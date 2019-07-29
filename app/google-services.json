@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "714469115491",
+    "firebase_url": "https://drcasmal-62132.firebaseio.com",
+    "project_id": "drcasmal-62132",
+    "storage_bucket": "drcasmal-62132.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:714469115491:android:7128a2befd61c7f0",
+        "android_client_info": {
+          "package_name": "com.jorzet.casmal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "714469115491-ubc8h58b59r09106g4f4qh9evuu5f6oj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jorzet.casmal",
+            "certificate_hash": "a0ba4d835b9b45f54f4376dc888b82366dbc6a8a"
+          }
+        },
+        {
+          "client_id": "714469115491-k0nfpm354rhd03om1dm67ehcat33eg38.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJpNdYPj0Ygslag7VUFR2UsjUv-vZ39n4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "714469115491-k0nfpm354rhd03om1dm67ehcat33eg38.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
