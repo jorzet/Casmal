@@ -1,7 +1,8 @@
-package com.jorzet.casmal
+package com.jorzet.casmal.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.jorzet.casmal.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
