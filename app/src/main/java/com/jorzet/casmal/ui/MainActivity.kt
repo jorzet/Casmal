@@ -34,8 +34,6 @@ import com.jorzet.casmal.fragments.SubjectsFragment
  */
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,7 +46,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         var fragment: Fragment? = null
-        when (item.getItemId()) {
+        when (item.itemId) {
             R.id.action_modules -> fragment = ModulesFragment()
             R.id.action_subjects -> fragment = SubjectsFragment()
             R.id.action_scores -> fragment = ScoreFragment()
@@ -64,9 +62,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
      * Set an initial fragment in container
      */
     private fun setInitialFragment() {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.fragment_container, ModulesFragment())
-        fragmentTransaction.commit()
+        replaceFragment(ModulesFragment())
     }
 
     /**
