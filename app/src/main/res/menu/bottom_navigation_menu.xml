@@ -15,8 +15,7 @@
   ~ limitations under the License.
   -->
 
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
       android:id="@+id/action_modules"
       android:enabled="true"
@@ -37,4 +36,5 @@
       android:enabled="true"
       android:icon="@drawable/ic_subjects"
       android:title="@string/bottom_navigation_menu_profile_text"/>
+
 </menu>

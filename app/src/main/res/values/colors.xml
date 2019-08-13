@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#8FD9DA</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="bacground">#FFFFFF</color>
+    <color name="background">#FFFFFF</color>
 
     <color name="bottom_navigation_icons_colors">#FFFFFF</color>
+
 </resources>
