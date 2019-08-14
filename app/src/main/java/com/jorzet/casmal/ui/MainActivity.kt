@@ -17,15 +17,17 @@
 package com.jorzet.casmal.ui
 
 import android.os.Bundle
+import android.os.Handler
+
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.jorzet.casmal.R
-import com.jorzet.casmal.fragments.ModulesFragment
-import com.jorzet.casmal.fragments.ProfileFragment
-import com.jorzet.casmal.fragments.ScoreFragment
-import com.jorzet.casmal.fragments.SubjectsFragment
+import com.jorzet.casmal.adapters.ViewPagerAdapter
+
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -33,46 +35,86 @@ import com.jorzet.casmal.fragments.SubjectsFragment
  * @date 12/08/19.
  */
 
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
+
+    /**
+     * UI accessors
+     */
+    private lateinit var mViewPager: ViewPager
+    private lateinit var mBottomNavigationView: BottomNavigationView
+    private lateinit var mCoordinatorView : View
+    private lateinit var mPrevMenuItem: MenuItem
+
+    /**
+     * Adapter
+     */
+    private lateinit var mViewPagerAdapter: ViewPagerAdapter
+
+    /*
+    * Variables
+    */
+    private var doubleBackToExitPressedOnce : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation_view)
-        bottomNavigationView.setOnNavigationItemSelectedListener(this)
+        mViewPager = findViewById(R.id.pager)
+        mBottomNavigationView = findViewById(R.id.bottom_navigation_view)
+        mCoordinatorView = findViewById(R.id.coordinator_view)
 
-        setInitialFragment()
+        mViewPager.addOnPageChangeListener(this)
+        mViewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+        mViewPager.adapter = mViewPagerAdapter
+
+        mBottomNavigationView.setOnNavigationItemSelectedListener(this)
+    }
+
+    /*
+     * Backpress override method, shows snackbar when user wants to exit
+     */
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        Snackbar.make(mCoordinatorView,
+            "Presiona otra vez para SALIR de la aplicación",
+            2000)
+            .show()
+
+        this.doubleBackToExitPressedOnce = true
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        var fragment: Fragment? = null
         when (item.itemId) {
-            R.id.action_modules -> fragment = ModulesFragment()
-            R.id.action_subjects -> fragment = SubjectsFragment()
-            R.id.action_scores -> fragment = ScoreFragment()
-            R.id.action_profile -> fragment = ProfileFragment()
+            R.id.action_modules -> mViewPager.currentItem = 0
+            R.id.action_subjects -> mViewPager.currentItem = 1
+            R.id.action_scores -> mViewPager.currentItem = 2
+            R.id.action_profile -> mViewPager.currentItem = 3
         }
-
-        if (fragment != null) replaceFragment(fragment)
-
         return true
     }
 
-    /**
-     * Set an initial fragment in container
-     */
-    private fun setInitialFragment() {
-        replaceFragment(ModulesFragment())
+    override fun onPageScrollStateChanged(state: Int) {
+
     }
 
-    /**
-     * Replace current [Fragment]
-     *
-     * @param fragment current fragment
-     */
-    private fun replaceFragment(fragment: Fragment) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_container, fragment)
-        fragmentTransaction.commit()
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        if (::mPrevMenuItem.isInitialized) {
+            mPrevMenuItem.isChecked = false
+        } else {
+            mBottomNavigationView.menu.getItem(0).isChecked = false
+        }
+
+        mBottomNavigationView.menu.getItem(position).isChecked = true
+        mPrevMenuItem = mBottomNavigationView.menu.getItem(position)
+    }
+
+    override fun onPageSelected(position: Int) {
+
     }
 }

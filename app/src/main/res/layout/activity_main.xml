@@ -8,11 +8,20 @@
 	android:background="@color/background"
 	tools:context=".ui.MainActivity">
 
-	<FrameLayout
-			android:id="@+id/fragment_container"
+
+	<androidx.coordinatorlayout.widget.CoordinatorLayout
+			android:id="@+id/coordinator_view"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
-			android:layout_weight="1"/>
+			android:layout_weight="1">
+
+		<androidx.viewpager.widget.ViewPager
+				android:id="@+id/pager"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:background="@color/background"/>
+
+	</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 	<com.google.android.material.bottomnavigation.BottomNavigationView
 			android:id="@+id/bottom_navigation_view"
