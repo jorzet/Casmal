@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/casmal_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:background="@drawable/splash_casmal"/>
+        android:background="@drawable/ic_casmal"/>
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/casmal_icon"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="Casmal"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:textColor="@color/blue"/>
+
+</RelativeLayout>
