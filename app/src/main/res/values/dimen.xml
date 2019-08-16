@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="width_table">100dp</dimen>
+    <dimen name="subject_box_width">100dp</dimen>
+    <dimen name="subject_box_height">100dp</dimen>
+</resources>

@@ -16,15 +16,25 @@
 
 package com.jorzet.casmal.models
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 /**
  * @author Jorge Zepeda Tinoco
  * @email jorzet.94@gmail.com
- * @date 08/08/19.
+ * @date 16/08/19.
  */
 
-enum class SubjectType {
-    NEUROLOGY,
-    BIOCHEMISTRY,
-    EPIDEMIOLOGY,
-    NONE
-}
+
+data class Subject(
+    @SerializedName("internalName")
+    @Expose
+    var internalName: String = "",
+    @SerializedName("nameToDisplay")
+    @Expose
+    var nameToDisplay: String = "",
+    // this is to identify course exmp. s1, s2, s3
+    var subjectId: String = "",
+    var subjectType : SubjectType = SubjectType.NONE,
+    var subjectAverage : Double = 0.0
+)

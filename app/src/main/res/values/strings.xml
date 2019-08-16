@@ -5,4 +5,6 @@
     <string name="bottom_navigation_menu_subject_text">Materias</string>
     <string name="bottom_navigation_menu_scores_text">Scores</string>
     <string name="bottom_navigation_menu_profile_text">Perfil</string>
+
+    <string name="snackbar_message_text">Presiona otra vez para SALIR de la aplicación</string>
 </resources>

@@ -10,4 +10,6 @@
     <color name="blue">#60ADE0</color>
     <color name="green">#5FBA7D</color>
 
+    <color name="subject_box_color">#059CAE</color>
+
 </resources>

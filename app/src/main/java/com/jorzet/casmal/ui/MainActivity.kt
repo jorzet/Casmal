@@ -28,7 +28,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.ViewPagerAdapter
 
-
 /**
  * @author Jorge Zepeda Tinoco
  * @email jorzet.94@gmail.com
@@ -51,9 +50,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private lateinit var mViewPagerAdapter: ViewPagerAdapter
 
     /*
-    * Variables
+    * Attributes
     */
     private var doubleBackToExitPressedOnce : Boolean = false
+    private val timeDelayExitBar: Int = 2000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         mBottomNavigationView.setOnNavigationItemSelectedListener(this)
     }
 
-    /*
-     * Backpress override method, shows snackbar when user wants to exit
+    /**
+     * Override method, to shows [Snackbar] when user wants to exit
      */
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -80,13 +80,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         Snackbar.make(mCoordinatorView,
-            "Presiona otra vez para SALIR de la aplicación",
-            2000)
+            R.string.snackbar_message_text,
+            timeDelayExitBar)
             .show()
 
-        this.doubleBackToExitPressedOnce = true
+        doubleBackToExitPressedOnce = true
 
-        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+        Handler().postDelayed({
+            doubleBackToExitPressedOnce = false
+        }, 2000)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

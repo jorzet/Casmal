@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridView
 import com.jorzet.casmal.R
 
 /**
@@ -30,8 +31,15 @@ import com.jorzet.casmal.R
 
 class SubjectsFragment: BaseFragment() {
 
+    /**
+     * UI accessors
+     */
+    private lateinit var mSubjectsGridView: GridView
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.subjects_fragment, container, false)
+
+        mSubjectsGridView = rootView.findViewById(R.id.gv_subjects)
 
         return rootView
     }
