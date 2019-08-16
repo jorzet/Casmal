@@ -2,10 +2,12 @@
 <resources>
     <color name="colorPrimary">#8AD4D5</color>
     <color name="colorPrimaryDark">#8FD9DA</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#8FD9DA</color>
 
     <color name="background">#FFFFFF</color>
 
-    <color name="bottom_navigation_icons_colors">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blue">#0094FF</color>
+    <color name="green">#5FBA7D</color>
 
 </resources>
