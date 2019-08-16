@@ -19,7 +19,7 @@
   <item
       android:id="@+id/action_modules"
       android:enabled="true"
-      android:icon="@drawable/ic_subjects"
+      android:icon="@drawable/ic_modules"
       android:title="@string/bottom_navigation_menu_modules_text"/>
   <item
     android:id="@+id/action_subjects"
@@ -29,12 +29,12 @@
   <item
       android:id="@+id/action_scores"
       android:enabled="true"
-      android:icon="@drawable/ic_subjects"
+      android:icon="@drawable/ic_scores"
       android:title="@string/bottom_navigation_menu_scores_text"/>
   <item
       android:id="@+id/action_profile"
       android:enabled="true"
-      android:icon="@drawable/ic_subjects"
+      android:icon="@drawable/ic_profile"
       android:title="@string/bottom_navigation_menu_profile_text"/>
 
 </menu>
