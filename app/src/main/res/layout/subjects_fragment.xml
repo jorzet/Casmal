@@ -6,9 +6,11 @@
         android:background="@color/background">
 
     <GridView
-            android:id="@+id/gv_subjects"
+            android:id="@+id/rv_subjects"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="30dp"
             android:numColumns="3">
     </GridView>
 

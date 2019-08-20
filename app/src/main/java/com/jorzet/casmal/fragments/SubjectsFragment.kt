@@ -22,6 +22,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
 import com.jorzet.casmal.R
+import com.jorzet.casmal.adapters.SubjectsAdapter
+import com.jorzet.casmal.models.Subject
+import com.jorzet.casmal.models.SubjectType
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -34,13 +37,41 @@ class SubjectsFragment: BaseFragment() {
     /**
      * UI accessors
      */
-    private lateinit var mSubjectsGridView: GridView
+    private lateinit var mSubjectsRecyclerView: GridView
+
+    /**
+     * Adapter
+     */
+    private lateinit var mSubjectsAdapter: SubjectsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.subjects_fragment, container, false)
 
-        mSubjectsGridView = rootView.findViewById(R.id.gv_subjects)
+        mSubjectsRecyclerView = rootView.findViewById(R.id.rv_subjects)
+
+        // hardcode to show subjects
+        val subjects = arrayListOf<Subject>()
+        val subject1 = Subject("epidemiology", "Epidemiología", "s1", SubjectType.EPIDEMIOLOGY, 0.0)
+        val subject2 = Subject("biochemistry", "Bioquimica", "s2", SubjectType.BIOCHEMISTRY, 0.0)
+        val subject3 = Subject("neurology", "Neurología", "s3", SubjectType.NEUROLOGY, 0.0)
+        val subject4 = Subject("", "", "s4", SubjectType.NONE, 0.0)
+
+        subjects.add(subject1)
+        subjects.add(subject2)
+        subjects.add(subject3)
+        (0..20).forEach { _ ->
+            subjects.add(subject4)
+        }
+
+        mSubjectsAdapter = SubjectsAdapter(context!!, subjects)
+        mSubjectsAdapter.mSubjectClickListener = object: SubjectsAdapter.OnSubjectClickListener {
+            override fun onSubjectClick(subject: Subject) {
+                goQuestionActivity()
+            }
+        }
+        mSubjectsRecyclerView.adapter = mSubjectsAdapter
 
         return rootView
     }
+
 }

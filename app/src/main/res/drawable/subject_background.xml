@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
+    <item android:id="@+id/subject_box_background">
         <shape>
-            <corners
-                    android:radius="10dip" />
-            <gradient
-                    android:startColor="@color/subject_box_color"
-                    android:centerY="0.50"
-                    android:endColor="@color/subject_box_color"
-                    android:angle="270"/>
+            <corners android:radius="10dip" />
+            <solid android:color="@color/eastern_blue" />
         </shape>
     </item>
 </layer-list>

@@ -14,34 +14,28 @@
  * limitations under the License.
  */
 
-package com.jorzet.casmal.fragments
+package com.jorzet.casmal.ui
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import com.jorzet.casmal.ui.QuestionActivity
+import android.os.PersistableBundle
+import androidx.appcompat.app.AppCompatActivity
+import com.jorzet.casmal.R
 
 /**
  * @author Jorge Zepeda Tinoco
  * @email jorzet.94@gmail.com
- * @date 12/08/19.
+ * @date 20/08/19.
  */
 
-open class BaseFragment: Fragment() {
+class QuestionActivity: AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
 
-    override fun onResume() {
-        super.onResume()
-    }
+        setContentView(R.layout.activity_question)
 
-    /**
-     * This method creates an intent to start [QuestionActivity]
-     */
-    fun goQuestionActivity() {
-        val intent = Intent(activity, QuestionActivity::class.java)
-        startActivity(intent)
+        if (intent != null) {
+
+        }
     }
 }

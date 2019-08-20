@@ -16,13 +16,17 @@
 
 package com.jorzet.casmal.adapters
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import androidx.core.content.ContextCompat
 import com.jorzet.casmal.R
 import com.jorzet.casmal.models.Subject
 import com.jorzet.casmal.models.SubjectType
+import kotlinx.android.synthetic.main.custom_subject_item.view.*
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -30,39 +34,59 @@ import com.jorzet.casmal.models.SubjectType
  * @date 16/08/19.
  */
 
-class SubjectsAdapter(subjects: List<Subject>): BaseAdapter() {
+/**
+ * Constants
+ */
+private const val TAG: String = "SubjectsAdapter"
+
+class SubjectsAdapter(context: Context, subjects: List<Subject>): BaseAdapter() {
+
+    /**
+     * Attributes
+     */
+    private val mContext: Context = context
+    lateinit var mSubjectClickListener: OnSubjectClickListener
 
     /**
      * Model
      */
     private val mSubjectList = subjects
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view: View
+    interface OnSubjectClickListener {
+        fun onSubjectClick(subject: Subject)
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
+        var view: View? = null
 
         if (convertView == null) {
-            val layoutInflater = LayoutInflater.from(parent?.context)
+            val layoutInflater = LayoutInflater.from(mContext)
             view = layoutInflater.inflate(R.layout.custom_subject_item, parent, false)
 
-        } else {
-            view = convertView
-        }
+            if (position % 2 == 0) {
+                val subject = getItem(position / 2)
 
-        if (position%2 == 0) {
-            val subject = getItem(position/2) as Subject
+                view.background = ContextCompat.getDrawable(mContext, R.drawable.subject_background)
 
-            when(subject.subjectType) {
-                SubjectType.NEUROLOGY -> {
-
+                when (subject.subjectType) {
+                    SubjectType.NEUROLOGY -> {
+                        view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_neurology_white)
+                    }
+                    SubjectType.BIOCHEMISTRY -> {
+                        view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_biochemistry_white)
+                    }
+                    SubjectType.EPIDEMIOLOGY -> {
+                        view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_epidemiology_white)
+                    }
+                    else -> {
+                        Log.d(TAG, "unknown subjects")
+                    }
                 }
-                SubjectType.BIOCHEMISTRY -> {
 
-                }
-                SubjectType.EPIDEMIOLOGY -> {
-
-                }
-                else -> {
-
+                view.setOnClickListener {
+                    if (::mSubjectClickListener.isInitialized) {
+                        mSubjectClickListener.onSubjectClick(subject)
+                    }
                 }
             }
         }
@@ -70,7 +94,7 @@ class SubjectsAdapter(subjects: List<Subject>): BaseAdapter() {
         return view
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): Subject {
         return mSubjectList[position]
     }
 

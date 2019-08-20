@@ -21,6 +21,11 @@
 
         <activity android:name=".ui.MainActivity"/>
 
+        <activity android:name=".ui.QuestionActivity"
+                  android:theme="@style/QuestionTheme"
+                  android:label=""
+                  android:parentActivityName=".ui.MainActivity"/>
+
     </application>
 
 </manifest>

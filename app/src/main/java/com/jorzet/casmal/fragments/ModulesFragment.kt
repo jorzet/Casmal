@@ -20,7 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
 import com.jorzet.casmal.R
+import com.jorzet.casmal.adapters.ModulesAdapter
+import com.jorzet.casmal.models.Module
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -30,9 +33,36 @@ import com.jorzet.casmal.R
 
 class ModulesFragment: BaseFragment() {
 
+    /**
+     * UI accessors
+     */
+    private lateinit var mModulesListView: ListView
+
+    /**
+     * Adapter
+     */
+    private lateinit var mModulesAdapter: ModulesAdapter
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val rootView = inflater.inflate(R.layout.modules_fragment, container, false)
+
+        mModulesListView = rootView.findViewById(R.id.lv_modules)
+
+        val modules = arrayListOf<Module>()
+
+        (0..3).forEach { _ ->
+            modules.add(Module("m","Módulo"))
+        }
+
+        mModulesAdapter = ModulesAdapter(modules)
+        mModulesAdapter.mModuleClickListener = object: ModulesAdapter.OnModuleClickListener {
+            override fun onModuleClick(module: Module) {
+                goQuestionActivity()
+            }
+        }
+
+        mModulesListView.adapter = mModulesAdapter
 
         return rootView
     }

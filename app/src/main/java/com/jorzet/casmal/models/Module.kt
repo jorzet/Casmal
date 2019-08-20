@@ -14,34 +14,22 @@
  * limitations under the License.
  */
 
-package com.jorzet.casmal.fragments
+package com.jorzet.casmal.models
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import com.jorzet.casmal.ui.QuestionActivity
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 /**
  * @author Jorge Zepeda Tinoco
  * @email jorzet.94@gmail.com
- * @date 12/08/19.
+ * @date 20/08/19.
  */
 
-open class BaseFragment: Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    /**
-     * This method creates an intent to start [QuestionActivity]
-     */
-    fun goQuestionActivity() {
-        val intent = Intent(activity, QuestionActivity::class.java)
-        startActivity(intent)
-    }
-}
+data class Module (
+    @SerializedName("module_id")
+    @Expose
+    var moduleId: String = "",
+    @SerializedName("module_name")
+    @Expose
+    var moduleName: String = ""
+)
