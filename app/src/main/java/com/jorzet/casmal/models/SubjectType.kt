@@ -23,7 +23,27 @@ package com.jorzet.casmal.models
  */
 
 enum class SubjectType {
+    CLINIC,
+    CARDIOLOGY,
+    SURGERY,
+    ANATOMY,
+    ENDOCRINOLOGY,
+    PHARMACOLOGY,
+    PHYSIOLOGY,
+    GASTROLOGY,
+    GYNECOLOGY,
+    HEMATOLOGY,
+    IMMUNOLOGY,
+    PNEUMOLOGY,
     NEUROLOGY,
+    ONCOLOGY,
+    PSYCHIATRY,
+    UROLOGY,
+    NEPHROLOGY,
+    DERMATOLOGY,
+    EMBRYOLOGY,
+    PATHOLOGY,
+    TRAUMATOLOGY,
     BIOCHEMISTRY,
     EPIDEMIOLOGY,
     NONE
