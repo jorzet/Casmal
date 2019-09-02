@@ -25,7 +25,6 @@ import android.support.multidex.MultiDexApplication
  */
 
 class CasmalApplication: MultiDexApplication() {
-
     override fun onCreate() {
         super.onCreate()
     }
