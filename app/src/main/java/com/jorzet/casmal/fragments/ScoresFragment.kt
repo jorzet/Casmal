@@ -28,8 +28,7 @@ import com.jorzet.casmal.R
  * @date 12/08/19.
  */
 
-class ScoreFragment: BaseFragment() {
-
+class ScoresFragment: BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.scores_frament, container, false)
 
