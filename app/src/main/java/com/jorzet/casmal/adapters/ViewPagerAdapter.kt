@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.jorzet.casmal.fragments.ModulesFragment
 import com.jorzet.casmal.fragments.ProfileFragment
-import com.jorzet.casmal.fragments.ScoreFragment
+import com.jorzet.casmal.fragments.ScoresFragment
 import com.jorzet.casmal.fragments.SubjectsFragment
 
 /**
@@ -31,20 +31,19 @@ import com.jorzet.casmal.fragments.SubjectsFragment
  */
 
 class ViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-
     override fun getItem(position: Int): Fragment {
         var fragment = Fragment()
         when(position) {
             0 -> fragment = ModulesFragment()
             1 -> fragment = SubjectsFragment()
-            2 -> fragment = ScoreFragment()
+            2 -> fragment = ScoresFragment()
             3 -> fragment = ProfileFragment()
         }
+
         return fragment
     }
 
     override fun getCount(): Int {
         return 4
     }
-
 }
