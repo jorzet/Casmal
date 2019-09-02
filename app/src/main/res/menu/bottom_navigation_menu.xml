@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-  <item
-      android:id="@+id/action_modules"
-      android:enabled="true"
-      android:icon="@drawable/ic_modules"
-      android:title="@string/bottom_navigation_menu_modules_text"
-      app:showAsAction="ifRoom"/>
-  <item
-    android:id="@+id/action_subjects"
-    android:enabled="true"
-    android:icon="@drawable/ic_subjects"
-    android:title="@string/bottom_navigation_menu_subject_text"
-    app:showAsAction="ifRoom"/>
-  <item
-      android:id="@+id/action_scores"
-      android:enabled="true"
-      android:icon="@drawable/ic_scores"
-      android:title="@string/bottom_navigation_menu_scores_text"
-      app:showAsAction="ifRoom"/>
-  <item
-      android:id="@+id/action_profile"
-      android:enabled="true"
-      android:icon="@drawable/ic_profile"
-      android:title="@string/bottom_navigation_menu_profile_text"
-      app:showAsAction="ifRoom"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_modules"
+        android:enabled="true"
+        android:icon="@drawable/ic_modules"
+        android:title="@string/bottom_navigation_menu_modules_text"/>
+
+    <item
+        android:id="@+id/action_subjects"
+        android:enabled="true"
+        android:icon="@drawable/ic_subjects"
+        android:title="@string/bottom_navigation_menu_subject_text"/>
+
+    <item
+        android:id="@+id/action_scores"
+        android:enabled="true"
+        android:icon="@drawable/ic_scores"
+        android:title="@string/bottom_navigation_menu_scores_text"/>
+
+    <item
+        android:id="@+id/action_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/bottom_navigation_menu_profile_text"/>
 </menu>
