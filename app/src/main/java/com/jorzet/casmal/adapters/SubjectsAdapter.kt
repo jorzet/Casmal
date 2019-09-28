@@ -89,6 +89,8 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): BaseAdapter() 
                     }
                 }
             }
+        } else {
+            view = convertView;
         }
 
         return view
