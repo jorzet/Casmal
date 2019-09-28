@@ -7,4 +7,7 @@
     <string name="bottom_navigation_menu_profile_text">Perfil</string>
 
     <string name="snackbar_message_text">Presiona otra vez para SALIR de la aplicación</string>
+
+    <string name="facebook_app_id">739055019862951</string>
+    <string name="fb_login_protocol_scheme">fb739055019862951</string>
 </resources>
