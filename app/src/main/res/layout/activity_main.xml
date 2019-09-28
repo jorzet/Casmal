@@ -8,29 +8,28 @@
 	android:background="@color/background"
 	tools:context=".ui.MainActivity">
 
-
 	<androidx.coordinatorlayout.widget.CoordinatorLayout
-			android:id="@+id/coordinator_view"
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1">
+		android:id="@+id/coordinator_view"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1">
 
 		<androidx.viewpager.widget.ViewPager
-				android:id="@+id/pager"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:background="@color/background"/>
+			android:id="@+id/pager"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="@color/background"/>
 
 	</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 	<com.google.android.material.bottomnavigation.BottomNavigationView
-			android:id="@+id/bottom_navigation_view"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:background="@color/colorPrimary"
-			app:labelVisibilityMode="labeled"
-			app:menu="@menu/bottom_navigation_menu"
-			app:itemTextColor="@color/bottom_navigation_color"
-			app:itemIconTint="@color/bottom_navigation_color"/>
+		android:id="@+id/bottom_navigation_view"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/colorPrimary"
+		app:labelVisibilityMode="labeled"
+		app:menu="@menu/bottom_navigation_menu"
+		app:itemTextColor="@color/bottom_navigation_color"
+		app:itemIconTint="@color/bottom_navigation_color"/>
 
 </LinearLayout>

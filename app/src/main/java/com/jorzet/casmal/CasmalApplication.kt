@@ -16,7 +16,7 @@
 
 package com.jorzet.casmal
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -25,7 +25,6 @@ import android.support.multidex.MultiDexApplication
  */
 
 class CasmalApplication: MultiDexApplication() {
-
     override fun onCreate() {
         super.onCreate()
     }

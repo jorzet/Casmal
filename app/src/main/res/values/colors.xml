@@ -6,19 +6,12 @@
 
     <color name="background">#FFFFFF</color>
 
-    <color name="white">#FFFFFF</color>
+    <color name="colorWhite">#FFFFFF</color>
     <color name="blue">#1A83B8</color>
-    <color name="green">#5FBA7D</color>
     <color name="black">#000000</color>
     <color name="blue_soft">#868E9F</color>
 
-    <color name="blue_chill_color">#059CAE</color>
     <color name="eastern_blue">#1A83B8</color>
-    <color name="asparagus_color">#779F56</color>
-    <color name="la_palma_color">#38A61C</color>
-    <color name="gold_drop_color">#F17600</color>
-    <color name="marron_flush_color">#B71C46</color>
-    <color name="towny_port_color">#641D48</color>
 
     <color name="progress_color">#B0DC3A</color>
     <color name="bottom_bar_background_color">#E6E6E6</color>
