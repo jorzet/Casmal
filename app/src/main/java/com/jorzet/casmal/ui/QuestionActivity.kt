@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.jorzet.casmal.R
+import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -29,13 +30,14 @@ import com.jorzet.casmal.R
 
 class QuestionActivity: AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question)
 
-        if (intent != null) {
-
-        }
+        val currentFragment = MultipleQuestionFragment()
+        val manager = getSupportFragmentManager();
+        val transaction = manager.beginTransaction();
+        transaction.replace(R.id.question_fragment_container, currentFragment);
+        transaction.commitAllowingStateLoss()
     }
 }

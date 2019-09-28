@@ -7,4 +7,11 @@
     <string name="bottom_navigation_menu_profile_text">Perfil</string>
 
     <string name="snackbar_message_text">Presiona otra vez para SALIR de la aplicación</string>
+
+    <!--question fragments-->
+    <string name="show_answer">VER SOLUCIÓN</string>
+    <string name="option_a_text">A)</string>
+    <string name="option_b_text">B)</string>
+    <string name="option_c_text">C)</string>
+    <string name="option_d_text">D)</string>
 </resources>
