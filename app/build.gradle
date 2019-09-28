@@ -14,7 +14,6 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
 
@@ -39,6 +38,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:5.5.1'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     //MultiDex
     implementation 'androidx.multidex:multidex:2.0.1'

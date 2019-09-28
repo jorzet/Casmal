@@ -16,7 +16,7 @@
 
 package com.jorzet.casmal
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 
 /**
  * @author Jorge Zepeda Tinoco

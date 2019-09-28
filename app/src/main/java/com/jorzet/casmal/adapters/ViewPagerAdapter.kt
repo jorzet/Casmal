@@ -34,8 +34,9 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         var fragment = Fragment()
         when(position) {
+            //TODO Fix ViewPager
             0 -> fragment = ModulesFragment()
-            1 -> fragment = SubjectsFragment()
+            //1 -> fragment = SubjectsFragment()
             2 -> fragment = ScoresFragment()
             3 -> fragment = ProfileFragment()
         }
