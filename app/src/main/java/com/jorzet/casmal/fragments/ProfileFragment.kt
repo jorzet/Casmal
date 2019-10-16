@@ -20,6 +20,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentActivity
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -65,6 +66,11 @@ class ProfileFragment: FragmentController() {
         return this.activity!!
     }
 
+    @LayoutRes
+    override fun getLayoutId(): Int {
+        return R.layout.profile_fragment
+    }
+
     override fun initView() {
         ivGoogleLogin = rootView.findViewById(R.id.ivGoogleLogin)
         ivFacebookLogin = rootView.findViewById(R.id.ivFacebookLogin)
@@ -108,10 +114,6 @@ class ProfileFragment: FragmentController() {
         ivGoogleLogin.setOnClickListener {
             googleSignIn()
         }
-    }
-
-    override fun getLayoutId(): Int {
-        return R.layout.profile_fragment
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
