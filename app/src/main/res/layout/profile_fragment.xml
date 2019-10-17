@@ -27,7 +27,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginTop="160dp"
-            android:src="@color/colorPrimary"
+            android:src="@color/colorBlack"
             android:layout_centerHorizontal="true"/>
 
         <LinearLayout
@@ -54,23 +54,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/ivGoogleLogin"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:src="@drawable/google_login"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/app_name"/>
-
-    <ImageView
-        android:id="@+id/ivFacebookLogin"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:src="@drawable/facebook_login"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/app_name"/>
 
 </LinearLayout>
