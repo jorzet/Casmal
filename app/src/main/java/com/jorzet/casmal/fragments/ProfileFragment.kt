@@ -18,8 +18,12 @@ package com.jorzet.casmal.fragments
 
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseFragment
+import com.jorzet.casmal.utils.Utils
+import com.jorzet.casmal.viewmodels.AccountsViewModel
 
 /**
  * @author Bani Azarael Mejia Flores
@@ -28,6 +32,8 @@ import com.jorzet.casmal.base.BaseFragment
  */
 
 class ProfileFragment: BaseFragment() {
+    private var viewModel: AccountsViewModel? = null
+
     companion object {
         private const val TAG = "ProfileFragment"
     }
@@ -46,6 +52,12 @@ class ProfileFragment: BaseFragment() {
     }
 
     override fun prepareComponents() {
+        viewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
 
+        viewModel?.list?.observe(this, Observer { list ->
+            list.let {
+                Utils.print("Accounts Update size = {${it[0].userName}}")
+            }
+        })
     }
 }

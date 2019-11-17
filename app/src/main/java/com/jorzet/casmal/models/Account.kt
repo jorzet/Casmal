@@ -17,6 +17,9 @@ data class Account(
     @ColumnInfo(name = RoomConstants.col_user_email)
     var userEmail: String,
 
+    @ColumnInfo(name = RoomConstants.col_image)
+    val image: String,
+
     @ColumnInfo(name = RoomConstants.col_provider)
     var provider: String
 )
