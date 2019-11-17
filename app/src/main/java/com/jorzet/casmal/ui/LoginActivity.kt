@@ -27,7 +27,7 @@ import com.jorzet.casmal.utils.Utils
 
 class LoginActivity: BaseActivity() {
     private lateinit var callbackManager: CallbackManager
-    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
     private lateinit var ivGoogleLogin: ImageView
@@ -62,21 +62,21 @@ class LoginActivity: BaseActivity() {
         permissions.add("public_profile")
 
         callbackManager = CallbackManager.Factory.create()
-        firebaseAuth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         LoginManager.getInstance().registerCallback(callbackManager, object :
             FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                Utils.printDebug(TAG, "facebook:onSuccess:$loginResult")
+                Utils.print(TAG, "facebook:onSuccess:$loginResult")
                 firebaseAuthWithFacebook(loginResult.accessToken)
             }
 
             override fun onError(ex: FacebookException?) {
-                Utils.printDebug(TAG, "facebook:onError $ex")
+                Utils.print(TAG, "facebook:onError $ex")
             }
 
             override fun onCancel() {
-                Utils.printDebug(TAG, "facebook:onCancel")
+                Utils.print(TAG, "facebook:onCancel")
             }
         })
 
@@ -111,25 +111,25 @@ class LoginActivity: BaseActivity() {
                 firebaseAuthWithGoogle(account!!)
             } catch (ex: ApiException) {
                 // Google Sign In failed, update UI appropriately
-                Utils.printDebug(TAG, "Google sign in failed $ex")
+                Utils.print(TAG, "Google sign in failed $ex")
                 // ...
             }
         }
     }
 
     private fun firebaseAuthWithFacebook(token: AccessToken) {
-        Utils.printDebug(TAG, "handleFacebookAccessToken:$token")
+        Utils.print(TAG, "handleFacebookAccessToken:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(getActivity()) { task ->
+        auth.signInWithCredential(credential).addOnCompleteListener(getActivity()) { task ->
             if (task.isSuccessful) {
                 // Sign in success, update UI with the signed-in user's information
-                Utils.printDebug(TAG, "signInWithCredential:success")
-                val user = firebaseAuth.currentUser
+                Utils.print(TAG, "signInWithCredential:success")
+                val user = auth.currentUser
                 updateUI(user)
             } else {
                 // If sign in fails, display a message to the user.
-                Utils.printDebug(TAG, "signInWithCredential:failure $task.exception")
+                Utils.print(TAG, "signInWithCredential:failure $task.exception")
                 Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show()
                 updateUI(null)
             }
@@ -137,18 +137,18 @@ class LoginActivity: BaseActivity() {
     }
 
     private fun firebaseAuthWithGoogle(googleSignInAccount: GoogleSignInAccount) {
-        Utils.printDebug(TAG, "firebaseAuthWithGoogle:" + googleSignInAccount.id!!)
+        Utils.print(TAG, "firebaseAuthWithGoogle:" + googleSignInAccount.id!!)
 
         val credential = GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(getActivity()) { task ->
+        auth.signInWithCredential(credential).addOnCompleteListener(getActivity()) { task ->
             if (task.isSuccessful) {
                 // Sign in success, update UI with the signed-in user's information
-                Utils.printDebug(TAG, "signInWithCredential:success")
-                val user = firebaseAuth.currentUser
+                Utils.print(TAG, "signInWithCredential:success")
+                val user = auth.currentUser
                 updateUI(user)
             } else {
                 // If sign in fails, display a message to the user.
-                Utils.printDebug(TAG, "signInWithCredential:failure $task.exception")
+                Utils.print(TAG, "signInWithCredential:failure $task.exception")
                 Snackbar.make(containerLogin, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
                 updateUI(null)
             }
@@ -159,7 +159,7 @@ class LoginActivity: BaseActivity() {
         super.onStart()
 
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = firebaseAuth.currentUser
+        val currentUser = auth.currentUser
         updateUI(currentUser)
     }
 
@@ -174,7 +174,7 @@ class LoginActivity: BaseActivity() {
 
     private fun signOut() {
         // Firebase sign out
-        firebaseAuth.signOut()
+        auth.signOut()
 
         // Google sign out
         googleSignInClient.signOut().addOnCompleteListener(getActivity()) {
@@ -184,7 +184,7 @@ class LoginActivity: BaseActivity() {
 
     // Firebase sign out and Google revoke
     private fun revokeAccess() {
-        firebaseAuth.signOut()
+        auth.signOut()
 
         // Google revoke access
         googleSignInClient.revokeAccess().addOnCompleteListener(getActivity()) {
