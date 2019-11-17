@@ -1,5 +1,5 @@
 /*
- * Copyright [2019] [Jorge Zepeda Tinoco]
+ * Copyright [2019] [Bani Azarael Mejia Flores]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,16 +44,16 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.jorzet.casmal.R
-import com.jorzet.casmal.base.FragmentController
+import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.customviews.MyMarkerView
 
 /**
- * @author Jorge Zepeda Tinoco
- * @email jorzet.94@gmail.com
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
  * @date 12/08/19.
  */
 
-class ScoresFragment: FragmentController(), SeekBar.OnSeekBarChangeListener, OnChartValueSelectedListener {
+class ScoresFragment: BaseFragment(), SeekBar.OnSeekBarChangeListener, OnChartValueSelectedListener {
     private lateinit var chart: LineChart
     private lateinit var seekBarX: SeekBar
     private lateinit var seekBarY: SeekBar
@@ -261,12 +261,14 @@ class ScoresFragment: FragmentController(), SeekBar.OnSeekBarChangeListener, OnC
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
         getFragmentActivity().menuInflater.inflate(R.menu.line, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.viewGithub -> {
                 val i = Intent(Intent.ACTION_VIEW)
                 i.data =
