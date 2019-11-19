@@ -16,6 +16,7 @@
 
 package com.jorzet.casmal.fragments
 
+import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -33,6 +34,8 @@ import com.jorzet.casmal.viewmodels.AccountsViewModel
 
 class ProfileFragment: BaseFragment() {
     private var viewModel: AccountsViewModel? = null
+    private var tvUserName: TextView? = null
+    private var tvUserEmail: TextView? = null
 
     companion object {
         private const val TAG = "ProfileFragment"
@@ -48,7 +51,8 @@ class ProfileFragment: BaseFragment() {
     }
 
     override fun initView() {
-
+        tvUserName = rootView.findViewById(R.id.tvUserName)
+        tvUserEmail = rootView.findViewById(R.id.tvUserEmail)
     }
 
     override fun prepareComponents() {
@@ -57,6 +61,9 @@ class ProfileFragment: BaseFragment() {
         viewModel?.list?.observe(this, Observer { list ->
             list.let {
                 Utils.print("Accounts Update size = {${it[0].userName}}")
+
+                tvUserName?.text = it[0].userName
+                tvUserEmail?.text = it[0].userEmail
             }
         })
     }
