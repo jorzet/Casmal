@@ -60,10 +60,12 @@ class ProfileFragment: BaseFragment() {
 
         viewModel?.list?.observe(this, Observer { list ->
             list.let {
+                /*
                 Utils.print("Accounts Update size = {${it[0].userName}}")
 
                 tvUserName?.text = it[0].userName
                 tvUserEmail?.text = it[0].userEmail
+                */
             }
         })
     }
