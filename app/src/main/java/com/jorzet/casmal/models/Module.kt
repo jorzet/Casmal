@@ -26,10 +26,16 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class Module (
-    @SerializedName("module_id")
+    @SerializedName("id")
     @Expose
     var moduleId: String = "",
-    @SerializedName("module_name")
+    @SerializedName("name")
     @Expose
-    var moduleName: String = ""
+    var moduleName: String = "",
+    @SerializedName("level")
+    @Expose
+    var level: String = "",
+    @SerializedName("questions")
+    @Expose
+    var questions: List<String> = arrayListOf()
 )

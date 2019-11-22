@@ -16,9 +16,10 @@
 
 package com.jorzet.casmal.managers
 
-import android.app.Activity
 import android.content.Context
+import com.jorzet.casmal.models.Module
 import com.jorzet.casmal.models.Question
+import com.jorzet.casmal.models.Subject
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -26,22 +27,46 @@ import com.jorzet.casmal.models.Question
  * @date 087/08/19.
  */
 
-abstract class FirebaseRequestManager(activity: Activity) {
+abstract class FirebaseRequestManager(context: Context) {
 
     protected val TAG : String = "FirebaseRequestManager"
-    protected val mActivity: Activity = activity
+    protected val mContext: Context = context
 
     companion object {
         /**
          * Manager constructor
          * @param activity Base Activity or Fragment [Context]
          */
-        fun getInstance(activity: Activity): FirebaseRequestManager {
-            return FirebaseRequestManagerImp.getInstance(activity)
+        fun getInstance(context: Context): FirebaseRequestManager {
+            return FirebaseRequestManagerImp.getInstance(context)
         }
     }
 
-    interface OnGetQuestionsListener {
+    interface OnGetModulesListener {
+        /**
+         *
+         */
+        fun onGetModulesSuccess(modules: List<Module>)
+
+        /**
+         *
+         */
+        fun onGetModulesFail(throwable: Throwable)
+    }
+
+    interface OnGetSubjectsListener {
+        /**
+         *
+         */
+        fun onGetSubjectsSuccess(subjects: List<Subject>)
+
+        /**
+         *
+         */
+        fun onGetSubjectsFail(throwable: Throwable)
+    }
+
+    interface OnGetQuestionListener {
         /**
          *
          */
@@ -56,7 +81,17 @@ abstract class FirebaseRequestManager(activity: Activity) {
     /**
      *
      */
-    abstract fun requestQuestion(questionId: String, onGetQuestionsListener: OnGetQuestionsListener)
+    abstract fun requestModules(onGetModulesListener: OnGetModulesListener)
+
+    /**
+     *
+     */
+    abstract fun requestSubjects(onGetSubjectsListener: OnGetSubjectsListener)
+
+    /**
+     *
+     */
+    abstract fun requestQuestion(questionId: String, onGetQuestionsListener: OnGetQuestionListener)
 
     /**
      * Destroy [FirebaseRequestManager] instance

@@ -17,12 +17,14 @@
 package com.jorzet.casmal.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.SubjectsAdapter
+import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Subject
 import com.jorzet.casmal.models.SubjectType
 
@@ -48,6 +50,16 @@ class SubjectsFragment: BaseFragment() {
         val rootView = inflater.inflate(R.layout.subjects_fragment, container, false)
 
         mSubjectsRecyclerView = rootView.findViewById(R.id.rv_subjects)
+
+        FirebaseRequestManager.getInstance(context!!).requestSubjects(object: FirebaseRequestManager.OnGetSubjectsListener {
+            override fun onGetSubjectsSuccess(subjects: List<Subject>) {
+                Log.d("","")
+            }
+
+            override fun onGetSubjectsFail(throwable: Throwable) {
+                Log.d("","")
+            }
+        })
 
         // hardcode to show subjects
         val subjects = arrayListOf<Subject>()
