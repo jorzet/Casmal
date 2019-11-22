@@ -24,7 +24,7 @@ class ModulesRequest: AbstractRequestDatabase<String, List<Module>>() {
     }
 
     override fun onGettingResponse(successResponse: DataSnapshot) {
-        Log.d("","")
+        Log.d(TAG,"modules request success")
         val post = successResponse.value
         if (post != null) {
             val modulesMap = (post as kotlin.collections.HashMap<*, *>)
@@ -47,6 +47,7 @@ class ModulesRequest: AbstractRequestDatabase<String, List<Module>>() {
     }
 
     override fun onGettingError(errorResponse: DatabaseError) {
+        Log.d(TAG,"modules request fail")
         onRequestLietenerFailed.onFailed(Throwable())
     }
 }

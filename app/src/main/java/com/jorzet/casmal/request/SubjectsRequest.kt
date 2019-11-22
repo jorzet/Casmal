@@ -23,7 +23,7 @@ class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
     }
 
     override fun onGettingResponse(successResponse: DataSnapshot) {
-        Log.d("","")
+        Log.d(TAG,"subjects request success")
         val post = successResponse.value
         if (post != null) {
             val subjectsMap = (post as kotlin.collections.HashMap<*, *>)
@@ -46,6 +46,7 @@ class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
     }
 
     override fun onGettingError(errorResponse: DatabaseError) {
+        Log.d(TAG,"subjects request fail")
         onRequestLietenerFailed.onFailed(Throwable())
     }
 

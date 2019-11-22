@@ -52,7 +52,7 @@ class QuestionsRequest(questionId: String): AbstractRequestDatabase<String, Ques
     }
 
     override fun onGettingResponse(successResponse: DataSnapshot) {
-        Log.d("","")
+        Log.d(TAG,"question request success")
         val post = successResponse.value
         if (post != null) {
             val questionMap = (post as kotlin.collections.HashMap<*, *>)
@@ -72,7 +72,8 @@ class QuestionsRequest(questionId: String): AbstractRequestDatabase<String, Ques
     }
 
     override fun onGettingError(errorResponse: DatabaseError) {
-        Log.d("","")
+        Log.d(TAG,"question request fail")
+        onRequestLietenerFailed.onFailed(Throwable())
     }
 
 }
