@@ -56,7 +56,8 @@ class ProfileFragment: BaseFragment() {
 
         viewModel?.list?.observe(this, Observer { list ->
             list.let {
-                Utils.print("Accounts Update size = {${it[0].userName}}")
+                if (it.isNotEmpty())
+                    Utils.print("Accounts Update size = {${it[0].userName}}")
             }
         })
     }

@@ -16,9 +16,13 @@
 
 package com.jorzet.casmal.request
 
+import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.gson.Gson
 import com.jorzet.casmal.models.Question
+import org.json.JSONObject
+import java.lang.Exception
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -26,13 +30,17 @@ import com.jorzet.casmal.models.Question
  * @date 17/07/19.
  */
 
-/**
- * Constants
- */
-private const val TAG: String = "QuestionsTask"
-private const val QUESTIONS_REFERENCE: String = "questions"
+
 
 class QuestionsRequest(questionId: String): AbstractRequestDatabase<String, Question>() {
+
+    companion object {
+        /**
+         * Constants
+         */
+        private const val TAG: String = "QuestionsTask"
+        private const val QUESTIONS_REFERENCE: String = "questions"
+    }
 
     /**
      * Attributes
@@ -40,15 +48,32 @@ class QuestionsRequest(questionId: String): AbstractRequestDatabase<String, Ques
     private val mQuestionId: String = questionId
 
     override fun getReference(): String? {
-        return QUESTIONS_REFERENCE
+        return "$QUESTIONS_REFERENCE/$mQuestionId"
     }
 
     override fun onGettingResponse(successResponse: DataSnapshot) {
+        Log.d(TAG,"question request success")
+        val post = successResponse.value
+        if (post != null) {
+            val questionMap = (post as kotlin.collections.HashMap<*, *>)
+            val questionJson = JSONObject(questionMap).toString()
+            try {
+                val question = Gson().fromJson(questionJson, Question::class.java)
+                onRequestListenerSucces.onSuccess(question)
+            } catch (e: Exception) {
+             e.printStackTrace()
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        } else {
+            onRequestLietenerFailed.onFailed(Throwable())
+        }
 
     }
 
     override fun onGettingError(errorResponse: DatabaseError) {
-
+        Log.d(TAG,"question request fail")
+        onRequestLietenerFailed.onFailed(Throwable())
     }
 
 }

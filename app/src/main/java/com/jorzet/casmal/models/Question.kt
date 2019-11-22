@@ -27,35 +27,40 @@ import java.io.Serializable
  */
 
 data class Question (
-    @SerializedName("answer")
+    @SerializedName("ANSWER")
     @Expose
     var answer : String = "",
-    @SerializedName("optionsData")
+    @SerializedName("LEVEL")
     @Expose
-    var optionsData : List<String> = arrayListOf(),
-    @SerializedName("optionsTypes")
+    var level : String = "",
+    @SerializedName("SUBJECT")
     @Expose
-    var optionsTypes : List<String> = arrayListOf(),
-    @SerializedName("questionData")
+    var subject : String,
+    @SerializedName("POINTS")
     @Expose
-    var questionData : List<String> = arrayListOf(),
-    @SerializedName("questionTypes")
+    var points : String = "",
+    @SerializedName("TEXT")
     @Expose
-    var questionTypes : List<String> = arrayListOf(),
-    @SerializedName("subject")
+    var text : String = "",
+    @SerializedName("TYPE")
     @Expose
-    var subject : SubjectType = SubjectType.NONE,
-    @SerializedName("subtopic")
+    var questionType : String = "",
+    @SerializedName("OPT1")
     @Expose
-    var subtopic : String = "",
-    @SerializedName("topic")
+    var opt1 : String = "",
+    @SerializedName("OPT2")
     @Expose
-    var topic : String = "",
-    @SerializedName("year")
+    var opt2 : String = "",
+    @SerializedName("OPT3")
     @Expose
-    var year : String = "",
-
+    var opt3 : String = "",
+    @SerializedName("OPT4")
+    @Expose
+    var opt4 : String = "",
+    @SerializedName("ID")
+    @Expose
     var questionId : String = "",
+
     var chosenOption : String = "",
     var wasOK : Boolean = false,
     var answered : Boolean = false // important this is just used in ShowQuestionsActivity
