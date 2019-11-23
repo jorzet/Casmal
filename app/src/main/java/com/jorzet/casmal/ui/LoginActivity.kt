@@ -5,6 +5,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -24,6 +26,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.utils.Utils
+import com.jorzet.casmal.viewmodels.AccountsViewModel
 
 class LoginActivity: BaseActivity() {
     private lateinit var callbackManager: CallbackManager
@@ -36,6 +39,8 @@ class LoginActivity: BaseActivity() {
     private lateinit var containerLogin: LinearLayout
 
     private val permissions: ArrayList<String> = ArrayList()
+
+    private var viewModel: AccountsViewModel? = null
 
     companion object {
         private const val TAG = "LoginActivity"
@@ -57,6 +62,16 @@ class LoginActivity: BaseActivity() {
     }
 
     override fun prepareComponents() {
+        viewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+
+        viewModel?.loginFacebook?.observe(this, Observer {
+            facebookSignIn()
+        })
+
+        viewModel?.loginGoogle?.observe(this, Observer {
+            googleSignIn()
+        })
+
         //Facebook Permissions
         permissions.add("email")
         permissions.add("public_profile")
@@ -64,8 +79,7 @@ class LoginActivity: BaseActivity() {
         callbackManager = CallbackManager.Factory.create()
         auth = FirebaseAuth.getInstance()
 
-        LoginManager.getInstance().registerCallback(callbackManager, object :
-            FacebookCallback<LoginResult> {
+        val facebookCallback: FacebookCallback<LoginResult> = object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 Utils.print(TAG, "facebook:onSuccess:$loginResult")
                 firebaseAuthWithFacebook(loginResult.accessToken)
@@ -78,7 +92,9 @@ class LoginActivity: BaseActivity() {
             override fun onCancel() {
                 Utils.print(TAG, "facebook:onCancel")
             }
-        })
+        }
+
+        LoginManager.getInstance().registerCallback(callbackManager, facebookCallback)
 
         // Configure Google Sign In
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -89,11 +105,11 @@ class LoginActivity: BaseActivity() {
         googleSignInClient = GoogleSignIn.getClient(getActivity(), googleSignInOptions)
 
         ivFacebookLogin.setOnClickListener {
-            facebookSignIn()
+            viewModel?.loginWithFacebook()
         }
 
         ivGoogleLogin.setOnClickListener {
-            googleSignIn()
+            viewModel?.loginWithGoogle()
         }
     }
 
@@ -168,8 +184,7 @@ class LoginActivity: BaseActivity() {
     }
 
     private fun googleSignIn() {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
     }
 
     private fun signOut() {
@@ -180,16 +195,9 @@ class LoginActivity: BaseActivity() {
         googleSignInClient.signOut().addOnCompleteListener(getActivity()) {
             updateUI(null)
         }
-    }
 
-    // Firebase sign out and Google revoke
-    private fun revokeAccess() {
-        auth.signOut()
-
-        // Google revoke access
-        googleSignInClient.revokeAccess().addOnCompleteListener(getActivity()) {
-            updateUI(null)
-        }
+        // Facebook sign out
+        LoginManager.getInstance().logOut()
     }
 
     private fun updateUI(currentUser: FirebaseUser?) {

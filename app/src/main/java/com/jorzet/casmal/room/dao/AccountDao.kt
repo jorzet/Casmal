@@ -17,4 +17,7 @@ interface AccountDao {
 
     @Delete
     fun delete(account: Account)
+
+    @Query("DELETE FROM tbl_accounts")
+    fun deleteAll()
 }
