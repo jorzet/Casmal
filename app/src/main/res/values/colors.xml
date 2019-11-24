@@ -26,6 +26,6 @@
     <color name="option_unselected_answer_background_color">#059CAE</color>
     <color name="option_correct_answer_background_color">#B0DC3A</color>
     <color name="option_wrong_answer_background_color">#FF0000</color>
-    <color name="show_andwer_background_color">#F4A01C</color>
+    <color name="show_answer_background_color">#F4A01C</color>
 
 </resources>

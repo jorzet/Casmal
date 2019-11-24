@@ -18,6 +18,8 @@ package com.jorzet.casmal
 
 import android.util.Log
 import androidx.multidex.MultiDexApplication
+import com.facebook.stetho.Stetho
+import com.jorzet.casmal.managers.ImageManager
 import com.google.firebase.database.FirebaseDatabase
 
 /**
@@ -32,6 +34,12 @@ class CasmalApplication: MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
+        if(BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+        }
+
+        ImageManager.getInstance().initialize(this)
 
         try {
             FirebaseDatabase
