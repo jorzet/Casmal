@@ -8,6 +8,9 @@ import com.jorzet.casmal.room.RoomConstants
 @Entity(tableName = RoomConstants.tbl_accounts)
 data class Account(
     @PrimaryKey
+    @ColumnInfo(name = RoomConstants.col_row_id)
+    var rowId: Int = 1,
+
     @ColumnInfo(name = RoomConstants.col_user_id) //ProviderId by @provider
     var userId: String,
 
