@@ -20,11 +20,11 @@ class AccountsRepository(private val accountDao: AccountDao) {
     fun insert(account: Account) {
         InsertAccount(accountDao, account, object : RoomOperationListener {
             override fun onBegin() {
-                Utils.print("Begin Insert LocalFile: ${account.userName}")
+                Utils.print("Begin Insert Account: ${account.userName}")
             }
 
             override fun onFinish() {
-                Utils.print("Finish Insert LocalFile: ${account.userName}")
+                Utils.print("Finish Insert Account: ${account.userName}")
             }
         }).execute()
     }
@@ -32,11 +32,11 @@ class AccountsRepository(private val accountDao: AccountDao) {
     fun update(account: Account) {
         UpdateAccount(accountDao, account, object : RoomOperationListener {
             override fun onBegin() {
-                Utils.print("Begin Update LocalFile: ${account.userName}")
+                Utils.print("Begin Update Account: ${account.userName}")
             }
 
             override fun onFinish() {
-                Utils.print("Finish Update LocalFile: ${account.userName}")
+                Utils.print("Finish Update Account: ${account.userName}")
             }
         }).execute()
     }
