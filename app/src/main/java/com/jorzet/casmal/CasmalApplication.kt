@@ -17,6 +17,8 @@
 package com.jorzet.casmal
 
 import androidx.multidex.MultiDexApplication
+import com.facebook.stetho.Stetho
+import com.jorzet.casmal.managers.ImageManager
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -27,5 +29,11 @@ import androidx.multidex.MultiDexApplication
 class CasmalApplication: MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
+
+        if(BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+        }
+
+        ImageManager.getInstance().initialize(this)
     }
 }
