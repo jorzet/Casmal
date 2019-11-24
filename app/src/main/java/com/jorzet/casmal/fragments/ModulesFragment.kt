@@ -54,6 +54,15 @@ class ModulesFragment: BaseFragment() {
         FirebaseRequestManager.getInstance(context!!).requestModules(object: FirebaseRequestManager.OnGetModulesListener {
             override fun onGetModulesSuccess(modules: List<Module>) {
                 Log.d("","")
+
+                mModulesAdapter = ModulesAdapter(modules)
+                mModulesAdapter.mModuleClickListener = object: ModulesAdapter.OnModuleClickListener {
+                    override fun onModuleClick(module: Module) {
+                        goQuestionActivity(module!!.questions)
+                    }
+                }
+
+                mModulesListView.adapter = mModulesAdapter
             }
 
             override fun onGetModulesFail(throwable: Throwable) {
@@ -61,20 +70,8 @@ class ModulesFragment: BaseFragment() {
             }
         })
 
-        val modules = arrayListOf<Module>()
 
-        (0..3).forEach { _ ->
-            modules.add(Module("m","Módulo"))
-        }
 
-        mModulesAdapter = ModulesAdapter(modules)
-        mModulesAdapter.mModuleClickListener = object: ModulesAdapter.OnModuleClickListener {
-            override fun onModuleClick(module: Module) {
-                goQuestionActivity()
-            }
-        }
-
-        mModulesListView.adapter = mModulesAdapter
 
         return rootView
     }

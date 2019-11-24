@@ -18,6 +18,7 @@ package com.jorzet.casmal.ui
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
@@ -29,10 +30,21 @@ import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
  */
 
 class QuestionActivity: AppCompatActivity() {
+    companion object {
+        const val QUESTION_LIST: String = "question_list"
+    }
+
+    public lateinit var mNextQuestion: View
+    public var mQuestions: List<String>? = arrayListOf()
+    public var mCurrectQuestionIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question)
+
+        mNextQuestion = findViewById(R.id.btn_next_question)
+
+        mQuestions = intent.extras!!.getStringArrayList(QUESTION_LIST)
 
         val currentFragment = MultipleQuestionFragment()
         val manager = getSupportFragmentManager();
@@ -40,4 +52,5 @@ class QuestionActivity: AppCompatActivity() {
         transaction.replace(R.id.question_fragment_container, currentFragment);
         transaction.commitAllowingStateLoss()
     }
+
 }

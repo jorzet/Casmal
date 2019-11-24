@@ -40,8 +40,9 @@ open class BaseFragment: Fragment() {
     /**
      * This method creates an intent to start [QuestionActivity]
      */
-    fun goQuestionActivity() {
+    fun goQuestionActivity(questions: List<String>) {
         val intent = Intent(activity, QuestionActivity::class.java)
+        intent.putStringArrayListExtra(QuestionActivity.QUESTION_LIST, questions as ArrayList<String>)
         startActivity(intent)
     }
 }
