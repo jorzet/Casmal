@@ -17,11 +17,14 @@
 package com.jorzet.casmal.managers
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
+import com.jorzet.casmal.models.Module
 import com.jorzet.casmal.models.Question
+import com.jorzet.casmal.models.Subject
 import com.jorzet.casmal.request.AbstractRequestDatabase
+import com.jorzet.casmal.request.ModulesRequest
 import com.jorzet.casmal.request.QuestionsRequest
+import com.jorzet.casmal.request.SubjectsRequest
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -29,8 +32,7 @@ import com.jorzet.casmal.request.QuestionsRequest
  * @date 087/08/19.
  */
 
-class FirebaseRequestManagerImp(activity: Activity): FirebaseRequestManager(activity) {
-
+class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(context) {
 
     companion object {
         /**
@@ -42,14 +44,14 @@ class FirebaseRequestManagerImp(activity: Activity): FirebaseRequestManager(acti
         /**
          * Creates a [FirebaseRequestManager] implementation instance
          *
-         * @param activity Base Activity or Fragment [Context]
+         * @param context Base Activity or Fragment [Context]
          * @return A [FirebaseRequestManager] instance
          */
-        fun getInstance(activity: Activity): FirebaseRequestManager {
+        fun getInstance(context: Context): FirebaseRequestManager {
             if (sInstance == null) {
                 synchronized(FirebaseRequestManager::class.java) {
                     if (sInstance == null) {
-                        sInstance = FirebaseRequestManagerImp(activity)
+                        sInstance = FirebaseRequestManagerImp(context)
                     }
                 }
             }
@@ -61,22 +63,58 @@ class FirebaseRequestManagerImp(activity: Activity): FirebaseRequestManager(acti
         sInstance = null
     }
 
-    override fun requestQuestion(questionId: String, onGetQuestionsListener: OnGetQuestionsListener) {
-        val questionsTask = QuestionsRequest(questionId)
+    override fun requestQuestion(questionId: String, onGetQuestionsListener: OnGetQuestionListener) {
+        val questionsRequest = QuestionsRequest(questionId)
 
-        questionsTask.setOnRequestSuccess(object: AbstractRequestDatabase.OnRequestListenerSuccess<Question> {
+        questionsRequest.setOnRequestSuccess(object: AbstractRequestDatabase.OnRequestListenerSuccess<Question> {
             override fun onSuccess(result: Question) {
                 onGetQuestionsListener.onGetQuestionLoaded(result)
             }
         })
 
-        questionsTask.setOnRequestFailed(object: AbstractRequestDatabase.OnRequestListenerFailed {
+        questionsRequest.setOnRequestFailed(object: AbstractRequestDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
                 onGetQuestionsListener.onGetQuestionError(throwable)
             }
         })
 
-        questionsTask.request()
+        questionsRequest.request()
+    }
+
+    override fun requestModules(onGetModulesListener: OnGetModulesListener) {
+        val modulesRequest = ModulesRequest()
+
+        modulesRequest.setOnRequestSuccess(object: AbstractRequestDatabase.OnRequestListenerSuccess<List<Module>> {
+            override fun onSuccess(result: List<Module>) {
+                onGetModulesListener.onGetModulesSuccess(result)
+            }
+        })
+
+        modulesRequest.setOnRequestFailed(object: AbstractRequestDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onGetModulesListener.onGetModulesFail(throwable)
+            }
+        })
+
+        modulesRequest.request()
+    }
+
+    override fun requestSubjects(onGetSubjectsListener: OnGetSubjectsListener) {
+        val subjectsRequest = SubjectsRequest()
+
+        subjectsRequest.setOnRequestSuccess(object: AbstractRequestDatabase.OnRequestListenerSuccess<List<Subject>> {
+            override fun onSuccess(result: List<Subject>) {
+                onGetSubjectsListener.onGetSubjectsSuccess(result)
+            }
+        })
+
+        subjectsRequest.setOnRequestFailed(object: AbstractRequestDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onGetSubjectsListener.onGetSubjectsFail(throwable)
+            }
+        })
+
+        subjectsRequest.request()
     }
 
 }

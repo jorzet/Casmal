@@ -16,9 +16,11 @@
 
 package com.jorzet.casmal
 
+import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.facebook.stetho.Stetho
 import com.jorzet.casmal.managers.ImageManager
+import com.google.firebase.database.FirebaseDatabase
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -27,6 +29,9 @@ import com.jorzet.casmal.managers.ImageManager
  */
 
 class CasmalApplication: MultiDexApplication() {
+
+    private val TAG: String = "CasmalApplication"
+
     override fun onCreate() {
         super.onCreate()
 
@@ -35,5 +40,14 @@ class CasmalApplication: MultiDexApplication() {
         }
 
         ImageManager.getInstance().initialize(this)
+
+        try {
+            FirebaseDatabase
+                .getInstance()
+                .setPersistenceEnabled(true)
+        } catch (e: Exception) {
+            Log.d(TAG, "cannot set persistence database")
+        }
+
     }
 }

@@ -17,12 +17,14 @@
 package com.jorzet.casmal.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.ModulesAdapter
+import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Module
 
 /**
@@ -48,6 +50,16 @@ class ModulesFragment: BaseFragment() {
         val rootView = inflater.inflate(R.layout.modules_fragment, container, false)
 
         mModulesListView = rootView.findViewById(R.id.lv_modules)
+
+        FirebaseRequestManager.getInstance(context!!).requestModules(object: FirebaseRequestManager.OnGetModulesListener {
+            override fun onGetModulesSuccess(modules: List<Module>) {
+                Log.d("","")
+            }
+
+            override fun onGetModulesFail(throwable: Throwable) {
+                Log.d("","")
+            }
+        })
 
         val modules = arrayListOf<Module>()
 

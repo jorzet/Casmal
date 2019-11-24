@@ -12,16 +12,12 @@
 		android:layout_weight="1"
 		android:background="@color/question_background_color">
 
-		<RelativeLayout
+		<TextView
+			android:id="@+id/tv_text"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent">
-
-			<view
-				class="androidx.appcompat.app.AlertController$RecycleListView"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent" />
-
-		</RelativeLayout>
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:gravity="center"/>
 
 	</LinearLayout>
 
@@ -58,14 +54,13 @@
 						android:layout_height="@dimen/min_height_option">
 
 						<TextView
-							android:id="@+id/tv_option_a"
+							android:id="@+id/tv_option_a_"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:layout_centerVertical="true"
 							android:layout_centerHorizontal="true"
 							android:text="@string/option_a_text"
 							android:textColor="@color/option_answer_text_color"
-							android:textSize="25sp"/>
+							android:textSize="25sp" />
 
 					</RelativeLayout>
 
@@ -84,7 +79,7 @@
 						android:background="@drawable/answer_unselected_option_background" >
 
 						<TextView
-							android:id="@+id/tv_answer_a"
+							android:id="@+id/tv_option_a"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerHorizontal="true"
@@ -119,7 +114,7 @@
 						android:layout_height="@dimen/min_height_option">
 
 						<TextView
-							android:id="@+id/tv_option_b"
+							android:id="@+id/tv_option_b_"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerHorizontal="true"
@@ -145,7 +140,7 @@
 						android:background="@drawable/answer_unselected_option_background">
 
 						<TextView
-							android:id="@+id/tv_answer_b"
+							android:id="@+id/tv_option_b"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerHorizontal="true"
@@ -180,7 +175,7 @@
 						android:layout_height="@dimen/min_height_option">
 
 						<TextView
-							android:id="@+id/tv_option_c"
+							android:id="@+id/tv_option_c_"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerVertical="true"
@@ -206,7 +201,7 @@
 						android:background="@drawable/answer_unselected_option_background">
 
 						<TextView
-							android:id="@+id/tv_answer_c"
+							android:id="@+id/tv_option_c"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerHorizontal="true"
@@ -230,7 +225,7 @@
 				</RelativeLayout>
 
 				<RelativeLayout
-					android:id="@+id/rl_option_d"
+					android:id="@+id/rl_option_d_"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginTop="@dimen/margin_anwer_button_top">
@@ -241,7 +236,7 @@
 						android:layout_height="@dimen/min_height_option">
 
 						<TextView
-							android:id="@+id/tv_option_d"
+							android:id="@+id/tv_option_d_"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerVertical="true"
@@ -267,7 +262,7 @@
 						android:background="@drawable/answer_unselected_option_background">
 
 						<TextView
-							android:id="@+id/tv_answer_d"
+							android:id="@+id/tv_option_d"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerHorizontal="true"
