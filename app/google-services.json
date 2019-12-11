@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "714469115491-b5d4299d2kmbqbn7572hf4aa3u2b7odi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jorzet.casmal",
+            "certificate_hash": "a0ba4d835b9b45f54f4376dc888b82366dbc6a8a"
+          }
+        },
+        {
           "client_id": "714469115491-217uu8qo37773ksgvlitupd7jcab74c9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
