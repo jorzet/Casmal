@@ -130,6 +130,8 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.A
                     holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_physiology_white)
                 SubjectType.PNEUMOLOGY ->
                     holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_pneumology_white)
+                SubjectType.PNEUMOLOGY_DERMATOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_dermatology_white)
                 SubjectType.PSYCHIATRY ->
                     holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_psychiatry_white)
                 SubjectType.SURGERY_ANESTHESIOLOGY ->
