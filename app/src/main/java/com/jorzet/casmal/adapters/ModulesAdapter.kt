@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.core.content.ContextCompat
 import com.jorzet.casmal.R
+import com.jorzet.casmal.models.DifficultyType
 import com.jorzet.casmal.models.Module
 import kotlinx.android.synthetic.main.custom_module_item.view.*
 
@@ -73,6 +74,15 @@ class ModulesAdapter(modules: List<Module>): BaseAdapter() {
         val module = getItem(position)
 
         view.iv_module_image.background = ContextCompat.getDrawable(parent?.context!!, moduleImage[position])
+
+        when(module.difficulty) {
+            DifficultyType.EASY ->
+                view.iv_difficulty.background = ContextCompat.getDrawable(parent.context!!, R.drawable.ic_easy)
+            DifficultyType.MEDIUM ->
+                view.iv_difficulty.background = ContextCompat.getDrawable(parent.context!!, R.drawable.ic_medium)
+            DifficultyType.HARD ->
+                view.iv_difficulty.background = ContextCompat.getDrawable(parent.context!!, R.drawable.ic_hard)
+        }
 
         view.tv_module.text = module.moduleName
 

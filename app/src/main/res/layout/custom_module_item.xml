@@ -9,12 +9,17 @@
 		android:layout_height="match_parent"
 		android:layout_margin="20dp">
 
-		<ImageView
+		<androidx.appcompat.widget.AppCompatImageView
 			android:id="@+id/iv_module_image"
 			android:layout_width="80dp"
 			android:layout_height="wrap_content"/>
 
-		<TextView
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/iv_difficulty"
+			android:layout_width="25dp"
+			android:layout_height="25dp"/>
+
+		<androidx.appcompat.widget.AppCompatTextView
 			android:id="@+id/tv_module"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"

@@ -40,7 +40,7 @@ enum class SubjectType(name: String) {
     ANATOMY("anatomy"),
     @SerializedName("endocrinologia")
     @Expose
-    ENDOCRINOLOGY("endocrinologia"),
+    ENDOCRINOLOGY("endocrinology"),
     @SerializedName("pharmacology")
     @Expose
     PHARMACOLOGY("pharmacology"),
@@ -61,7 +61,10 @@ enum class SubjectType(name: String) {
     IMMUNOLOGY("immunology"),
     @SerializedName("pneumology_dermatology")
     @Expose
-    PNEUMOLOGY("pneumology_dermatology"),
+    PNEUMOLOGY_DERMATOLOGY("pneumology_dermatology"),
+    @SerializedName("pneumology")
+    @Expose
+    PNEUMOLOGY("pneumology"),
     @SerializedName("neurology")
     @Expose
     NEUROLOGY("neurology"),

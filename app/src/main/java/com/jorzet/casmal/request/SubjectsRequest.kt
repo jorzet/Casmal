@@ -32,7 +32,10 @@ class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
                 val subjectMap = subjectsMap.get(key) as kotlin.collections.HashMap<*, *>
                 try {
                     val subject = Gson().fromJson(JSONObject(subjectMap).toString(), Subject::class.java)
-                    mSubjects.add(subject)
+                    // just save enabled subject
+                    if (subject.enabled) {
+                        mSubjects.add(subject)
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 } catch (e: java.lang.Exception) {
