@@ -25,16 +25,15 @@ import com.google.gson.annotations.SerializedName
  * @date 16/08/19.
  */
 
-
 data class Subject(
     @SerializedName("internalName")
     @Expose
-    var internalName: String = "",
+    var internalName : SubjectType = SubjectType.NONE,
     @SerializedName("nameToDisplay")
     @Expose
     var nameToDisplay: String = "",
     // this is to identify course exmp. s1, s2, s3
     var subjectId: String = "",
-    var subjectType : SubjectType = SubjectType.NONE,
+
     var subjectAverage : Double = 0.0
 )

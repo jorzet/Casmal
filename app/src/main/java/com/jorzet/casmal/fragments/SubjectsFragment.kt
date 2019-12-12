@@ -22,6 +22,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.SubjectsAdapter
 import com.jorzet.casmal.managers.FirebaseRequestManager
@@ -39,7 +41,7 @@ class SubjectsFragment: BaseFragment() {
     /**
      * UI accessors
      */
-    private lateinit var mSubjectsRecyclerView: GridView
+    private lateinit var mSubjectsRecyclerView: RecyclerView
 
     /**
      * Adapter
@@ -54,6 +56,15 @@ class SubjectsFragment: BaseFragment() {
         FirebaseRequestManager.getInstance(context!!).requestSubjects(object: FirebaseRequestManager.OnGetSubjectsListener {
             override fun onGetSubjectsSuccess(subjects: List<Subject>) {
                 Log.d("","")
+
+                mSubjectsRecyclerView.layoutManager = GridLayoutManager(context, 3)
+                mSubjectsAdapter = SubjectsAdapter(context!!, subjects)
+                mSubjectsAdapter.mSubjectClickListener = object: SubjectsAdapter.OnSubjectClickListener {
+                    override fun onSubjectClick(subject: Subject) {
+                        goQuestionActivity(arrayListOf())
+                    }
+                }
+                mSubjectsRecyclerView.adapter = mSubjectsAdapter
             }
 
             override fun onGetSubjectsFail(throwable: Throwable) {
@@ -61,27 +72,7 @@ class SubjectsFragment: BaseFragment() {
             }
         })
 
-        // hardcode to show subjects
-        val subjects = arrayListOf<Subject>()
-        val subject1 = Subject("epidemiology", "Epidemiología", "s1", SubjectType.EPIDEMIOLOGY, 0.0)
-        val subject2 = Subject("biochemistry", "Bioquimica", "s2", SubjectType.BIOCHEMISTRY, 0.0)
-        val subject3 = Subject("neurology", "Neurología", "s3", SubjectType.NEUROLOGY, 0.0)
-        val subject4 = Subject("", "", "s4", SubjectType.NONE, 0.0)
 
-        subjects.add(subject1)
-        subjects.add(subject2)
-        subjects.add(subject3)
-        (0..20).forEach { _ ->
-            subjects.add(subject4)
-        }
-
-        mSubjectsAdapter = SubjectsAdapter(context!!, subjects)
-        mSubjectsAdapter.mSubjectClickListener = object: SubjectsAdapter.OnSubjectClickListener {
-            override fun onSubjectClick(subject: Subject) {
-                goQuestionActivity(arrayListOf())
-            }
-        }
-        mSubjectsRecyclerView.adapter = mSubjectsAdapter
 
         return rootView
     }

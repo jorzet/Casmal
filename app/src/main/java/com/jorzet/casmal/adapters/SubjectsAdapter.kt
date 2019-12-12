@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
 import com.jorzet.casmal.models.Subject
 import com.jorzet.casmal.models.SubjectType
@@ -39,7 +40,7 @@ import kotlinx.android.synthetic.main.custom_subject_item.view.*
  */
 private const val TAG: String = "SubjectsAdapter"
 
-class SubjectsAdapter(context: Context, subjects: List<Subject>): BaseAdapter() {
+class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.Adapter<SubjectViewHolder>() {
 
     /**
      * Attributes
@@ -56,56 +57,107 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): BaseAdapter() 
         fun onSubjectClick(subject: Subject)
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
-        var view: View? = null
-
-        if (convertView == null) {
-            val layoutInflater = LayoutInflater.from(mContext)
-            view = layoutInflater.inflate(R.layout.custom_subject_item, parent, false)
-
-            if (position % 2 == 0) {
-                val subject = getItem(position / 2)
-
-                view.background = ContextCompat.getDrawable(mContext, R.drawable.subject_background)
-
-                when (subject.subjectType) {
-                    SubjectType.NEUROLOGY -> {
-                        view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_neurology_white)
-                    }
-                    SubjectType.BIOCHEMISTRY -> {
-                        view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_biochemistry_white)
-                    }
-                    SubjectType.EPIDEMIOLOGY -> {
-                        view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_epidemiology_white)
-                    }
-                    else -> {
-                        Log.d(TAG, "unknown subjects")
-                    }
-                }
-
-                view.setOnClickListener {
-                    if (::mSubjectClickListener.isInitialized) {
-                        mSubjectClickListener.onSubjectClick(subject)
-                    }
-                }
-            }
-        } else {
-            view = convertView;
-        }
-
-        return view
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectViewHolder {
+        val view = LayoutInflater.from(mContext)
+            .inflate(R.layout.custom_subject_item, parent, false)
+        return SubjectViewHolder(view)
     }
 
-    override fun getItem(position: Int): Subject {
-        return mSubjectList[position]
-    }
-
-    override fun getItemId(position: Int): Long {
-        return 0
-    }
-
-    override fun getCount(): Int {
+    override fun getItemCount(): Int {
         return mSubjectList.size + mSubjectList.size - 1
     }
 
+    private fun getItem(position: Int): Subject {
+        return mSubjectList[position]
+    }
+
+    override fun onBindViewHolder(holder: SubjectViewHolder, position: Int) {
+        if (position % 2 == 0) {
+            val subject = getItem(position / 2)
+
+            holder.view.background = ContextCompat.getDrawable(mContext, R.drawable.subject_background)
+
+            when (subject.internalName) {
+                SubjectType.NEUROLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_neurology_white)
+                SubjectType.BIOCHEMISTRY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_biochemistry_white)
+                SubjectType.EPIDEMIOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_epidemiology_white)
+                SubjectType.ANATOMY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_anatomy_white)
+                SubjectType.CARDIOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_cardiology_white)
+                SubjectType.CLINIC ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_clinic_white)
+                SubjectType.DERMATOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_dermatology_white)
+                SubjectType.EMBRYOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_embriology_white)
+                SubjectType.ENDOCRINOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_endocrinology_white)
+                SubjectType.GASTROENTEROLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_gastroenterology_white)
+                SubjectType.GASTROLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_gastronomy_white)
+                SubjectType.GENETICS ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_genetics_white)
+                SubjectType.GYNECOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_ginecology_white)
+                SubjectType.HEMATOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_hematology_white)
+                SubjectType.HISTOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_histology_white)
+                SubjectType.IMMUNOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_inmunology_white)
+                SubjectType.INFECTOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_infectology_white)
+                SubjectType.MICROBIOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_microbiology_white)
+                SubjectType.NEPHROLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_nephrology_white)
+                SubjectType.ONCOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_oncology_white)
+                SubjectType.OPHTHALMOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_ophthalmology_white)
+                SubjectType.OTORHINOLARYNGOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_otorhinolaryngology_white)
+                SubjectType.PATHOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_patology_white)
+                SubjectType.PEDIATRICS ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_pediatrics_white)
+                SubjectType.PHARMACOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_pharmacology_white)
+                SubjectType.PHYSIOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_physiology_white)
+                SubjectType.PNEUMOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_pneumology_white)
+                SubjectType.PSYCHIATRY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_psychiatry_white)
+                SubjectType.SURGERY_ANESTHESIOLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_surgery_anesthesiology_white)
+                SubjectType.TRAUMATOLOGY_ORTHOPEDICS ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_traumatology_orthopedics_white)
+                SubjectType.UROLOGY ->
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.ic_urology_white)
+                else -> {
+                    holder.view.image.background = ContextCompat.getDrawable(mContext, R.drawable.no_subject_background)
+                    Log.d(TAG, "unknown subjects")
+                }
+            }
+
+            holder.view.setOnClickListener {
+                if (::mSubjectClickListener.isInitialized) {
+                    mSubjectClickListener.onSubjectClick(subject)
+                }
+            }
+        } else {
+            holder.view.background = ContextCompat.getDrawable(mContext, R.drawable.no_subject_background)
+        }
+    }
+
+}
+
+class SubjectViewHolder(v: View): RecyclerView.ViewHolder(v) {
+    var view: View = v
 }

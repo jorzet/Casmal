@@ -30,10 +30,16 @@ import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
  */
 
 class QuestionActivity: AppCompatActivity() {
+    /**
+     * Tags
+     */
     companion object {
         const val QUESTION_LIST: String = "question_list"
     }
 
+    /**
+     * Models
+     */
     public lateinit var mNextQuestion: View
     public var mQuestions: List<String>? = arrayListOf()
     public var mCurrectQuestionIndex = 0
