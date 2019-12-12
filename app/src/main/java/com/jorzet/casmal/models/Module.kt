@@ -16,8 +16,10 @@
 
 package com.jorzet.casmal.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -25,6 +27,7 @@ import com.google.gson.annotations.SerializedName
  * @date 20/08/19.
  */
 
+@Parcelize
 data class Module (
     @SerializedName("id")
     @Expose
@@ -35,7 +38,13 @@ data class Module (
     @SerializedName("level")
     @Expose
     var level: String = "",
+    @SerializedName("enabled")
+    @Expose
+    var enabled: Boolean = false,
+    @SerializedName("difficulty")
+    @Expose
+    var difficulty: DifficultyType = DifficultyType.EASY,
     @SerializedName("questions")
     @Expose
     var questions: List<String> = arrayListOf()
-)
+): Parcelable

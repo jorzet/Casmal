@@ -33,7 +33,11 @@ class ModulesRequest: AbstractRequestDatabase<String, List<Module>>() {
                 val moduleMap = modulesMap.get(key) as kotlin.collections.HashMap<*, *>
                 try {
                     val module = Gson().fromJson(JSONObject(moduleMap).toString(), Module::class.java)
-                    mModules.add(module)
+
+                    // just save enabled module
+                    if (module.enabled) {
+                        mModules.add(module)
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 } catch (e: java.lang.Exception) {

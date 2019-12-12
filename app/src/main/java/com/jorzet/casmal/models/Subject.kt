@@ -16,8 +16,10 @@
 
 package com.jorzet.casmal.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -25,6 +27,7 @@ import com.google.gson.annotations.SerializedName
  * @date 16/08/19.
  */
 
+@Parcelize
 data class Subject(
     @SerializedName("internalName")
     @Expose
@@ -32,8 +35,13 @@ data class Subject(
     @SerializedName("nameToDisplay")
     @Expose
     var nameToDisplay: String = "",
+    @SerializedName("enabled")
+    @Expose
+    var enabled: Boolean = false,
+
     // this is to identify course exmp. s1, s2, s3
     var subjectId: String = "",
 
     var subjectAverage : Double = 0.0
-)
+
+): Parcelable

@@ -16,8 +16,10 @@
 
 package com.jorzet.casmal.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
 /**
@@ -26,42 +28,46 @@ import java.io.Serializable
  * @date 087/08/19.
  */
 
+@Parcelize
 data class Question (
-    @SerializedName("ANSWER")
+    @SerializedName("answer")
     @Expose
     var answer : String = "",
-    @SerializedName("LEVEL")
+    @SerializedName("level")
     @Expose
     var level : String = "",
-    @SerializedName("SUBJECT")
+    @SerializedName("subject_type")
     @Expose
-    var subject : String,
-    @SerializedName("POINTS")
+    var subject : SubjectType = SubjectType.NONE,
+    @SerializedName("question_type")
+    @Expose
+    var questionType : QuestionType = QuestionType.NONE,
+    @SerializedName("points")
     @Expose
     var points : String = "",
-    @SerializedName("TEXT")
+    @SerializedName("text")
     @Expose
     var text : String = "",
-    @SerializedName("TYPE")
-    @Expose
-    var questionType : String = "",
-    @SerializedName("OPT1")
+    @SerializedName("opt1")
     @Expose
     var opt1 : String = "",
-    @SerializedName("OPT2")
+    @SerializedName("opt2")
     @Expose
     var opt2 : String = "",
-    @SerializedName("OPT3")
+    @SerializedName("opt3")
     @Expose
     var opt3 : String = "",
-    @SerializedName("OPT4")
+    @SerializedName("opt4")
     @Expose
     var opt4 : String = "",
-    @SerializedName("ID")
+    @SerializedName("id")
     @Expose
     var questionId : String = "",
+    @SerializedName("enabled")
+    @Expose
+    var enabled : Boolean = false,
 
     var chosenOption : String = "",
     var wasOK : Boolean = false,
     var answered : Boolean = false // important this is just used in ShowQuestionsActivity
-) : Serializable
+) : Parcelable

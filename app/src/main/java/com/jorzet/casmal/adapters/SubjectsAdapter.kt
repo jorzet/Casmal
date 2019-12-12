@@ -35,12 +35,14 @@ import kotlinx.android.synthetic.main.custom_subject_item.view.*
  * @date 16/08/19.
  */
 
-/**
- * Constants
- */
-private const val TAG: String = "SubjectsAdapter"
+class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.Adapter<SubjectsAdapter.SubjectViewHolder>() {
 
-class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.Adapter<SubjectViewHolder>() {
+    companion object {
+        /**
+         * Constants
+         */
+        private const val TAG: String = "SubjectsAdapter"
+    }
 
     /**
      * Attributes
@@ -53,7 +55,11 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.A
      */
     private val mSubjectList = subjects
 
+    /** Interface to catch item click listener **/
     interface OnSubjectClickListener {
+        /**
+         * This method is called when item view is clicked
+         */
         fun onSubjectClick(subject: Subject)
     }
 
@@ -61,14 +67,6 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.A
         val view = LayoutInflater.from(mContext)
             .inflate(R.layout.custom_subject_item, parent, false)
         return SubjectViewHolder(view)
-    }
-
-    override fun getItemCount(): Int {
-        return mSubjectList.size + mSubjectList.size - 1
-    }
-
-    private fun getItem(position: Int): Subject {
-        return mSubjectList[position]
     }
 
     override fun onBindViewHolder(holder: SubjectViewHolder, position: Int) {
@@ -156,8 +154,21 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.A
         }
     }
 
-}
+    override fun getItemCount(): Int {
+        return mSubjectList.size + mSubjectList.size - 1
+    }
 
-class SubjectViewHolder(v: View): RecyclerView.ViewHolder(v) {
-    var view: View = v
+    /**
+     *
+     */
+    private fun getItem(position: Int): Subject {
+        return mSubjectList[position]
+    }
+
+    /**
+     *
+     */
+    class SubjectViewHolder(v: View): RecyclerView.ViewHolder(v) {
+        var view: View = v
+    }
 }
