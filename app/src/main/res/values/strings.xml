@@ -14,6 +14,8 @@
     <string name="option_b_text">B)</string>
     <string name="option_c_text">C)</string>
     <string name="option_d_text">D)</string>
+    <string name="option_true_text">Verdadero</string>
+    <string name="option_false_text">Falso</string>
 
     <string name="facebook_app_id">739055019862951</string>
     <string name="fb_login_protocol_scheme">fb739055019862951</string>

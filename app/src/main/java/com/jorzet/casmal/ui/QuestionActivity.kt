@@ -16,12 +16,18 @@
 
 package com.jorzet.casmal.ui
 
-import android.os.Bundle
-import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
+import com.jorzet.casmal.base.BaseActivity
+import com.jorzet.casmal.base.BaseQuestionFrgament
 import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
+import com.jorzet.casmal.fragments.question.TrueFalseQuestionFragment
+import com.jorzet.casmal.managers.FirebaseRequestManager
+import com.jorzet.casmal.models.Question
+import com.jorzet.casmal.models.QuestionType
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -29,7 +35,7 @@ import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
  * @date 20/08/19.
  */
 
-class QuestionActivity: AppCompatActivity() {
+class QuestionActivity: BaseActivity() {
     /**
      * Tags
      */
@@ -40,23 +46,100 @@ class QuestionActivity: AppCompatActivity() {
     /**
      * Models
      */
-    public lateinit var mNextQuestion: View
-    public var mQuestions: List<String>? = arrayListOf()
-    public var mCurrectQuestionIndex = 0
+    private lateinit var mNextQuestion: View
+    lateinit var mShowQuestions: View
+    lateinit var mShowAnswer: View
+    private var mQuestions: List<String>? = arrayListOf()
+    private var mCurrectQuestionIndex = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_question)
+    /**
+     * Fragment
+     */
+    private lateinit var currentFragment: BaseQuestionFrgament
 
+    override fun getLayoutId(): Int {
+        return R.layout.activity_question
+    }
+
+    override fun getActivity(): FragmentActivity {
+        return this
+    }
+
+    override fun initView() {
+        mShowQuestions = findViewById(R.id.rl_show_questions)
         mNextQuestion = findViewById(R.id.btn_next_question)
+        mShowAnswer = findViewById(R.id.btn_show_answer)
+    }
+
+    override fun prepareComponents() {
+        mShowQuestions.setOnClickListener(mShowQuestionsClickListener)
+        mNextQuestion.setOnClickListener(mNextQuestionClickListener)
+        mShowAnswer.setOnClickListener(mShowAnswerClickListener)
 
         mQuestions = intent.extras!!.getStringArrayList(QUESTION_LIST)
 
-        val currentFragment = MultipleQuestionFragment()
-        val manager = getSupportFragmentManager();
-        val transaction = manager.beginTransaction();
-        transaction.replace(R.id.question_fragment_container, currentFragment);
-        transaction.commitAllowingStateLoss()
+
+        val question = mQuestions?.get(mCurrectQuestionIndex)
+        if (question != null) {
+            FirebaseRequestManager.getInstance(this).requestQuestion(
+                question,
+                object : FirebaseRequestManager.OnGetQuestionListener {
+                    override fun onGetQuestionLoaded(question: Question) {
+                        Log.d("", "")
+                        if (question.questionType.equals(QuestionType.MULTIPLE)) {
+                            currentFragment = MultipleQuestionFragment(question)
+                        } else if (question.questionType.equals(QuestionType.TRUE_FALSE)) {
+                            currentFragment = TrueFalseQuestionFragment(question)
+                        }
+
+                        val manager = getSupportFragmentManager();
+                        val transaction = manager.beginTransaction();
+                        transaction.replace(R.id.question_fragment_container, currentFragment);
+                        transaction.commitAllowingStateLoss()
+                    }
+
+                    override fun onGetQuestionError(throwable: Throwable) {
+                        Log.d("", "")
+                    }
+                })
+            mCurrectQuestionIndex += 1
+        }
+    }
+
+    private val mShowQuestionsClickListener = View.OnClickListener {
+
+    }
+
+    private val mNextQuestionClickListener = View.OnClickListener {
+        val question = mQuestions?.get(mCurrectQuestionIndex)
+        if (question != null) {
+            FirebaseRequestManager.getInstance(this).requestQuestion(
+                question,
+                object : FirebaseRequestManager.OnGetQuestionListener {
+                    override fun onGetQuestionLoaded(question: Question) {
+                        Log.d("", "")
+                        if (question.questionType.equals(QuestionType.MULTIPLE)) {
+                            currentFragment = MultipleQuestionFragment(question)
+                        } else if (question.questionType.equals(QuestionType.TRUE_FALSE)) {
+                            currentFragment = TrueFalseQuestionFragment(question)
+                        }
+
+                        val manager = getSupportFragmentManager();
+                        val transaction = manager.beginTransaction();
+                        transaction.replace(R.id.question_fragment_container, currentFragment);
+                        transaction.commitAllowingStateLoss()
+                    }
+
+                    override fun onGetQuestionError(throwable: Throwable) {
+                        Log.d("", "")
+                    }
+                })
+            mCurrectQuestionIndex += 1
+        }
+    }
+
+    private val mShowAnswerClickListener = View.OnClickListener {
+
     }
 
 }

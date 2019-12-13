@@ -22,8 +22,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.ModulesAdapter
+import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Module
 
@@ -45,12 +47,19 @@ class ModulesFragment: BaseFragment() {
      */
     private lateinit var mModulesAdapter: ModulesAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun getLayoutId(): Int {
+        return R.layout.modules_fragment
+    }
 
-        val rootView = inflater.inflate(R.layout.modules_fragment, container, false)
+    override fun getFragmentActivity(): FragmentActivity {
+        return this.activity!!
+    }
 
+    override fun initView() {
         mModulesListView = rootView.findViewById(R.id.lv_modules)
+    }
 
+    override fun prepareComponents() {
         FirebaseRequestManager.getInstance(context!!).requestModules(object: FirebaseRequestManager.OnGetModulesListener {
             override fun onGetModulesSuccess(modules: List<Module>) {
                 Log.d("","")
@@ -69,10 +78,5 @@ class ModulesFragment: BaseFragment() {
                 Log.d("","")
             }
         })
-
-
-
-
-        return rootView
     }
 }
