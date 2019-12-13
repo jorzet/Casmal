@@ -22,10 +22,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.SubjectsAdapter
+import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Subject
 import com.jorzet.casmal.models.SubjectType
@@ -48,11 +50,19 @@ class SubjectsFragment: BaseFragment() {
      */
     private lateinit var mSubjectsAdapter: SubjectsAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.subjects_fragment, container, false)
+    override fun getLayoutId(): Int {
+        return R.layout.subjects_fragment
+    }
 
+    override fun getFragmentActivity(): FragmentActivity {
+        return this.activity!!
+    }
+
+    override fun initView() {
         mSubjectsRecyclerView = rootView.findViewById(R.id.rv_subjects)
+    }
 
+    override fun prepareComponents() {
         FirebaseRequestManager.getInstance(context!!).requestSubjects(object: FirebaseRequestManager.OnGetSubjectsListener {
             override fun onGetSubjectsSuccess(subjects: List<Subject>) {
                 Log.d("","")
@@ -71,10 +81,6 @@ class SubjectsFragment: BaseFragment() {
                 Log.d("","")
             }
         })
-
-
-
-        return rootView
     }
 
 }

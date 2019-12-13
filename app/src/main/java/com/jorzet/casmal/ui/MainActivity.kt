@@ -21,11 +21,13 @@ import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.ViewPagerAdapter
+import com.jorzet.casmal.base.BaseActivity
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -33,7 +35,7 @@ import com.jorzet.casmal.adapters.ViewPagerAdapter
  * @date 12/08/19.
  */
 
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
+class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
 
     /**
      * UI accessors
@@ -54,14 +56,21 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private var doubleBackToExitPressedOnce : Boolean = false
     private val timeDelayExitBar: Int = 2000
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun getLayoutId(): Int {
+        return R.layout.activity_main
+    }
 
+    override fun getActivity(): FragmentActivity {
+        return this
+    }
+
+    override fun initView() {
         mViewPager = findViewById(R.id.pager)
         mBottomNavigationView = findViewById(R.id.bottom_navigation_view)
         mCoordinatorView = findViewById(R.id.coordinator_view)
+    }
 
+    override fun prepareComponents() {
         mViewPager.addOnPageChangeListener(this)
         mViewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
         mViewPager.adapter = mViewPagerAdapter

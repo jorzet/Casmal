@@ -1,5 +1,6 @@
 package com.jorzet.casmal.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.jorzet.casmal.ui.QuestionActivity
 
 abstract class BaseFragment: Fragment() {
     protected lateinit var rootView: View
@@ -29,4 +31,13 @@ abstract class BaseFragment: Fragment() {
     abstract fun getFragmentActivity(): FragmentActivity
     abstract fun initView()
     abstract fun prepareComponents()
+
+    /**
+     * This method creates an intent to start [QuestionActivity]
+     */
+    fun goQuestionActivity(questions: List<String>) {
+        val intent = Intent(activity, QuestionActivity::class.java)
+        intent.putStringArrayListExtra(QuestionActivity.QUESTION_LIST, questions as ArrayList<String>)
+        startActivity(intent)
+    }
 }
