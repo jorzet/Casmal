@@ -16,12 +16,7 @@
 
 package com.jorzet.casmal.fragments
 
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.GridView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +25,6 @@ import com.jorzet.casmal.adapters.SubjectsAdapter
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Subject
-import com.jorzet.casmal.models.SubjectType
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -71,7 +65,7 @@ class SubjectsFragment: BaseFragment() {
                 mSubjectsAdapter = SubjectsAdapter(context!!, subjects)
                 mSubjectsAdapter.mSubjectClickListener = object: SubjectsAdapter.OnSubjectClickListener {
                     override fun onSubjectClick(subject: Subject) {
-                        goQuestionActivity(arrayListOf())
+                        goQuestionActivity(subject.questions)
                     }
                 }
                 mSubjectsRecyclerView.adapter = mSubjectsAdapter
