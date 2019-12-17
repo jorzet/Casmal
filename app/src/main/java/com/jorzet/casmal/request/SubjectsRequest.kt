@@ -6,7 +6,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.gson.Gson
 import com.jorzet.casmal.models.Subject
 import org.json.JSONObject
-import java.lang.Exception
 
 class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
 

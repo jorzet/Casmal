@@ -17,7 +17,6 @@
 package com.jorzet.casmal.fragments
 
 import android.util.Log
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R

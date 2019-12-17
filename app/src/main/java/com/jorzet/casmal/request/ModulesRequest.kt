@@ -6,8 +6,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.gson.Gson
 import com.jorzet.casmal.models.Module
 import org.json.JSONObject
-import java.lang.Exception
-import java.util.ArrayList
+import java.util.*
 
 class ModulesRequest: AbstractRequestDatabase<String, List<Module>>() {
 
