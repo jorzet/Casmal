@@ -2,13 +2,26 @@ package com.jorzet.casmal.fragments.question
 
 import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseQuestionFragment
 import com.jorzet.casmal.models.Question
+import com.jorzet.casmal.ui.QuestionActivity
 
-class TrueFalseQuestionFragment(override var mQuestion: Question) : BaseQuestionFragment(){
+/**
+ * @author Jorge Zepeda Tinoco
+ * @email jorzet.94@gmail.com
+ * @date 20/08/19.
+ */
 
+class TrueFalseQuestionFragment(override var mQuestion: Question,
+                                override var mActivity: QuestionActivity
+) : BaseQuestionFragment(){
+
+    /**
+     * UI accessors
+     */
     private lateinit var mText: TextView
     private lateinit var mOptionTrue: TextView
     private lateinit var mOptionFalse: TextView
@@ -40,9 +53,9 @@ class TrueFalseQuestionFragment(override var mQuestion: Question) : BaseQuestion
 
             mOptionTrueBackgroundView.background =
                 if (mQuestion.answer == "1")
-                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_correct_option_background)
                 else
-                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
             mOptionFalseBackgroundView.setOnClickListener(null)
 
@@ -54,9 +67,9 @@ class TrueFalseQuestionFragment(override var mQuestion: Question) : BaseQuestion
 
             mOptionFalseBackgroundView.background =
                 if (mQuestion.answer == "0")
-                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_correct_option_background)
                 else
-                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
             mOptionTrueBackgroundView.setOnClickListener(null)
 
@@ -78,11 +91,11 @@ class TrueFalseQuestionFragment(override var mQuestion: Question) : BaseQuestion
             when(mQuestion.answer) {
                 "0" -> {
                     mOptionFalseBackgroundView.background =
-                        resources.getDrawable(R.drawable.answer_response_background)
+                        ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
                 }
                 "1" -> {
                     mOptionTrueBackgroundView.background =
-                        resources.getDrawable(R.drawable.answer_response_background)
+                        ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
                 }
             }
             mQuestion.wasOK = false

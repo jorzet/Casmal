@@ -8,9 +8,9 @@
             <corners
                     android:radius="8dip" />
             <gradient
-                    android:startColor="#D6A08F"
+                    android:startColor="@color/show_answer_button_background_color_disable"
                     android:centerY="0.50"
-                    android:endColor="#D6A08F"
+                    android:endColor="@color/show_answer_button_background_color_disable"
                     android:angle="270"/>
         </shape>
     </item>
@@ -20,9 +20,9 @@
             <corners
                     android:radius="8dip" />
             <gradient
-                    android:startColor="#EFC68C"
+                    android:startColor="@color/show_answer_button_background_color_disable"
                     android:centerY="0.50"
-                    android:endColor="#EFC68C"
+                    android:endColor="@color/show_answer_button_background_color_disable"
                     android:angle="270" />
         </shape>
     </item>

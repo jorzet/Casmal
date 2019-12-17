@@ -29,8 +29,6 @@ import org.json.JSONObject
  * @date 17/07/19.
  */
 
-
-
 class QuestionsRequest(questionId: String): AbstractRequestDatabase<String, Question>() {
 
     companion object {

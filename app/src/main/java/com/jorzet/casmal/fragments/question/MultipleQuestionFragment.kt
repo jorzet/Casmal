@@ -2,13 +2,26 @@ package com.jorzet.casmal.fragments.question
 
 import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseQuestionFragment
 import com.jorzet.casmal.models.Question
+import com.jorzet.casmal.ui.QuestionActivity
 
-class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionFragment(){
+/**
+ * @author Jorge Zepeda Tinoco
+ * @email jorzet.94@gmail.com
+ * @date 20/08/19.
+ */
 
+class MultipleQuestionFragment(override var mQuestion: Question,
+                               override var mActivity: QuestionActivity
+) : BaseQuestionFragment() {
+
+    /**
+     * UI accessors
+     */
     private lateinit var mText: TextView
     private lateinit var mOptionA: TextView
     private lateinit var mOptionB: TextView
@@ -52,13 +65,16 @@ class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionF
 
             mOptionABackgroundView.background =
                 if (mQuestion.answer == "1")
-                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_correct_option_background)
                 else
-                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
             mOptionBBackgroundView.setOnClickListener(null)
             mOptionCBackgroundView.setOnClickListener(null)
             mOptionDBackgroundView.setOnClickListener(null)
+
+            if (mQuestion.answer == "1") mActivity.onOptionCorrect()
+            else mActivity.onOptionIncorrect()
 
             mQuestion.wasOK = mQuestion.answer == "1"
             mQuestion.answered = true
@@ -68,13 +84,16 @@ class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionF
 
             mOptionBBackgroundView.background =
                 if (mQuestion.answer == "2")
-                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_correct_option_background)
                 else
-                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
             mOptionABackgroundView.setOnClickListener(null)
             mOptionCBackgroundView.setOnClickListener(null)
             mOptionDBackgroundView.setOnClickListener(null)
+
+            if (mQuestion.answer == "2") mActivity.onOptionCorrect()
+            else mActivity.onOptionIncorrect()
 
             mQuestion.wasOK = mQuestion.answer == "2"
             mQuestion.answered = true
@@ -84,13 +103,16 @@ class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionF
 
             mOptionCBackgroundView.background =
                 if (mQuestion.answer == "3")
-                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_correct_option_background)
                 else
-                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
             mOptionABackgroundView.setOnClickListener(null)
             mOptionBBackgroundView.setOnClickListener(null)
             mOptionDBackgroundView.setOnClickListener(null)
+
+            if (mQuestion.answer == "3") mActivity.onOptionCorrect()
+            else mActivity.onOptionIncorrect()
 
             mQuestion.wasOK = mQuestion.answer == "3"
             mQuestion.answered = true
@@ -100,13 +122,16 @@ class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionF
 
             mOptionDBackgroundView.background =
                 if (mQuestion.answer == "4")
-                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_correct_option_background)
                 else
-                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
             mOptionABackgroundView.setOnClickListener(null)
             mOptionBBackgroundView.setOnClickListener(null)
             mOptionCBackgroundView.setOnClickListener(null)
+
+            if (mQuestion.answer == "4") mActivity.onOptionCorrect()
+            else mActivity.onOptionIncorrect()
 
             mQuestion.wasOK = mQuestion.answer == "4"
             mQuestion.answered = true
@@ -142,24 +167,31 @@ class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionF
 
     override fun showAnswer() {
         if (mQuestion.answer.isNotEmpty()) {
-            when(mQuestion.answer) {
-                "1" -> {
-                    mOptionABackgroundView.background =
-                        resources.getDrawable(R.drawable.answer_response_background)
-                }
-                "2" -> {
-                    mOptionBBackgroundView.background =
-                        resources.getDrawable(R.drawable.answer_response_background)
-                }
-                "3" -> {
-                    mOptionCBackgroundView.background =
-                        resources.getDrawable(R.drawable.answer_response_background)
-                }
-                "4" -> {
-                    mOptionDBackgroundView.background =
-                        resources.getDrawable(R.drawable.answer_response_background)
-                }
-            }
+
+            mOptionABackgroundView.background =
+                if (mQuestion.answer == "1")
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
+                else
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_unselected_option_background)
+
+            mOptionBBackgroundView.background =
+                if (mQuestion.answer == "2")
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
+                else
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_unselected_option_background)
+
+            mOptionCBackgroundView.background =
+                if (mQuestion.answer == "3")
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
+                else
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_unselected_option_background)
+
+            mOptionDBackgroundView.background =
+                if (mQuestion.answer == "4")
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
+                else
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_unselected_option_background)
+
             mQuestion.wasOK = false
             mQuestion.answered = false
             mQuestion.chosenOption = "-1"

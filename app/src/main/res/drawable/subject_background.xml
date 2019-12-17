@@ -3,7 +3,7 @@
     <item>
         <shape>
             <corners android:radius="10dip" />
-            <solid android:color="@color/william_green" />
+            <solid android:color="@color/blue" />
         </shape>
     </item>
 </layer-list>
