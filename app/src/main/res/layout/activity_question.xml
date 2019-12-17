@@ -90,12 +90,11 @@
 		android:id="@+id/pb_questions_progress"
 		style="?android:attr/progressBarStyleHorizontal"
 		android:layout_width="fill_parent"
-		android:layout_height="2dp"
+		android:layout_height="4dp"
 		android:layout_below="@+id/toolbar_question"
 		android:indeterminate="false"
 		android:maxHeight="4dip"
 		android:minHeight="4dip"
-		android:progress="50"
 		android:progressDrawable="@drawable/greenprogress" />
 
 	<FrameLayout
@@ -120,7 +119,7 @@
 
 		<RelativeLayout
 			android:id="@+id/btn_show_answer"
-			android:layout_width="120dp"
+			android:layout_width="150dp"
 			android:layout_height="30dp"
 			android:layout_centerVertical="true"
 			android:layout_marginStart="20dp"
@@ -133,23 +132,16 @@
 				android:layout_height="wrap_content"
 				android:layout_centerHorizontal="true"
 				android:layout_centerVertical="true"
-				android:text="E X P L I C A C I Ó N"
+				android:text="R E S P U E S T A"
 				android:textSize="10sp"
 				android:textColor="@color/colorWhite"/>
 
 		</RelativeLayout>
 
-		<ImageView
-			android:id="@+id/iv_show_expanded_question"
-			android:layout_width="30dp"
-			android:layout_height="40dp"
-			android:layout_centerHorizontal="true"
-			android:layout_centerVertical="true"
-			android:background="@drawable/finger_unselected_icon"/>
 
 		<RelativeLayout
 			android:id="@+id/btn_next_question"
-			android:layout_width="120dp"
+			android:layout_width="150dp"
 			android:layout_height="30dp"
 			android:layout_centerVertical="true"
 			android:layout_alignParentRight="true"
