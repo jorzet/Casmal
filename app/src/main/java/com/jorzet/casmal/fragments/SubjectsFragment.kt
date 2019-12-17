@@ -16,13 +16,7 @@
 
 package com.jorzet.casmal.fragments
 
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.GridView
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
@@ -30,7 +24,6 @@ import com.jorzet.casmal.adapters.SubjectsAdapter
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Subject
-import com.jorzet.casmal.models.SubjectType
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -52,10 +45,6 @@ class SubjectsFragment: BaseFragment() {
 
     override fun getLayoutId(): Int {
         return R.layout.subjects_fragment
-    }
-
-    override fun getFragmentActivity(): FragmentActivity {
-        return this.activity!!
     }
 
     override fun initView() {

@@ -1,8 +1,6 @@
 package com.jorzet.casmal.fragments.question
 
-import android.util.Log
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseQuestionFrgament
 import com.jorzet.casmal.models.Question
@@ -19,10 +17,6 @@ class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionF
 
     override fun getLayoutId(): Int {
         return R.layout.multiple_question_fragment
-    }
-
-    override fun getFragmentActivity(): FragmentActivity {
-        return this.activity!!
     }
 
     override fun initView() {

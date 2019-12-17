@@ -19,8 +19,6 @@ package com.jorzet.casmal.fragments
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.LayoutRes
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.jorzet.casmal.R
@@ -46,15 +44,6 @@ class ProfileFragment: BaseFragment() {
     private var ivGoogleCircle: ImageView? = null
     private var ivEmailCircle: ImageView? = null
 
-    companion object {
-        private const val TAG = "ProfileFragment"
-    }
-
-    override fun getFragmentActivity(): FragmentActivity {
-        return this.activity!!
-    }
-
-    @LayoutRes
     override fun getLayoutId(): Int {
         return R.layout.profile_fragment
     }

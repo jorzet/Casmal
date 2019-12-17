@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.ui.QuestionActivity
 
 abstract class BaseFragment: Fragment() {
@@ -28,7 +27,6 @@ abstract class BaseFragment: Fragment() {
 
     @LayoutRes
     abstract fun getLayoutId(): Int
-    abstract fun getFragmentActivity(): FragmentActivity
     abstract fun initView()
     abstract fun prepareComponents()
 

@@ -1,10 +1,8 @@
 package com.jorzet.casmal.fragments.question
 
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseQuestionFrgament
-import com.jorzet.casmal.interfaces.QuestionView
 import com.jorzet.casmal.models.Question
 
 class TrueFalseQuestionFragment(override var mQuestion: Question) : BaseQuestionFrgament(){
@@ -15,10 +13,6 @@ class TrueFalseQuestionFragment(override var mQuestion: Question) : BaseQuestion
 
     override fun getLayoutId(): Int {
         return R.layout.true_false_question_fragment
-    }
-
-    override fun getFragmentActivity(): FragmentActivity {
-        return this.activity!!
     }
 
     override fun initView() {
@@ -36,5 +30,4 @@ class TrueFalseQuestionFragment(override var mQuestion: Question) : BaseQuestion
         mOptionTrue.text = mQuestion.opt1
         mOptionFalse.text = mQuestion.opt2
     }
-
 }
