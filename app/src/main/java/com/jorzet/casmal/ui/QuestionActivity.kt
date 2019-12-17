@@ -18,8 +18,6 @@ package com.jorzet.casmal.ui
 
 import android.util.Log
 import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseQuestionFrgament
@@ -59,10 +57,6 @@ class QuestionActivity: BaseActivity() {
 
     override fun getLayoutId(): Int {
         return R.layout.activity_question
-    }
-
-    override fun getActivity(): FragmentActivity {
-        return this
     }
 
     override fun initView() {
