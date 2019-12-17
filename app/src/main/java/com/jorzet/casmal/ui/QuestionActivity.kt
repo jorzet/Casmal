@@ -19,6 +19,7 @@ package com.jorzet.casmal.ui
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
@@ -46,6 +47,7 @@ class QuestionActivity: BaseActivity() {
     /**
      * UI accessors
      */
+    private lateinit var mQuestionTitle: TextView
     private lateinit var mShowQuestions: View
     private lateinit var mCloseQuestions: View
     private lateinit var mProgresBarQuestions: ProgressBar
@@ -75,6 +77,7 @@ class QuestionActivity: BaseActivity() {
     }
 
     override fun initView() {
+        mQuestionTitle = findViewById(R.id.tv_question_type_text)
         mShowQuestions = findViewById(R.id.rl_show_questions)
         mCloseQuestions = findViewById(R.id.iv_close_question)
         mProgresBarQuestions = findViewById(R.id.pb_questions_progress)
@@ -123,6 +126,8 @@ class QuestionActivity: BaseActivity() {
                     object : FirebaseRequestManager.OnGetQuestionListener {
                         override fun onGetQuestionLoaded(question: Question) {
                             Log.d("", "")
+
+                            mQuestionTitle.text = question.subject.name
 
                             // instance question fragment
                             if (question.questionType == QuestionType.MULTIPLE) {

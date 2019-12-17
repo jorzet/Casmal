@@ -7,13 +7,17 @@ import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseQuestionFragment
 import com.jorzet.casmal.models.Question
 
-class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionFragment() {
+class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionFragment(){
 
     private lateinit var mText: TextView
     private lateinit var mOptionA: TextView
     private lateinit var mOptionB: TextView
     private lateinit var mOptionC: TextView
     private lateinit var mOptionD: TextView
+    private lateinit var mOptionABackgroundView: View
+    private lateinit var mOptionBBackgroundView: View
+    private lateinit var mOptionCBackgroundView: View
+    private lateinit var mOptionDBackgroundView: View
     private lateinit var mOptionAView: View
     private lateinit var mOptionBView: View
     private lateinit var mOptionCView: View
@@ -33,7 +37,10 @@ class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionF
         mOptionB = rootView.findViewById(R.id.tv_option_b)
         mOptionC = rootView.findViewById(R.id.tv_option_c)
         mOptionD = rootView.findViewById(R.id.tv_option_d)
-
+        mOptionABackgroundView = rootView.findViewById(R.id.option_a)
+        mOptionBBackgroundView = rootView.findViewById(R.id.option_b)
+        mOptionCBackgroundView = rootView.findViewById(R.id.option_c)
+        mOptionDBackgroundView = rootView.findViewById(R.id.option_d)
         mOptionAView = rootView.findViewById(R.id.rl_option_a)
         mOptionBView = rootView.findViewById(R.id.rl_option_b)
         mOptionCView = rootView.findViewById(R.id.rl_option_c)
@@ -41,6 +48,70 @@ class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionF
     }
 
     override fun prepareComponents() {
+        mOptionABackgroundView.setOnClickListener {
+
+            mOptionABackgroundView.background =
+                if (mQuestion.answer == "1")
+                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                else
+                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+
+            mOptionBBackgroundView.setOnClickListener(null)
+            mOptionCBackgroundView.setOnClickListener(null)
+            mOptionDBackgroundView.setOnClickListener(null)
+
+            mQuestion.wasOK = mQuestion.answer == "1"
+            mQuestion.answered = true
+            mQuestion.chosenOption = "1"
+        }
+        mOptionBBackgroundView.setOnClickListener {
+
+            mOptionBBackgroundView.background =
+                if (mQuestion.answer == "2")
+                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                else
+                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+
+            mOptionABackgroundView.setOnClickListener(null)
+            mOptionCBackgroundView.setOnClickListener(null)
+            mOptionDBackgroundView.setOnClickListener(null)
+
+            mQuestion.wasOK = mQuestion.answer == "2"
+            mQuestion.answered = true
+            mQuestion.chosenOption = "2"
+        }
+        mOptionCBackgroundView.setOnClickListener {
+
+            mOptionCBackgroundView.background =
+                if (mQuestion.answer == "3")
+                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                else
+                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+
+            mOptionABackgroundView.setOnClickListener(null)
+            mOptionBBackgroundView.setOnClickListener(null)
+            mOptionDBackgroundView.setOnClickListener(null)
+
+            mQuestion.wasOK = mQuestion.answer == "3"
+            mQuestion.answered = true
+            mQuestion.chosenOption = "3"
+        }
+        mOptionDBackgroundView.setOnClickListener {
+
+            mOptionDBackgroundView.background =
+                if (mQuestion.answer == "4")
+                    resources.getDrawable(R.drawable.answer_correct_option_background)
+                else
+                    resources.getDrawable(R.drawable.answer_wrong_option_background)
+
+            mOptionABackgroundView.setOnClickListener(null)
+            mOptionBBackgroundView.setOnClickListener(null)
+            mOptionCBackgroundView.setOnClickListener(null)
+
+            mQuestion.wasOK = mQuestion.answer == "4"
+            mQuestion.answered = true
+            mQuestion.chosenOption = "4"
+        }
         onUpdateQuestionView()
     }
 
@@ -70,7 +141,29 @@ class MultipleQuestionFragment(override var mQuestion: Question) : BaseQuestionF
     }
 
     override fun showAnswer() {
-
+        if (mQuestion.answer.isNotEmpty()) {
+            when(mQuestion.answer) {
+                "1" -> {
+                    mOptionABackgroundView.background =
+                        resources.getDrawable(R.drawable.answer_response_background)
+                }
+                "2" -> {
+                    mOptionBBackgroundView.background =
+                        resources.getDrawable(R.drawable.answer_response_background)
+                }
+                "3" -> {
+                    mOptionCBackgroundView.background =
+                        resources.getDrawable(R.drawable.answer_response_background)
+                }
+                "4" -> {
+                    mOptionDBackgroundView.background =
+                        resources.getDrawable(R.drawable.answer_response_background)
+                }
+            }
+            mQuestion.wasOK = false
+            mQuestion.answered = false
+            mQuestion.chosenOption = "-1"
+        }
     }
 
 }

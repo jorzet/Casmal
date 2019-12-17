@@ -132,7 +132,7 @@
 				android:layout_height="wrap_content"
 				android:layout_centerHorizontal="true"
 				android:layout_centerVertical="true"
-				android:text="E X P L I C A C I Ó N"
+				android:text="R E S P U E S T A"
 				android:textSize="10sp"
 				android:textColor="@color/colorWhite"/>
 
