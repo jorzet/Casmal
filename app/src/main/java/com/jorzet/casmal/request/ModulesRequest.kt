@@ -27,10 +27,10 @@ class ModulesRequest: AbstractRequestDatabase<String, List<Module>>() {
         Log.d(TAG,"modules request success")
         val post = successResponse.value
         if (post != null) {
-            val modulesMap = (post as kotlin.collections.HashMap<*, *>)
+            val modulesMap = (post as HashMap<*, *>)
             val mModules = ArrayList<Module>()
             for (key in modulesMap.keys) {
-                val moduleMap = modulesMap.get(key) as kotlin.collections.HashMap<*, *>
+                val moduleMap = modulesMap[key] as HashMap<*, *>
                 try {
                     val module = Gson().fromJson(JSONObject(moduleMap).toString(), Module::class.java)
 
@@ -38,20 +38,18 @@ class ModulesRequest: AbstractRequestDatabase<String, List<Module>>() {
                     if (module.enabled) {
                         mModules.add(module)
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                } catch (e: java.lang.Exception) {
-                    e.printStackTrace()
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
                 }
             }
-            onRequestListenerSucces.onSuccess(mModules)
+            onRequestListenerSuccess.onSuccess(mModules)
         } else {
-            onRequestLietenerFailed.onFailed(Throwable())
+            onRequestListenerFailed.onFailed(Throwable())
         }
     }
 
     override fun onGettingError(errorResponse: DatabaseError) {
         Log.d(TAG,"modules request fail")
-        onRequestLietenerFailed.onFailed(Throwable())
+        onRequestListenerFailed.onFailed(Throwable())
     }
 }
