@@ -61,6 +61,9 @@ class MultipleQuestionFragment(override var mQuestion: Question,
     }
 
     override fun prepareComponents() {
+        // enable next question button
+        mActivity.onNextQuestionButtonEnable(false)
+
         mOptionABackgroundView.setOnClickListener {
 
             mOptionABackgroundView.background =
@@ -79,6 +82,9 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mQuestion.wasOK = mQuestion.answer == "1"
             mQuestion.answered = true
             mQuestion.chosenOption = "1"
+
+            // enable next question button
+            mActivity.onNextQuestionButtonEnable(true)
         }
         mOptionBBackgroundView.setOnClickListener {
 
@@ -98,6 +104,9 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mQuestion.wasOK = mQuestion.answer == "2"
             mQuestion.answered = true
             mQuestion.chosenOption = "2"
+
+            // enable next question button
+            mActivity.onNextQuestionButtonEnable(true)
         }
         mOptionCBackgroundView.setOnClickListener {
 
@@ -117,6 +126,9 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mQuestion.wasOK = mQuestion.answer == "3"
             mQuestion.answered = true
             mQuestion.chosenOption = "3"
+
+            // enable next question button
+            mActivity.onNextQuestionButtonEnable(true)
         }
         mOptionDBackgroundView.setOnClickListener {
 
@@ -136,6 +148,9 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mQuestion.wasOK = mQuestion.answer == "4"
             mQuestion.answered = true
             mQuestion.chosenOption = "4"
+
+            // enable next question button
+            mActivity.onNextQuestionButtonEnable(true)
         }
         onUpdateQuestionView()
     }
@@ -144,22 +159,22 @@ class MultipleQuestionFragment(override var mQuestion: Question,
 
         mText.text = mQuestion.text
 
-        if (mQuestion.opt1.isNotEmpty())
+        if (mQuestion.opt1 != null && mQuestion.opt1!!.isNotEmpty())
             mOptionA.text = mQuestion.opt1
         else
             mOptionAView.visibility = View.GONE
 
-        if (mQuestion.opt2.isNotEmpty())
+        if (mQuestion.opt2 != null && mQuestion.opt2!!.isNotEmpty())
             mOptionB.text = mQuestion.opt2
         else
             mOptionBView.visibility = View.GONE
 
-        if (mQuestion.opt3.isNotEmpty())
+        if (mQuestion.opt3 != null && mQuestion.opt3!!.isNotEmpty())
             mOptionC.text = mQuestion.opt3
         else
             mOptionCView.visibility = View.GONE
 
-        if (mQuestion.opt4.isNotEmpty())
+        if (mQuestion.opt4 != null && mQuestion.opt4!!.isNotEmpty())
             mOptionD.text = mQuestion.opt4
         else
             mOptionDView.visibility = View.GONE

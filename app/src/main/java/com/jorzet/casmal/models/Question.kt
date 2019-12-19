@@ -49,16 +49,16 @@ data class Question (
     var text : String = "",
     @SerializedName("opt1")
     @Expose
-    var opt1 : String = "",
+    var opt1 : String? = "",
     @SerializedName("opt2")
     @Expose
-    var opt2 : String = "",
+    var opt2 : String? = "",
     @SerializedName("opt3")
     @Expose
-    var opt3 : String = "",
+    var opt3 : String? = "",
     @SerializedName("opt4")
     @Expose
-    var opt4 : String = "",
+    var opt4 : String? = "",
     @SerializedName("id")
     @Expose
     var questionId : String = "",
@@ -68,5 +68,6 @@ data class Question (
 
     var chosenOption : String = "",
     var wasOK : Boolean = false,
-    var answered : Boolean = false // important this is just used in ShowQuestionsActivity
+    var answered : Boolean = false, // important this is just used in ShowQuestionsActivity
+    var moduleId: String // just set it in case exam is open
 ) : Parcelable

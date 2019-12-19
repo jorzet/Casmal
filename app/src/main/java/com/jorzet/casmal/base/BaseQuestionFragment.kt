@@ -1,5 +1,7 @@
 package com.jorzet.casmal.base
 
+import android.util.Log
+import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.ui.QuestionActivity
 
@@ -12,6 +14,13 @@ import com.jorzet.casmal.ui.QuestionActivity
 abstract class BaseQuestionFragment: BaseFragment() {
 
     /**
+     * Constants
+     */
+    companion object {
+        const val TAG: String = "BaseQuestionFragment"
+    }
+
+    /**
      * Attributes
      */
     abstract var mQuestion: Question
@@ -22,6 +31,7 @@ abstract class BaseQuestionFragment: BaseFragment() {
      */
     interface OnOptionSelectedListener {
         fun onButtonsEnable()
+        fun onNextQuestionButtonEnable(enable: Boolean)
         fun onOptionCorrect()
         fun onOptionIncorrect()
     }
@@ -35,4 +45,19 @@ abstract class BaseQuestionFragment: BaseFragment() {
      *
      */
     abstract fun showAnswer()
+
+    open fun onPushQuestion(isExam: Boolean) {
+        val mFirebaseRequestManager: FirebaseRequestManager =
+            FirebaseRequestManager.getInstance(mActivity)
+
+        mFirebaseRequestManager.pushQuestion(isExam, mQuestion, object: FirebaseRequestManager.OnPushQuestionListener {
+            override fun onPushQuestionSuccess() {
+                Log.d(TAG, "push question success")
+            }
+
+            override fun onPushQuestionFail(throwable: Throwable) {
+                Log.d(TAG, "push question fail")
+            }
+        })
+    }
 }

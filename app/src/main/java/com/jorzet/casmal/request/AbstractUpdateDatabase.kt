@@ -32,19 +32,19 @@ abstract class AbstractUpdateDatabase<A, B>: AbstractDatabase<A, B>() {
         // get firebase data base reference
         mFirebaseDatabase = getDatabaseInstance()
 
+        mFirebaseDatabase.keepSynced(true)
+
         val params = getParams()
         if (params != null) {
             mFirebaseDatabase.updateChildren(params).addOnCompleteListener(mOnCompleteListener)
         }
     }
 
-    private val mOnCompleteListener = object: OnCompleteListener<Void> {
-        override fun onComplete(task: Task<Void>) {
+    private val mOnCompleteListener = OnCompleteListener<Void> { task ->
             if (task.isComplete) {
                 onUpdateSuccess()
             } else {
                 onUpdateError(task.exception!!)
             }
         }
-    }
 }

@@ -44,6 +44,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
      */
     companion object {
         const val QUESTION_LIST: String = "question_list"
+        const val IS_EXAM: String = "is_exam"
     }
 
     /**
@@ -63,6 +64,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     private var mQuestions: List<String>? = arrayListOf()
     private var mCurrectQuestionIndex = 0
     private var mCurrentQuestionProgress = 0
+    private var mIsExam: Boolean = false
 
     /**
      * Fragment
@@ -94,6 +96,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         mShowAnswer.setOnClickListener(mShowAnswerClickListener)
 
         mQuestions = intent.extras!!.getStringArrayList(QUESTION_LIST)
+        mIsExam = intent.extras!!.getBoolean(IS_EXAM)
 
         mLoadingQuestionProgressBar.visibility = View.VISIBLE
         onChangeQuestion()
@@ -123,6 +126,11 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     private fun onChangeQuestion() {
         if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
             val question = mQuestions?.get(mCurrectQuestionIndex)
+
+            if (::currentFragment.isInitialized) {
+                currentFragment.onPushQuestion(mIsExam)
+            }
+
             if (question != null) {
                 FirebaseRequestManager.getInstance(this).requestQuestion(
                     question,
@@ -182,18 +190,28 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     override fun onButtonsEnable() {
-        mShowQuestions.isEnabled = true
-        mCloseQuestions.isEnabled = true
-        mShowAnswer.isEnabled = true
-        mNextQuestion.isEnabled = true
+        if (::mShowQuestions.isInitialized) mShowQuestions.isEnabled = true
+        if (::mCloseQuestions.isInitialized) mCloseQuestions.isEnabled = true
+        if (::mShowAnswer.isInitialized) mShowAnswer.isEnabled = true
+        if (::mNextQuestion.isInitialized) mNextQuestion.isEnabled = true
+    }
+
+    override fun onNextQuestionButtonEnable(enable: Boolean) {
+        if (::mNextQuestion.isInitialized) {
+            mNextQuestion.isEnabled = enable
+        }
     }
 
     override fun onOptionCorrect() {
-        mShowAnswer.isEnabled = false
+        if (::mShowAnswer.isInitialized) {
+            mShowAnswer.isEnabled = false
+        }
     }
 
     override fun onOptionIncorrect() {
-        mShowAnswer.isEnabled = true
+        if (::mShowAnswer.isInitialized) {
+            mShowAnswer.isEnabled = true
+        }
     }
 
 }
