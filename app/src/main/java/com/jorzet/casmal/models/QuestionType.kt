@@ -10,5 +10,8 @@ enum class QuestionType(name: String) {
     @SerializedName("multiple")
     @Expose
     MULTIPLE("multiple"),
+    @SerializedName("match")
+    @Expose
+    MATCH("match"),
     NONE("")
 }

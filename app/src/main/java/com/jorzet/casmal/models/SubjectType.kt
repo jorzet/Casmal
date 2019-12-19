@@ -25,102 +25,102 @@ import com.google.gson.annotations.SerializedName
  * @date 08/08/19.
  */
 
-enum class SubjectType(name: String) {
+enum class SubjectType(val value: String) {
     @SerializedName("clinic")
     @Expose
-    CLINIC("clinic"),
+    CLINIC("Clínica"),
     @SerializedName("cardiology")
     @Expose
-    CARDIOLOGY("cardiology"),
+    CARDIOLOGY("Cardiología"),
     @SerializedName("surgery_anesthesiology")
     @Expose
-    SURGERY_ANESTHESIOLOGY("surgery_anesthesiology"),
+    SURGERY_ANESTHESIOLOGY("Cirugía Anestesiología"),
     @SerializedName("anatomy")
     @Expose
-    ANATOMY("anatomy"),
-    @SerializedName("endocrinologia")
+    ANATOMY("Anatomía"),
+    @SerializedName("endocrinology")
     @Expose
-    ENDOCRINOLOGY("endocrinology"),
+    ENDOCRINOLOGY("Endocrinología"),
     @SerializedName("pharmacology")
     @Expose
-    PHARMACOLOGY("pharmacology"),
+    PHARMACOLOGY("Farmacología"),
     @SerializedName("physiology")
     @Expose
-    PHYSIOLOGY("physiology"),
+    PHYSIOLOGY("Fisiología"),
     @SerializedName("gastrology")
     @Expose
-    GASTROLOGY("gastrology"),
+    GASTROLOGY("Gastrologia"),
     @SerializedName("gynecology")
     @Expose
-    GYNECOLOGY("gynecology"),
+    GYNECOLOGY("Ginecología"),
     @SerializedName("hematology")
     @Expose
-    HEMATOLOGY("hematology"),
+    HEMATOLOGY("Hematología"),
     @SerializedName("immunology")
     @Expose
-    IMMUNOLOGY("immunology"),
+    IMMUNOLOGY("Inmunología"),
     @SerializedName("pneumology_dermatology")
     @Expose
-    PNEUMOLOGY_DERMATOLOGY("pneumology_dermatology"),
+    PNEUMOLOGY_DERMATOLOGY("Neumología Dermatología"),
     @SerializedName("pneumology")
     @Expose
-    PNEUMOLOGY("pneumology"),
+    PNEUMOLOGY("Neumología"),
     @SerializedName("neurology")
     @Expose
-    NEUROLOGY("neurology"),
+    NEUROLOGY("Neurología"),
     @SerializedName("oncology")
     @Expose
-    ONCOLOGY("oncology"),
+    ONCOLOGY("Oncología"),
     @SerializedName("psychiatry")
     @Expose
-    PSYCHIATRY("psychiatry"),
+    PSYCHIATRY("Psiquiatría"),
     @SerializedName("nephrology_urology")
     @Expose
-    UROLOGY("nephrology_urology"),
+    UROLOGY("Nefrología Urología"),
     @SerializedName("nephrology")
     @Expose
-    NEPHROLOGY("nephrology"),
+    NEPHROLOGY("Nefrología"),
     @SerializedName("dermatology")
     @Expose
-    DERMATOLOGY("dermatology"),
+    DERMATOLOGY("Dermatología"),
     @SerializedName("embryology")
     @Expose
-    EMBRYOLOGY("embryology"),
+    EMBRYOLOGY("Embriología"),
     @SerializedName("pathology")
     @Expose
-    PATHOLOGY("pathology"),
+    PATHOLOGY("Patología"),
     @SerializedName("traumatology_orthopedics")
     @Expose
-    TRAUMATOLOGY_ORTHOPEDICS("traumatology_orthopedics"),
+    TRAUMATOLOGY_ORTHOPEDICS("Traumatologia Ortopedia"),
     @SerializedName("biochemistry")
     @Expose
-    BIOCHEMISTRY("biochemistry"),
+    BIOCHEMISTRY("Bioquímica"),
     @SerializedName("epidemiology")
     @Expose
-    EPIDEMIOLOGY("epidemiology"),
+    EPIDEMIOLOGY("Epidemiología"),
     @SerializedName("histology")
     @Expose
-    HISTOLOGY("histology"),
+    HISTOLOGY("Histología"),
     @SerializedName("microbiology")
     @Expose
-    MICROBIOLOGY("microbiology"),
+    MICROBIOLOGY("Microbiología"),
     @SerializedName("genetics")
     @Expose
-    GENETICS("genetics"),
+    GENETICS("Genética"),
     @SerializedName("otorhinolaryngology")
     @Expose
-    OTORHINOLARYNGOLOGY("otorhinolaryngology"),
+    OTORHINOLARYNGOLOGY("Otorrinolaringología"),
     @SerializedName("ophthalmology")
     @Expose
-    OPHTHALMOLOGY("ophthalmology"),
+    OPHTHALMOLOGY("Oftalmología"),
     @SerializedName("infectology")
     @Expose
-    INFECTOLOGY("infectology"),
+    INFECTOLOGY("Infectología"),
     @SerializedName("gastroenterology")
     @Expose
-    GASTROENTEROLOGY("gastroenterology"),
+    GASTROENTEROLOGY("Gastroenterología"),
     @SerializedName("pediatrics")
     @Expose
-    PEDIATRICS("pediatrics"),
+    PEDIATRICS("Pediatría"),
     NONE("none")
 }

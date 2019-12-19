@@ -78,6 +78,18 @@ abstract class FirebaseRequestManager(context: Context) {
         fun onGetQuestionError(throwable: Throwable)
     }
 
+    interface OnPushQuestionListener {
+        /**
+         *
+         */
+        fun onPushQuestionSuccess()
+
+        /**
+         *
+         */
+        fun onPushQuestionFail(throwable: Throwable)
+    }
+
     /**
      *
      */
@@ -92,6 +104,11 @@ abstract class FirebaseRequestManager(context: Context) {
      *
      */
     abstract fun requestQuestion(questionId: String, onGetQuestionsListener: OnGetQuestionListener)
+
+    /**
+     *
+     */
+    abstract fun pushQuestion(isExam: Boolean, question: Question, onPushQuestionListener: OnPushQuestionListener)
 
     /**
      * Destroy [FirebaseRequestManager] instance

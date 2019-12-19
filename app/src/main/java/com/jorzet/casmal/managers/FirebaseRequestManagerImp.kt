@@ -21,10 +21,7 @@ import android.content.Context
 import com.jorzet.casmal.models.Module
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.models.Subject
-import com.jorzet.casmal.request.AbstractRequestDatabase
-import com.jorzet.casmal.request.ModulesRequest
-import com.jorzet.casmal.request.QuestionsRequest
-import com.jorzet.casmal.request.SubjectsRequest
+import com.jorzet.casmal.request.*
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -66,13 +63,13 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestQuestion(questionId: String, onGetQuestionsListener: OnGetQuestionListener) {
         val questionsRequest = QuestionsRequest(questionId)
 
-        questionsRequest.setOnRequestSuccess(object: AbstractRequestDatabase.OnRequestListenerSuccess<Question> {
+        questionsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Question> {
             override fun onSuccess(result: Question) {
                 onGetQuestionsListener.onGetQuestionLoaded(result)
             }
         })
 
-        questionsRequest.setOnRequestFailed(object: AbstractRequestDatabase.OnRequestListenerFailed {
+        questionsRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
                 onGetQuestionsListener.onGetQuestionError(throwable)
             }
@@ -81,16 +78,34 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
         questionsRequest.request()
     }
 
+    override fun pushQuestion(isExam: Boolean, question: Question, onPushQuestionListener: OnPushQuestionListener) {
+        val pushQuestionRequest = PushQuestionRequest(isExam, question)
+
+        pushQuestionRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Boolean> {
+            override fun onSuccess(result: Boolean) {
+                onPushQuestionListener.onPushQuestionSuccess()
+            }
+        })
+
+        pushQuestionRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onPushQuestionListener.onPushQuestionFail(throwable)
+            }
+        })
+
+        pushQuestionRequest.update()
+    }
+
     override fun requestModules(onGetModulesListener: OnGetModulesListener) {
         val modulesRequest = ModulesRequest()
 
-        modulesRequest.setOnRequestSuccess(object: AbstractRequestDatabase.OnRequestListenerSuccess<List<Module>> {
+        modulesRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<Module>> {
             override fun onSuccess(result: List<Module>) {
                 onGetModulesListener.onGetModulesSuccess(result)
             }
         })
 
-        modulesRequest.setOnRequestFailed(object: AbstractRequestDatabase.OnRequestListenerFailed {
+        modulesRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
                 onGetModulesListener.onGetModulesFail(throwable)
             }
@@ -102,13 +117,13 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestSubjects(onGetSubjectsListener: OnGetSubjectsListener) {
         val subjectsRequest = SubjectsRequest()
 
-        subjectsRequest.setOnRequestSuccess(object: AbstractRequestDatabase.OnRequestListenerSuccess<List<Subject>> {
+        subjectsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<Subject>> {
             override fun onSuccess(result: List<Subject>) {
                 onGetSubjectsListener.onGetSubjectsSuccess(result)
             }
         })
 
-        subjectsRequest.setOnRequestFailed(object: AbstractRequestDatabase.OnRequestListenerFailed {
+        subjectsRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
                 onGetSubjectsListener.onGetSubjectsFail(throwable)
             }

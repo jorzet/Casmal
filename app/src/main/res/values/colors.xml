@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#8AD4D5</color>
-    <color name="colorPrimaryDark">#8FD9DA</color>
-    <color name="colorAccent">#8FD9DA</color>
+    <color name="colorPrimary">#5fafde</color>
+    <color name="colorPrimaryDark">#5fafde</color>
+    <color name="colorAccent">#5fafde</color>
 
     <color name="background">#FFFFFF</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="blue">#1A83B8</color>
+    <color name="blue_casmal">#5fafde</color>
+    <color name="blue_hard">#101E45</color>
     <color name="black">#000000</color>
     <color name="blue_soft">#868E9F</color>
 
@@ -18,7 +20,8 @@
     <color name="progress_color">#B0DC3A</color>
     <color name="bottom_bar_background_color">#E6E6E6</color>
     <color name="next_question_button_background_color">#B0DC3A</color>
-    <color name="show_answer_button_background_color">#F4A01C</color>
+    <color name="show_answer_button_background_color_enable">#F4A01C</color>
+    <color name="show_answer_button_background_color_disable">#EFC68C</color>
 
     <color name="question_background_color">#101E45</color>
     <color name="option_text_color">#B2D8FF</color>

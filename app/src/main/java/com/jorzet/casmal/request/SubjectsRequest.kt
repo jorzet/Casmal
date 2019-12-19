@@ -8,6 +8,13 @@ import com.jorzet.casmal.models.Subject
 import org.json.JSONObject
 import java.lang.Exception
 
+/**
+ * @author Jorge Zepeda Tinoco
+ * @email jorzet.94@gmail.com
+ * @date 17/12/19.
+ */
+
+
 class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
 
     companion object {
