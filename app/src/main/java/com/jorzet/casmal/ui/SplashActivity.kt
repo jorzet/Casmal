@@ -114,8 +114,7 @@ class SplashActivity: BaseActivity() {
         callbackManager = CallbackManager.Factory.create()
         auth = FirebaseAuth.getInstance()
 
-        val facebookCallback: FacebookCallback<LoginResult> = object :
-            FacebookCallback<LoginResult> {
+        val facebookCallback: FacebookCallback<LoginResult> = object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 Utils.print(TAG, "facebook:onSuccess:$loginResult")
                 firebaseAuthWithFacebook(loginResult.accessToken)
@@ -152,43 +151,48 @@ class SplashActivity: BaseActivity() {
     /**
      * This method creates ans intent to show [MainActivity]
      */
-    private fun goMainActivity(uid: String) {
-        FirebaseDatabase.getInstance().reference.child(Constants.tableUsers).orderByChild("uid").equalTo(uid).addValueEventListener(object: ValueEventListener {
+    private fun goMainActivity(currentUser: FirebaseUser?) {
+        val intent = Intent(this, MainActivity::class.java)
+
+        FirebaseDatabase.getInstance().reference.child(Constants.tableUsers).orderByChild("uid").equalTo(currentUser?.uid).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val dataSnapshots: Iterator<DataSnapshot> = dataSnapshot.children.iterator()
                 val users: MutableList<User> = ArrayList()
 
                 while (dataSnapshots.hasNext()) {
                     val dataSnapshotChild: DataSnapshot = dataSnapshots.next()
+                    Utils.print(dataSnapshot.toString())
                     val user: User? = dataSnapshotChild.getValue(User::class.java)
                     users.add(user!!)
+
+                    Utils.print("Adding: " + user.uid)
                 }
 
                 val temp: MutableList<User> = ArrayList()
 
-                try {
-                    for (i in 0..users.size) {
-                        Utils.print(uid)
-
-                        if (users[i].uid == uid) {
-                            temp.add(users[i])
-                            //Here you can find your searchable user
-                            Utils.print(temp[i].uid)
-                        }
-                    }
-                } catch (ex: Exception) {
-                    Utils.print("Error $ex)")
+                if(users.isEmpty()) {
+                    Utils.print("¡Usuario nuevo!")
+                    return
+                } else {
+                    Utils.print("Users size: " + users.size)
                 }
+
+                Utils.print("User found: " + currentUser?.uid)
+
+                if (users[0].uid == currentUser?.uid) {
+                    temp.add(users[0])
+                    //Here you can find your searchable user
+                    Utils.print(temp[0].uid)
+                }
+
+                startActivity(intent)
+                finish()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 Utils.print("Operación cancelada: " + databaseError.details)
             }
         })
-
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -206,7 +210,8 @@ class SplashActivity: BaseActivity() {
             } catch (ex: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Utils.print(TAG, "Google sign in failed $ex")
-                // ...
+
+                Toast.makeText(this, R.string.text_error_login, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -305,7 +310,7 @@ class SplashActivity: BaseActivity() {
 
             Utils.print(currentUser.uid)
 
-            goMainActivity(currentUser.uid)
+            goMainActivity(currentUser)
 
             Handler().postDelayed({
                 //TODO Test login

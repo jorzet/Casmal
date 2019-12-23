@@ -8,6 +8,8 @@
 
     <string name="snackbar_message_text">Presiona otra vez para SALIR de la aplicación</string>
 
+    <string name="text_error_login">Ocurrió un error al iniciar sesión, intentalo nuevamente</string>
+
     <!--question fragments-->
     <string name="show_answer">VER SOLUCIÓN</string>
     <string name="option_a_text">A)</string>

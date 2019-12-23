@@ -7,19 +7,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Payment (
-    @SerializedName("confirming")
-    @Expose
-    var confirming: Boolean = false,
-
-    @SerializedName("isPremium")
-    @Expose
-    var isPremium: Boolean = false,
-
-    @SerializedName("subscription")
-    @Expose
-    var subscription: String = "",
-
-    @SerializedName("timestamp")
-    @Expose
-    var timestamp: Int = 0
-) : Parcelable
+    var confirming: Boolean,
+    var isPremium: Boolean,
+    var subscription: String,
+    var timeStamp: Int
+) : Parcelable {
+    constructor() : this(false, false, "", 0)
+}
