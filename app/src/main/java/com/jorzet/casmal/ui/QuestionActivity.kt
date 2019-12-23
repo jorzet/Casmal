@@ -141,17 +141,17 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                                 QuestionType.MULTIPLE -> {
                                     currentFragment =
                                         MultipleQuestionFragment(question,
-                                            getActivity() as QuestionActivity)
+                                            this@QuestionActivity)
                                 }
                                 QuestionType.TRUE_FALSE -> {
                                     currentFragment =
                                         TrueFalseQuestionFragment(question,
-                                            getActivity() as QuestionActivity)
+                                            this@QuestionActivity)
                                 }
                                 QuestionType.MATCH -> {
                                     currentFragment =
                                         MatchQuestionFragment(question,
-                                            getActivity() as QuestionActivity)
+                                            this@QuestionActivity)
                                 }
                                 else -> {}
                             }
@@ -208,5 +208,4 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
             mShowAnswer.isEnabled = true
         }
     }
-
 }

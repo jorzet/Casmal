@@ -22,7 +22,6 @@ import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.models.Subject
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.request.*
-import com.jorzet.casmal.request.*
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -134,13 +133,13 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestUser(uid: String, onGetUserListener: OnGetUserListener) {
         val usersRequest = UserRequest(uid)
 
-        usersRequest.setOnRequestSuccess(object : AbstractRequestDatabase.OnRequestListenerSuccess<User> {
+        usersRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<User> {
             override fun onSuccess(result: User) {
                 onGetUserListener.onGetUserLoaded(result)
             }
         })
 
-        usersRequest.setOnRequestFailed(object : AbstractRequestDatabase.OnRequestListenerFailed {
+        usersRequest.setOnRequestFailed(object : AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
                 onGetUserListener.onGetUserError(throwable)
             }

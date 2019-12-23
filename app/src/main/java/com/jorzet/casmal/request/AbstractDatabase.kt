@@ -18,8 +18,8 @@ abstract class AbstractDatabase<A, B> {
     /**
      * Listeners
      */
-    protected lateinit var onRequestListenerSucces: OnRequestListenerSuccess<B>
-    protected lateinit var onRequestLietenerFailed: OnRequestListenerFailed
+    protected lateinit var onRequestListenerSuccess: OnRequestListenerSuccess<B>
+    protected lateinit var onRequestListenerFailed: OnRequestListenerFailed
 
     /** Describes success interface listener*/
     interface OnRequestListenerSuccess<B> {
@@ -43,7 +43,7 @@ abstract class AbstractDatabase<A, B> {
      * @param onRequestSuccess [OnRequestListenerSuccess] implementation
      */
     fun setOnRequestSuccess(onRequestSuccess: OnRequestListenerSuccess<B>) {
-        this.onRequestListenerSucces = onRequestSuccess
+        this.onRequestListenerSuccess = onRequestSuccess
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class AbstractDatabase<A, B> {
      * @param onRequestFailed [OnRequestListenerFailed] implementation
      */
     fun setOnRequestFailed(onRequestFailed: OnRequestListenerFailed) {
-        this.onRequestLietenerFailed = onRequestFailed
+        this.onRequestListenerFailed = onRequestFailed
     }
 
     /**

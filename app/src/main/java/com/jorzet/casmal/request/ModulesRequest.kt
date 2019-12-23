@@ -41,6 +41,7 @@ class ModulesRequest: AbstractRequestDatabase<String, List<Module>>() {
                     ex.printStackTrace()
                 }
             }
+
             onRequestListenerSuccess.onSuccess(mModules)
         } else {
             onRequestListenerFailed.onFailed(Throwable())
