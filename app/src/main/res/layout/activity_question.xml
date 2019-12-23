@@ -179,7 +179,7 @@
 			android:layout_height="wrap_content"
 			android:indeterminate="true"
 			android:layout_gravity="center"
-			android:indeterminateTint="@color/colorWhite"/>
+			android:indeterminateTint="@color/blue"/>
 
 	</FrameLayout>
 

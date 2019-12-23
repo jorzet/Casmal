@@ -1,10 +1,63 @@
 package com.jorzet.casmal.base
 
+import android.util.Log
+import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Question
+import com.jorzet.casmal.ui.QuestionActivity
+
+/**
+ * @author Jorge Zepeda Tinoco
+ * @email jorzet.94@gmail.com
+ * @date 20/08/19.
+ */
 
 abstract class BaseQuestionFragment: BaseFragment() {
-    abstract var mQuestion: Question
 
+    /**
+     * Constants
+     */
+    companion object {
+        const val TAG: String = "BaseQuestionFragment"
+    }
+
+    /**
+     * Attributes
+     */
+    abstract var mQuestion: Question
+    abstract var mActivity: QuestionActivity
+
+    /**
+     * Listener
+     */
+    interface OnOptionSelectedListener {
+        fun onButtonsEnable()
+        fun onNextQuestionButtonEnable(enable: Boolean)
+        fun onOptionCorrect()
+        fun onOptionIncorrect()
+    }
+
+    /**
+     *
+     */
     abstract fun onUpdateQuestionView()
+
+    /**
+     *
+     */
     abstract fun showAnswer()
+
+    open fun onPushQuestion(isExam: Boolean) {
+        val mFirebaseRequestManager: FirebaseRequestManager =
+            FirebaseRequestManager.getInstance(mActivity)
+
+        mFirebaseRequestManager.pushQuestion(isExam, mQuestion, object: FirebaseRequestManager.OnPushQuestionListener {
+            override fun onPushQuestionSuccess() {
+                Log.d(TAG, "push question success")
+            }
+
+            override fun onPushQuestionFail(throwable: Throwable) {
+                Log.d(TAG, "push question fail")
+            }
+        })
+    }
 }

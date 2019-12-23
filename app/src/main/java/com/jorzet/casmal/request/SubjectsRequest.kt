@@ -7,6 +7,13 @@ import com.google.gson.Gson
 import com.jorzet.casmal.models.Subject
 import org.json.JSONObject
 
+/**
+ * @author Jorge Zepeda Tinoco
+ * @email jorzet.94@gmail.com
+ * @date 17/12/19.
+ */
+
+
 class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
 
     companion object {

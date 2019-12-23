@@ -18,11 +18,13 @@ package com.jorzet.casmal.ui
 
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseQuestionFragment
+import com.jorzet.casmal.fragments.question.MatchQuestionFragment
 import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
 import com.jorzet.casmal.fragments.question.TrueFalseQuestionFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
@@ -35,12 +37,13 @@ import com.jorzet.casmal.models.QuestionType
  * @date 20/08/19.
  */
 
-class QuestionActivity: BaseActivity() {
+class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedListener {
     /**
      * Tags
      */
     companion object {
         const val QUESTION_LIST: String = "question_list"
+        const val IS_EXAM: String = "is_exam"
     }
 
     /**
@@ -52,8 +55,7 @@ class QuestionActivity: BaseActivity() {
     private lateinit var mProgresBarQuestions: ProgressBar
     private lateinit var mShowAnswer: View
     private lateinit var mNextQuestion: View
-
-
+    private lateinit var mLoadingQuestionProgressBar: FrameLayout
 
     /**
      * Models
@@ -61,6 +63,7 @@ class QuestionActivity: BaseActivity() {
     private var mQuestions: List<String>? = arrayListOf()
     private var mCurrectQuestionIndex = 0
     private var mCurrentQuestionProgress = 0
+    private var mIsExam: Boolean = false
 
     /**
      * Fragment
@@ -78,6 +81,7 @@ class QuestionActivity: BaseActivity() {
         mProgresBarQuestions = findViewById(R.id.pb_questions_progress)
         mNextQuestion = findViewById(R.id.btn_next_question)
         mShowAnswer = findViewById(R.id.btn_show_answer)
+        mLoadingQuestionProgressBar = findViewById(R.id.progressBarHolder)
     }
 
     override fun prepareComponents() {
@@ -87,7 +91,9 @@ class QuestionActivity: BaseActivity() {
         mShowAnswer.setOnClickListener(mShowAnswerClickListener)
 
         mQuestions = intent.extras!!.getStringArrayList(QUESTION_LIST)
+        mIsExam = intent.extras!!.getBoolean(IS_EXAM)
 
+        mLoadingQuestionProgressBar.visibility = View.VISIBLE
         onChangeQuestion()
     }
 
@@ -115,6 +121,11 @@ class QuestionActivity: BaseActivity() {
     private fun onChangeQuestion() {
         if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
             val question = mQuestions?.get(mCurrectQuestionIndex)
+
+            if (::currentFragment.isInitialized) {
+                currentFragment.onPushQuestion(mIsExam)
+            }
+
             if (question != null) {
                 FirebaseRequestManager.getInstance(this).requestQuestion(
                     question,
@@ -122,14 +133,30 @@ class QuestionActivity: BaseActivity() {
                         override fun onGetQuestionLoaded(question: Question) {
                             Log.d("", "")
 
-                            mQuestionTitle.text = question.subject.name
+                            mLoadingQuestionProgressBar.visibility = View.GONE
+                            mQuestionTitle.text = question.subject.value
 
                             // instance question fragment
-                            if (question.questionType == QuestionType.MULTIPLE) {
-                                currentFragment = MultipleQuestionFragment(question)
-                            } else if (question.questionType == QuestionType.TRUE_FALSE) {
-                                currentFragment = TrueFalseQuestionFragment(question)
+                            when (question.questionType) {
+                                QuestionType.MULTIPLE -> {
+                                    currentFragment =
+                                        MultipleQuestionFragment(question,
+                                            getActivity() as QuestionActivity)
+                                }
+                                QuestionType.TRUE_FALSE -> {
+                                    currentFragment =
+                                        TrueFalseQuestionFragment(question,
+                                            getActivity() as QuestionActivity)
+                                }
+                                QuestionType.MATCH -> {
+                                    currentFragment =
+                                        MatchQuestionFragment(question,
+                                            getActivity() as QuestionActivity)
+                                }
+                                else -> {}
                             }
+
+                            onButtonsEnable()
 
                             // add to fragment manager
                             supportFragmentManager
@@ -141,6 +168,7 @@ class QuestionActivity: BaseActivity() {
 
                         override fun onGetQuestionError(throwable: Throwable) {
                             Log.d("", "")
+                            mLoadingQuestionProgressBar.visibility = View.GONE
                         }
                     })
 
@@ -153,6 +181,31 @@ class QuestionActivity: BaseActivity() {
                     mProgresBarQuestions.progress = mCurrentQuestionProgress
                 }
             }
+        }
+    }
+
+    override fun onButtonsEnable() {
+        if (::mShowQuestions.isInitialized) mShowQuestions.isEnabled = true
+        if (::mCloseQuestions.isInitialized) mCloseQuestions.isEnabled = true
+        if (::mShowAnswer.isInitialized) mShowAnswer.isEnabled = true
+        if (::mNextQuestion.isInitialized) mNextQuestion.isEnabled = true
+    }
+
+    override fun onNextQuestionButtonEnable(enable: Boolean) {
+        if (::mNextQuestion.isInitialized) {
+            mNextQuestion.isEnabled = enable
+        }
+    }
+
+    override fun onOptionCorrect() {
+        if (::mShowAnswer.isInitialized) {
+            mShowAnswer.isEnabled = false
+        }
+    }
+
+    override fun onOptionIncorrect() {
+        if (::mShowAnswer.isInitialized) {
+            mShowAnswer.isEnabled = true
         }
     }
 

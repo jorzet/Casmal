@@ -30,7 +30,7 @@ import com.jorzet.casmal.models.User
 
 abstract class FirebaseRequestManager(context: Context) {
     protected val TAG : String = "FirebaseRequestManager"
-    protected val context: Context = context
+    protected val mContext: Context = context
 
     companion object {
         /**
@@ -89,6 +89,18 @@ abstract class FirebaseRequestManager(context: Context) {
         fun onGetUserError(throwable: Throwable)
     }
 
+    interface OnPushQuestionListener {
+        /**
+         *
+         */
+        fun onPushQuestionSuccess()
+
+        /**
+         *
+         */
+        fun onPushQuestionFail(throwable: Throwable)
+    }
+
     /**
      *
      */
@@ -108,6 +120,11 @@ abstract class FirebaseRequestManager(context: Context) {
      *
      */
     abstract fun requestUser(uid: String, onGetUserListener: OnGetUserListener)
+
+    /**
+     *
+     */
+    abstract fun pushQuestion(isExam: Boolean, question: Question, onPushQuestionListener: OnPushQuestionListener)
 
     /**
      * Destroy [FirebaseRequestManager] instance

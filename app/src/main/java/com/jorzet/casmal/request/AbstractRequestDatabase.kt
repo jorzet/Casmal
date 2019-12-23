@@ -30,65 +30,13 @@ import com.google.firebase.database.*
  * A: input
  * B: output
  */
-abstract class AbstractRequestDatabase<A, B> {
+abstract class AbstractRequestDatabase<A, B>: AbstractDatabase<A, B>() {
 
     /**
      * Attributes
      */
     private var mResponse: B? = null
     private var mParams: A? = null
-
-    /*
-     * Database object
-     */
-    protected lateinit var mFirebaseDatabase: DatabaseReference
-
-    /**
-     * Listeners
-     */
-    protected lateinit var onRequestListenerSuccess: OnRequestListenerSuccess<B>
-    protected lateinit var onRequestListenerFailed: OnRequestListenerFailed
-
-    /** Describes success interface listener*/
-    interface OnRequestListenerSuccess<B> {
-        /**
-         * Success method, gives B as output response
-         */
-        fun onSuccess(result: B)
-    }
-
-    /** Describes fail interface listener */
-    interface OnRequestListenerFailed {
-        /**
-         * Fail method, gives [Throwable] as output error response
-         */
-        fun onFailed(throwable: Throwable)
-    }
-
-    /**
-     * Set success request listener
-     *
-     * @param onRequestSuccess [OnRequestListenerSuccess] implementation
-     */
-    fun setOnRequestSuccess(onRequestSuccess: OnRequestListenerSuccess<B>) {
-        this.onRequestListenerSuccess = onRequestSuccess
-    }
-
-    /**
-     * Set fail request listener
-     *
-     * @param onRequestFailed [OnRequestListenerFailed] implementation
-     */
-    fun setOnRequestFailed(onRequestFailed: OnRequestListenerFailed) {
-        this.onRequestListenerFailed = onRequestFailed
-    }
-
-    /**
-     * This method gives database reference
-     *
-     * @return reference in [String]
-     */
-    abstract fun getReference(): String?
 
     /**
      * This method gives the success response on param
@@ -111,23 +59,6 @@ abstract class AbstractRequestDatabase<A, B> {
      */
     protected open fun keepSync(): Boolean {
         return true
-    }
-
-    /**
-     * Create a Firebase Database instance according reference
-     *
-     * @return An isntance of [DatabaseReference]
-     */
-    protected open fun getDatabaseInstance(): DatabaseReference {
-        val reference = getReference()
-
-        if (reference != null) {
-            return FirebaseDatabase
-                .getInstance()
-                .getReference(reference)
-        }
-
-        return FirebaseDatabase.getInstance().reference
     }
 
     protected open fun getQuery(): Query? {
