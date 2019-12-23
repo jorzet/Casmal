@@ -1,8 +1,6 @@
 package com.jorzet.casmal.fragments
 
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -21,10 +19,6 @@ class ScoresFragment: BaseFragment() {
 
     override fun getLayoutId(): Int {
         return R.layout.scores_fragment
-    }
-
-    override fun getFragmentActivity(): FragmentActivity {
-        return this.activity!!
     }
 
     override fun initView() {

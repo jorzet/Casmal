@@ -19,8 +19,8 @@ package com.jorzet.casmal
 import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.facebook.stetho.Stetho
-import com.jorzet.casmal.managers.ImageManager
 import com.google.firebase.database.FirebaseDatabase
+import com.jorzet.casmal.managers.ImageManager
 
 /**
  * @author Jorge Zepeda Tinoco

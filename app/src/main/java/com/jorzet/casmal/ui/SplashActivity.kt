@@ -22,7 +22,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.facebook.AccessToken
@@ -40,9 +39,15 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.models.Account
+import com.jorzet.casmal.models.User
+import com.jorzet.casmal.utils.Constants
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
@@ -81,10 +86,6 @@ class SplashActivity: BaseActivity() {
         return R.layout.activity_splash
     }
 
-    override fun getActivity(): FragmentActivity {
-        return this@SplashActivity
-    }
-
     override fun initView() {
         ivGoogleLogin = findViewById(R.id.ivGoogleLogin)
         ivFacebookLogin = findViewById(R.id.ivFacebookLogin)
@@ -113,8 +114,7 @@ class SplashActivity: BaseActivity() {
         callbackManager = CallbackManager.Factory.create()
         auth = FirebaseAuth.getInstance()
 
-        val facebookCallback: FacebookCallback<LoginResult> = object :
-            FacebookCallback<LoginResult> {
+        val facebookCallback: FacebookCallback<LoginResult> = object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 Utils.print(TAG, "facebook:onSuccess:$loginResult")
                 firebaseAuthWithFacebook(loginResult.accessToken)
@@ -137,7 +137,7 @@ class SplashActivity: BaseActivity() {
             .requestEmail()
             .build()
 
-        googleSignInClient = GoogleSignIn.getClient(getActivity(), googleSignInOptions)
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
 
         ivFacebookLogin.setOnClickListener {
             viewModel?.loginWithFacebook()
@@ -151,10 +151,48 @@ class SplashActivity: BaseActivity() {
     /**
      * This method creates ans intent to show [MainActivity]
      */
-    private fun goMainActivity() {
+    private fun goMainActivity(currentUser: FirebaseUser?) {
         val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        this.finish()
+
+        FirebaseDatabase.getInstance().reference.child(Constants.tableUsers).orderByChild("uid").equalTo(currentUser?.uid).addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val dataSnapshots: Iterator<DataSnapshot> = dataSnapshot.children.iterator()
+                val users: MutableList<User> = ArrayList()
+
+                while (dataSnapshots.hasNext()) {
+                    val dataSnapshotChild: DataSnapshot = dataSnapshots.next()
+                    Utils.print(dataSnapshot.toString())
+                    val user: User? = dataSnapshotChild.getValue(User::class.java)
+                    users.add(user!!)
+
+                    Utils.print("Adding: " + user.uid)
+                }
+
+                val temp: MutableList<User> = ArrayList()
+
+                if(users.isEmpty()) {
+                    Utils.print("¡Usuario nuevo!")
+                    return
+                } else {
+                    Utils.print("Users size: " + users.size)
+                }
+
+                Utils.print("User found: " + currentUser?.uid)
+
+                if (users[0].uid == currentUser?.uid) {
+                    temp.add(users[0])
+                    //Here you can find your searchable user
+                    Utils.print(temp[0].uid)
+                }
+
+                startActivity(intent)
+                finish()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Utils.print("Operación cancelada: " + databaseError.details)
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -172,7 +210,8 @@ class SplashActivity: BaseActivity() {
             } catch (ex: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Utils.print(TAG, "Google sign in failed $ex")
-                // ...
+
+                Toast.makeText(this, R.string.text_error_login, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -181,7 +220,7 @@ class SplashActivity: BaseActivity() {
         Utils.print(TAG, "handleFacebookAccessToken:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
-        auth.signInWithCredential(credential).addOnCompleteListener(getActivity()) { task ->
+        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 // Sign in success, update UI with the signed-in user's information
 
@@ -189,7 +228,7 @@ class SplashActivity: BaseActivity() {
             } else {
                 // If sign in fails, display a message to the user.
                 Utils.print(TAG, "signInWithCredential:failure ${task.exception.toString()}")
-                Toast.makeText(getActivity(), "Authentication failed ${task.exception.toString()}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Authentication failed ${task.exception.toString()}", Toast.LENGTH_SHORT).show()
                 updateUI(null)
             }
         }
@@ -199,14 +238,14 @@ class SplashActivity: BaseActivity() {
         Utils.print(TAG, "firebaseAuthWithGoogle:" + googleSignInAccount.id!!)
 
         val credential = GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener(getActivity()) { task ->
+        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 Utils.print(TAG, "signInWithCredentialGoogle:success")
                 loginSuccess(PROVIDER_GOOGLE)
             } else {
                 // If sign in fails, display a message to the user.
                 Utils.print(TAG, "signInWithCredential:failure ${task.exception.toString()}")
-                Toast.makeText(getActivity(), "Authentication failed ${task.exception.toString()}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Authentication failed ${task.exception.toString()}", Toast.LENGTH_SHORT).show()
                 updateUI(null)
             }
         }
@@ -240,7 +279,7 @@ class SplashActivity: BaseActivity() {
     }
 
     private fun facebookSignIn() {
-        LoginManager.getInstance().logInWithReadPermissions(getActivity(), permissions)
+        LoginManager.getInstance().logInWithReadPermissions(this, permissions)
     }
 
     private fun googleSignIn() {
@@ -252,7 +291,7 @@ class SplashActivity: BaseActivity() {
         auth.signOut()
 
         // Google sign out
-        googleSignInClient.signOut().addOnCompleteListener(getActivity()) {
+        googleSignInClient.signOut().addOnCompleteListener(this) {
             updateUI(null)
         }
 
@@ -269,7 +308,9 @@ class SplashActivity: BaseActivity() {
             ivFacebookLogin.visibility = View.GONE
             ivGoogleLogin.visibility = View.GONE
 
-            goMainActivity()
+            Utils.print(currentUser.uid)
+
+            goMainActivity(currentUser)
 
             Handler().postDelayed({
                 //TODO Test login

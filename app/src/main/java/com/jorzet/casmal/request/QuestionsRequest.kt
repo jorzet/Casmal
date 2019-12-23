@@ -52,25 +52,22 @@ class QuestionsRequest(questionId: String): AbstractRequestDatabase<String, Ques
         Log.d(TAG,"question request success")
         val post = successResponse.value
         if (post != null) {
-            val questionMap = (post as kotlin.collections.HashMap<*, *>)
+            val questionMap = (post as HashMap<*, *>)
             val questionJson = JSONObject(questionMap).toString()
             try {
                 val question = Gson().fromJson(questionJson, Question::class.java)
-                onRequestListenerSucces.onSuccess(question)
-            } catch (e: Exception) {
-             e.printStackTrace()
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
+                onRequestListenerSuccess.onSuccess(question)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
             }
         } else {
-            onRequestLietenerFailed.onFailed(Throwable())
+            onRequestListenerFailed.onFailed(Throwable())
         }
 
     }
 
     override fun onGettingError(errorResponse: DatabaseError) {
         Log.d(TAG,"question request fail")
-        onRequestLietenerFailed.onFailed(Throwable())
+        onRequestListenerFailed.onFailed(Throwable())
     }
-
 }

@@ -34,10 +34,6 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
         return R.layout.true_false_question_fragment
     }
 
-    override fun getFragmentActivity(): FragmentActivity {
-        return this.activity!!
-    }
-
     override fun initView() {
         mText = rootView.findViewById(R.id.tv_text)
         mOptionTrue = rootView.findViewById(R.id.tv_option_true)
@@ -112,5 +108,4 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
             mQuestion.chosenOption = "-1"
         }
     }
-
 }

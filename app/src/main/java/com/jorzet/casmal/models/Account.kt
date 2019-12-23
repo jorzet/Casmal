@@ -25,4 +25,6 @@ data class Account(
 
     @ColumnInfo(name = RoomConstants.col_provider) //Facebook, Google or Email
     var provider: String
-)
+) {
+    constructor() : this(0, "", "", "", "", "")
+}

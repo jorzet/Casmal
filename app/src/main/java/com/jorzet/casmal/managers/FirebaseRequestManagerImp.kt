@@ -16,11 +16,11 @@
 
 package com.jorzet.casmal.managers
 
-import android.annotation.SuppressLint
 import android.content.Context
 import com.jorzet.casmal.models.Module
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.models.Subject
+import com.jorzet.casmal.models.User
 import com.jorzet.casmal.request.*
 
 /**
@@ -30,12 +30,10 @@ import com.jorzet.casmal.request.*
  */
 
 class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(context) {
-
     companion object {
         /**
          * Manager static instance
          */
-        @SuppressLint("StaticFieldLeak")
         private var sInstance: FirebaseRequestManagerImp? = null
 
         /**
@@ -132,4 +130,20 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
         subjectsRequest.request()
     }
 
+    override fun requestUser(uid: String, onGetUserListener: OnGetUserListener) {
+        val usersRequest = UserRequest(uid)
+
+        usersRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<User> {
+            override fun onSuccess(result: User) {
+                onGetUserListener.onGetUserLoaded(result)
+            }
+        })
+
+        usersRequest.setOnRequestFailed(object : AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onGetUserListener.onGetUserError(throwable)
+            }
+
+        })
+    }
 }

@@ -16,13 +16,8 @@
 
 package com.jorzet.casmal.fragments
 
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ListView
-import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.ModulesAdapter
 import com.jorzet.casmal.base.BaseFragment
@@ -49,10 +44,6 @@ class ModulesFragment: BaseFragment() {
 
     override fun getLayoutId(): Int {
         return R.layout.modules_fragment
-    }
-
-    override fun getFragmentActivity(): FragmentActivity {
-        return this.activity!!
     }
 
     override fun initView() {

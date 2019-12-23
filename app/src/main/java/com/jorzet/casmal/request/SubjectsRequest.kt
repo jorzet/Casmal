@@ -6,7 +6,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.gson.Gson
 import com.jorzet.casmal.models.Subject
 import org.json.JSONObject
-import java.lang.Exception
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -33,31 +32,28 @@ class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
         Log.d(TAG,"subjects request success")
         val post = successResponse.value
         if (post != null) {
-            val subjectsMap = (post as kotlin.collections.HashMap<*, *>)
+            val subjectsMap = (post as HashMap<*, *>)
             val mSubjects = ArrayList<Subject>()
             for (key in subjectsMap.keys) {
-                val subjectMap = subjectsMap.get(key) as kotlin.collections.HashMap<*, *>
+                val subjectMap = subjectsMap[key] as HashMap<*, *>
                 try {
                     val subject = Gson().fromJson(JSONObject(subjectMap).toString(), Subject::class.java)
                     // just save enabled subject
                     if (subject.enabled) {
                         mSubjects.add(subject)
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                } catch (e: java.lang.Exception) {
-                    e.printStackTrace()
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
                 }
             }
-            onRequestListenerSucces.onSuccess(mSubjects)
+            onRequestListenerSuccess.onSuccess(mSubjects)
         } else {
-            onRequestLietenerFailed.onFailed(Throwable())
+            onRequestListenerFailed.onFailed(Throwable())
         }
     }
 
     override fun onGettingError(errorResponse: DatabaseError) {
         Log.d(TAG,"subjects request fail")
-        onRequestLietenerFailed.onFailed(Throwable())
+        onRequestListenerFailed.onFailed(Throwable())
     }
-
 }

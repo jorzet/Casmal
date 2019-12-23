@@ -40,10 +40,6 @@ class MultipleQuestionFragment(override var mQuestion: Question,
         return R.layout.multiple_question_fragment
     }
 
-    override fun getFragmentActivity(): FragmentActivity {
-        return this.activity!!
-    }
-
     override fun initView() {
         mText = rootView.findViewById(R.id.tv_text)
         mOptionA = rootView.findViewById(R.id.tv_option_a)
@@ -212,5 +208,4 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mQuestion.chosenOption = "-1"
         }
     }
-
 }

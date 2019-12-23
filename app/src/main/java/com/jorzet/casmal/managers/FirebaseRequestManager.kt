@@ -20,6 +20,7 @@ import android.content.Context
 import com.jorzet.casmal.models.Module
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.models.Subject
+import com.jorzet.casmal.models.User
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -28,7 +29,6 @@ import com.jorzet.casmal.models.Subject
  */
 
 abstract class FirebaseRequestManager(context: Context) {
-
     protected val TAG : String = "FirebaseRequestManager"
     protected val mContext: Context = context
 
@@ -78,6 +78,17 @@ abstract class FirebaseRequestManager(context: Context) {
         fun onGetQuestionError(throwable: Throwable)
     }
 
+    interface OnGetUserListener {
+        /**
+         *
+         */
+        fun onGetUserLoaded(user: User)
+        /**
+         *
+         */
+        fun onGetUserError(throwable: Throwable)
+    }
+
     interface OnPushQuestionListener {
         /**
          *
@@ -108,11 +119,15 @@ abstract class FirebaseRequestManager(context: Context) {
     /**
      *
      */
+    abstract fun requestUser(uid: String, onGetUserListener: OnGetUserListener)
+
+    /**
+     *
+     */
     abstract fun pushQuestion(isExam: Boolean, question: Question, onPushQuestionListener: OnPushQuestionListener)
 
     /**
      * Destroy [FirebaseRequestManager] instance
      */
     abstract fun destroy()
-
 }

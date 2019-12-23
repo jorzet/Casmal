@@ -16,12 +16,9 @@
 
 package com.jorzet.casmal.ui
 
-import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -58,10 +55,6 @@ class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelecte
 
     override fun getLayoutId(): Int {
         return R.layout.activity_main
-    }
-
-    override fun getActivity(): FragmentActivity {
-        return this
     }
 
     override fun initView() {

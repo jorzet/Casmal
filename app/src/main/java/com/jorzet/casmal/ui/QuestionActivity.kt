@@ -21,7 +21,6 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseQuestionFragment
@@ -73,10 +72,6 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
 
     override fun getLayoutId(): Int {
         return R.layout.activity_question
-    }
-
-    override fun getActivity(): FragmentActivity {
-        return this
     }
 
     override fun initView() {
@@ -146,17 +141,17 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                                 QuestionType.MULTIPLE -> {
                                     currentFragment =
                                         MultipleQuestionFragment(question,
-                                            getActivity() as QuestionActivity)
+                                            this@QuestionActivity)
                                 }
                                 QuestionType.TRUE_FALSE -> {
                                     currentFragment =
                                         TrueFalseQuestionFragment(question,
-                                            getActivity() as QuestionActivity)
+                                            this@QuestionActivity)
                                 }
                                 QuestionType.MATCH -> {
                                     currentFragment =
                                         MatchQuestionFragment(question,
-                                            getActivity() as QuestionActivity)
+                                            this@QuestionActivity)
                                 }
                                 else -> {}
                             }
@@ -213,5 +208,4 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
             mShowAnswer.isEnabled = true
         }
     }
-
 }

@@ -63,11 +63,11 @@ class PushQuestionRequest(isExam: Boolean, question: Question): AbstractUpdateDa
 
     override fun onUpdateSuccess() {
         Log.d(TAG,"question update success")
-        onRequestListenerSucces.onSuccess(true)
+        onRequestListenerSuccess.onSuccess(true)
     }
 
     override fun onUpdateError(errorResponse: Throwable) {
         Log.d(TAG,"question update fail")
-        onRequestLietenerFailed.onFailed(Throwable())
+        onRequestListenerFailed.onFailed(Throwable())
     }
 }
