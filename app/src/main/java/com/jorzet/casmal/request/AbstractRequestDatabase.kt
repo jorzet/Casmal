@@ -88,7 +88,7 @@ abstract class AbstractRequestDatabase<A, B>: AbstractDatabase<A, B>() {
         }
     }
 
-    private val mValueEventListener = object : ValueEventListener {
+    protected val mValueEventListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             onGettingResponse(dataSnapshot)
         }

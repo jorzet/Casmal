@@ -27,6 +27,7 @@ class UserRequest(private val uid: String): AbstractRequestDatabase<String, User
             Utils.print("¡User found!")
             Utils.print(user.toString())
             onRequestListenerSuccess.onSuccess(user)
+            mFirebaseDatabase.removeEventListener(mValueEventListener)
         } else {
             Utils.print("¡User not found!")
             onRequestListenerSuccess.onSuccess(null)
