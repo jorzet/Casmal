@@ -17,10 +17,7 @@
 package com.jorzet.casmal.managers
 
 import android.content.Context
-import com.jorzet.casmal.models.Module
-import com.jorzet.casmal.models.Question
-import com.jorzet.casmal.models.Subject
-import com.jorzet.casmal.models.User
+import com.jorzet.casmal.models.*
 import com.jorzet.casmal.request.*
 
 /**
@@ -92,6 +89,44 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
         })
 
         pushQuestionRequest.update()
+    }
+
+    override fun requestFlashcard(flashcardId: String, onGetFlashcardListener: OnGetFlashcardListener) {
+        val flashcardRequest = FlashcardRequest(flashcardId)
+
+        flashcardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<Any> {
+            override fun onSuccess(result: Any) {
+                val flashcard = result as Flashcard
+                onGetFlashcardListener.onGetFlashcardSuccess(flashcard)
+            }
+        })
+
+        flashcardRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onGetFlashcardListener.onFlashcardFail(throwable)
+            }
+        })
+
+        flashcardRequest.request()
+    }
+
+    override fun requestFlashcards(onGetFlashcardListener: OnGetFlashcardListener) {
+        val flashcardRequest = FlashcardRequest()
+
+        flashcardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<Any> {
+            override fun onSuccess(result: Any) {
+                val flashcards = result as List<Flashcard>
+                onGetFlashcardListener.onGetFlashcardsSuccess(flashcards)
+            }
+        })
+
+        flashcardRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onGetFlashcardListener.onFlashcardFail(throwable)
+            }
+        })
+
+        flashcardRequest.request()
     }
 
     override fun requestModules(onGetModulesListener: OnGetModulesListener) {
