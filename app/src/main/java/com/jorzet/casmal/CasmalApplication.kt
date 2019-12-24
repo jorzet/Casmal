@@ -29,7 +29,6 @@ import com.jorzet.casmal.managers.ImageManager
  */
 
 class CasmalApplication: MultiDexApplication() {
-
     private val TAG: String = "CasmalApplication"
 
     override fun onCreate() {
@@ -48,6 +47,5 @@ class CasmalApplication: MultiDexApplication() {
         } catch (e: Exception) {
             Log.d(TAG, "cannot set persistence database")
         }
-
     }
 }
