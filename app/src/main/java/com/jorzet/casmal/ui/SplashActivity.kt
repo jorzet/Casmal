@@ -153,34 +153,35 @@ class SplashActivity: BaseActivity() {
         FirebaseRequestManager.getInstance(this).requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
             override fun onGetUserLoaded(user: User?) {
                 if(user != null) {
-                    Utils.print("UID Found: " + user.uid)
                     startActivity(intent)
                     finish()
                 } else {
                     //TODO InsertNewEmptyModel
-                    insertNewUserModel(currentUser)
+                    pushUser(currentUser)
                 }
             }
 
             override fun onGetUserError(throwable: Throwable) {
-                Utils.print("Operación cancelada: " + throwable.message)
+                Utils.print("Error 1: " + throwable.message)
                 //TODO Protocol to exception
                 finish()
             }
         })
     }
 
-    private fun insertNewUserModel(firebaseUser: FirebaseUser) {
-        val user = User()
-        user.uid = firebaseUser.uid
+    private fun pushUser(firebaseUser: FirebaseUser) {
+        Utils.print("start PushUser: " + firebaseUser.uid)
+        val intent = Intent(this, MainActivity::class.java)
 
-        FirebaseRequestManager.getInstance(this).insertUser(user, object : FirebaseRequestManager.OnInsertUserListener {
+        FirebaseRequestManager.getInstance(this).insertUser(firebaseUser.uid, object : FirebaseRequestManager.OnInsertUserListener {
             override fun onSuccessUserInserted() {
                 startActivity(intent)
                 finish()
             }
 
             override fun onErrorUserInserted(throwable: Throwable) {
+                Utils.print("Error 2: " + throwable.message)
+                //TODO Protocol to exception
                 finish()
             }
         })

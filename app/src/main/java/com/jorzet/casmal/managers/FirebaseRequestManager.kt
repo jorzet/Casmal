@@ -135,7 +135,7 @@ abstract class FirebaseRequestManager(context: Context) {
     /**
      *
      */
-    abstract fun insertUser(user: User, onGetUserListener: OnInsertUserListener)
+    abstract fun insertUser(uid: String, onGetUserListener: OnInsertUserListener)
 
     /**
      *

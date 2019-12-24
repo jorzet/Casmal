@@ -22,7 +22,6 @@ import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.models.Subject
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.request.*
-import com.jorzet.casmal.utils.Constants
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -144,17 +143,16 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
             override fun onFailed(throwable: Throwable) {
                 onGetUserListener.onGetUserError(throwable)
             }
-
         })
 
-        usersRequest.request(Constants.tableUsers, Constants.fieldUid, uid)
+        usersRequest.request()
     }
 
-    override fun insertUser(user: User, onGetUserListener: OnInsertUserListener) {
-        val insertUserRequest = InsertUserRequest(user)
+    override fun insertUser(uid: String, onGetUserListener: OnInsertUserListener) {
+        val insertUserRequest = PushUserRequest(uid)
 
-        insertUserRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<User> {
-            override fun onSuccess(result: User) {
+        insertUserRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<Boolean> {
+            override fun onSuccess(result: Boolean) {
                 onGetUserListener.onSuccessUserInserted()
             }
         })
@@ -165,6 +163,6 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
             }
         })
 
-        insertUserRequest.request()
+        insertUserRequest.update()
     }
 }

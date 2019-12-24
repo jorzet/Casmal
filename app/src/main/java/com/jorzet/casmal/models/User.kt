@@ -3,6 +3,7 @@ package com.jorzet.casmal.models
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.jorzet.casmal.utils.Utils
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -13,10 +14,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class User (
-    @SerializedName("uid")
-    @Expose
-    var uid: String = "",
-
     @SerializedName("deviceOS")
     @Expose
     var deviceOS: String = "Android",
@@ -27,7 +24,19 @@ data class User (
 
     @SerializedName("payment")
     @Expose
-    var payment: Payment
+    var payment: Payment = Payment()
 ) : Parcelable {
-    constructor() : this("", "Android", 0, Payment())
+    constructor() : this("Android", 0, Payment())
+
+    override fun toString(): String {
+        Utils.print("deviceOS: $deviceOS")
+        Utils.print("level: $level")
+        Utils.print("payment:")
+        Utils.print("payment.confirming ${payment.confirming}")
+        Utils.print("payment.isPremium ${payment.isPremium}")
+        Utils.print("payment.subscription ${payment.subscription}")
+        Utils.print("payment.timeStamp ${payment.timeStamp}")
+
+        return "User"
+    }
 }
