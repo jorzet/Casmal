@@ -1,20 +1,23 @@
 package com.jorzet.casmal.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseAdapter
 import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.FirebaseStorageManager
-import com.jorzet.casmal.managers.ImageManager
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.viewholders.FlashCardHolder
 import com.jorzet.casmal.viewholders.ViewHolder
 
 class FlashCardAdapter(
-    list: ArrayList<FlashCard>, listener: ItemListener<FlashCard>
-) : BaseAdapter<FlashCard>(list, listener) {
+    context: Context,
+    list: ArrayList<FlashCard>,
+    listener: ItemListener<FlashCard>
+) : BaseAdapter<FlashCard>(context, list, listener) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_flash_card, parent, false)
         return FlashCardHolder(view)
@@ -26,9 +29,13 @@ class FlashCardAdapter(
 
             val holder: FlashCardHolder = viewHolder
 
-            val image: String = FirebaseStorageManager.getImage(item.storageName)
+            holder.ivFlashCard.setOnClickListener {
+                listener.onItemSelected(item)
+            }
 
-            ImageManager.getInstance().setImage(image, holder.ivFlashCard)
+            val storageReference = FirebaseStorageManager.getInstance().reference.child(item.storageName)
+
+            Glide.with(context).load(storageReference).into(holder.ivFlashCard)
         }
     }
 }

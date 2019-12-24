@@ -8,8 +8,6 @@
 		android:id="@+id/ivFlashCard"
 		android:layout_width="100dp"
 		android:layout_height="100dp"
-		android:src="@drawable/ic_anatomy_white"
-		android:background="@color/colorPrimary"
 		android:contentDescription="@string/app_name"/>
 
 </LinearLayout>

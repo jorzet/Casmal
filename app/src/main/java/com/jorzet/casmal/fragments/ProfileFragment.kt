@@ -21,9 +21,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
+import com.jorzet.casmal.adapters.FlashCardAdapter
 import com.jorzet.casmal.base.BaseFragment
+import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.ImageManager
+import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
@@ -43,6 +48,7 @@ class ProfileFragment: BaseFragment() {
     private var ivFacebookCircle: ImageView? = null
     private var ivGoogleCircle: ImageView? = null
     private var ivEmailCircle: ImageView? = null
+    private var recyclerView: RecyclerView? = null
 
     override fun getLayoutId(): Int {
         return R.layout.profile_fragment
@@ -55,6 +61,7 @@ class ProfileFragment: BaseFragment() {
         ivFacebookCircle = rootView.findViewById(R.id.ivFacebookCircle)
         ivGoogleCircle = rootView.findViewById(R.id.ivGoogleCircle)
         ivEmailCircle = rootView.findViewById(R.id.ivEmailCircle)
+        recyclerView = rootView.findViewById(R.id.recyclerView);
     }
 
     override fun prepareComponents() {
@@ -93,5 +100,21 @@ class ProfileFragment: BaseFragment() {
                 ImageManager.getInstance().setImage(urlPhoto, ivPhoto)
             }
         })
+
+        val list: ArrayList<FlashCard> = ArrayList()
+        list.add(FlashCard("f1", "hematology_generalities.png", 1))
+        list.add(FlashCard("f2", "medicine_antidotes.png", 1))
+        list.add(FlashCard("f3", "triada_carcot_colangitis.png", 1))
+        list.add(FlashCard("f4", "virchow_trombosis.png", 1))
+
+        val adapter = FlashCardAdapter(context!!, list, object: ItemListener<FlashCard> {
+            override fun onItemSelected(item: FlashCard) {
+                Utils.print("ItemId: ${item.id}")
+            }
+        })
+
+        recyclerView?.setHasFixedSize(true)
+        recyclerView?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView?.adapter = adapter
     }
 }
