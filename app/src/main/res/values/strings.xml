@@ -9,6 +9,8 @@
     <string name="snackbar_message_text">Presiona otra vez para SALIR de la aplicación</string>
 
     <string name="text_error_login">Ocurrió un error al iniciar sesión, intentalo nuevamente</string>
+    <string name="text_payment_methods">Métodos de pago</string>
+    <string name="text_flash_cards">Mis FlashCards</string>
 
     <!--question fragments-->
     <string name="show_answer">VER SOLUCIÓN</string>
