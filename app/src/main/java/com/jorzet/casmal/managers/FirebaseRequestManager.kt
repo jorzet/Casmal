@@ -17,10 +17,7 @@
 package com.jorzet.casmal.managers
 
 import android.content.Context
-import com.jorzet.casmal.models.Module
-import com.jorzet.casmal.models.Question
-import com.jorzet.casmal.models.Subject
-import com.jorzet.casmal.models.User
+import com.jorzet.casmal.models.*
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -112,6 +109,23 @@ abstract class FirebaseRequestManager(context: Context) {
         fun onPushQuestionFail(throwable: Throwable)
     }
 
+    interface OnGetFlashcardListener {
+        /**
+         *
+         */
+        fun onGetFlashcardSuccess(flashcard: Flashcard)
+
+        /**
+         *
+         */
+        fun onGetFlashcardsSuccess(flashcards: List<Flashcard>)
+
+        /**
+         *
+         */
+        fun onFlashcardFail(throwable: Throwable)
+    }
+
     /**
      *
      */
@@ -141,6 +155,16 @@ abstract class FirebaseRequestManager(context: Context) {
      *
      */
     abstract fun pushQuestion(isExam: Boolean, question: Question, onPushQuestionListener: OnPushQuestionListener)
+
+    /**
+     *
+     */
+    abstract fun requestFlashcard(flashcardId: String, onGetFlashcardListener: OnGetFlashcardListener)
+
+    /**
+     *
+     */
+    abstract fun requestFlashcards(onGetFlashcardListener: OnGetFlashcardListener)
 
     /**
      * Destroy [FirebaseRequestManager] instance
