@@ -82,11 +82,22 @@ abstract class FirebaseRequestManager(context: Context) {
         /**
          *
          */
-        fun onGetUserLoaded(user: User)
+        fun onGetUserLoaded(user: User?)
         /**
          *
          */
         fun onGetUserError(throwable: Throwable)
+    }
+
+    interface OnInsertUserListener {
+        /**
+         *
+         */
+        fun onSuccessUserInserted()
+        /**
+         *
+         */
+        fun onErrorUserInserted(throwable: Throwable)
     }
 
     interface OnPushQuestionListener {
@@ -120,6 +131,11 @@ abstract class FirebaseRequestManager(context: Context) {
      *
      */
     abstract fun requestUser(uid: String, onGetUserListener: OnGetUserListener)
+
+    /**
+     *
+     */
+    abstract fun insertUser(user: User, onGetUserListener: OnInsertUserListener)
 
     /**
      *

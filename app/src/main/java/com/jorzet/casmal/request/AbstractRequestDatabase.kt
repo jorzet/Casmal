@@ -16,7 +16,10 @@ package com.jorzet.casmal.request
  * limitations under the License.
  */
 
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.Query
+import com.google.firebase.database.ValueEventListener
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -85,6 +88,26 @@ abstract class AbstractRequestDatabase<A, B>: AbstractDatabase<A, B>() {
         }
     }
 
+    /**
+     * This method gets data, with the given reference and search label then return it on success and error methods
+     */
+    open fun request(pathString: String, path: String, value: String) {
+        // get firebase data base reference
+        mFirebaseDatabase = getDatabaseInstance()
+
+        // set keep sync
+        mFirebaseDatabase.keepSynced(keepSync())
+
+        val query = getQuery()
+
+        // Attach a listener to read the data at our posts reference
+        if (query != null) {
+            query.addValueEventListener(mValueEventListener)
+        } else {
+            mFirebaseDatabase.child(pathString).orderByChild(path).equalTo(value).addValueEventListener(mValueEventListener)
+        }
+    }
+
     private val mValueEventListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             onGettingResponse(dataSnapshot)
@@ -94,5 +117,4 @@ abstract class AbstractRequestDatabase<A, B>: AbstractDatabase<A, B>() {
             onGettingError(databaseError)
         }
     }
-
 }

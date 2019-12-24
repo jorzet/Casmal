@@ -22,6 +22,7 @@ import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.models.Subject
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.request.*
+import com.jorzet.casmal.utils.Constants
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -133,8 +134,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestUser(uid: String, onGetUserListener: OnGetUserListener) {
         val usersRequest = UserRequest(uid)
 
-        usersRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<User> {
-            override fun onSuccess(result: User) {
+        usersRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<User?> {
+            override fun onSuccess(result: User?) {
                 onGetUserListener.onGetUserLoaded(result)
             }
         })
@@ -145,5 +146,25 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
             }
 
         })
+
+        usersRequest.request(Constants.tableUsers, Constants.fieldUid, uid)
+    }
+
+    override fun insertUser(user: User, onGetUserListener: OnInsertUserListener) {
+        val insertUserRequest = InsertUserRequest(user)
+
+        insertUserRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<User> {
+            override fun onSuccess(result: User) {
+                onGetUserListener.onSuccessUserInserted()
+            }
+        })
+
+        insertUserRequest.setOnRequestFailed(object : AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onGetUserListener.onErrorUserInserted(throwable)
+            }
+        })
+
+        insertUserRequest.request()
     }
 }
