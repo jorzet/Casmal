@@ -64,6 +64,7 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
 
             // enable next question button
             mActivity.onNextQuestionButtonEnable(true)
+            mActivity.onOptionSelected(mQuestion)
         }
         mOptionFalseBackgroundView.setOnClickListener {
 
@@ -81,6 +82,7 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
 
             // enable next question button
             mActivity.onNextQuestionButtonEnable(true)
+            mActivity.onOptionSelected(mQuestion)
         }
         onUpdateQuestionView()
     }

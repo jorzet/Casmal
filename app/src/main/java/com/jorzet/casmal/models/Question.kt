@@ -70,4 +70,8 @@ data class Question (
     var wasOK : Boolean = false,
     var answered : Boolean = false, // important this is just used in ShowQuestionsActivity
     var moduleId: String // just set it in case exam is open
-) : Parcelable
+) : Parcelable {
+    constructor(): this("","", SubjectType.NONE, QuestionType.NONE, "",
+        "", "", "", "", "", "", false,
+        "", false, false, "")
+}

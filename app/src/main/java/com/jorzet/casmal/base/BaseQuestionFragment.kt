@@ -32,8 +32,7 @@ abstract class BaseQuestionFragment: BaseFragment() {
     interface OnOptionSelectedListener {
         fun onButtonsEnable()
         fun onNextQuestionButtonEnable(enable: Boolean)
-        fun onOptionCorrect()
-        fun onOptionIncorrect()
+        fun onOptionSelected(question: Question)
     }
 
     /**

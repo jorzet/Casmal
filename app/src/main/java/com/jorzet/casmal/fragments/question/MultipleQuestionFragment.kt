@@ -72,15 +72,13 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mOptionCBackgroundView.setOnClickListener(null)
             mOptionDBackgroundView.setOnClickListener(null)
 
-            if (mQuestion.answer == "1") mActivity.onOptionCorrect()
-            else mActivity.onOptionIncorrect()
-
             mQuestion.wasOK = mQuestion.answer == "1"
             mQuestion.answered = true
             mQuestion.chosenOption = "1"
 
             // enable next question button
             mActivity.onNextQuestionButtonEnable(true)
+            mActivity.onOptionSelected(mQuestion)
         }
         mOptionBBackgroundView.setOnClickListener {
 
@@ -94,15 +92,13 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mOptionCBackgroundView.setOnClickListener(null)
             mOptionDBackgroundView.setOnClickListener(null)
 
-            if (mQuestion.answer == "2") mActivity.onOptionCorrect()
-            else mActivity.onOptionIncorrect()
-
             mQuestion.wasOK = mQuestion.answer == "2"
             mQuestion.answered = true
             mQuestion.chosenOption = "2"
 
             // enable next question button
             mActivity.onNextQuestionButtonEnable(true)
+            mActivity.onOptionSelected(mQuestion)
         }
         mOptionCBackgroundView.setOnClickListener {
 
@@ -116,15 +112,13 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mOptionBBackgroundView.setOnClickListener(null)
             mOptionDBackgroundView.setOnClickListener(null)
 
-            if (mQuestion.answer == "3") mActivity.onOptionCorrect()
-            else mActivity.onOptionIncorrect()
-
             mQuestion.wasOK = mQuestion.answer == "3"
             mQuestion.answered = true
             mQuestion.chosenOption = "3"
 
             // enable next question button
             mActivity.onNextQuestionButtonEnable(true)
+            mActivity.onOptionSelected(mQuestion)
         }
         mOptionDBackgroundView.setOnClickListener {
 
@@ -138,15 +132,13 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mOptionBBackgroundView.setOnClickListener(null)
             mOptionCBackgroundView.setOnClickListener(null)
 
-            if (mQuestion.answer == "4") mActivity.onOptionCorrect()
-            else mActivity.onOptionIncorrect()
-
             mQuestion.wasOK = mQuestion.answer == "4"
             mQuestion.answered = true
             mQuestion.chosenOption = "4"
 
             // enable next question button
             mActivity.onNextQuestionButtonEnable(true)
+            mActivity.onOptionSelected(mQuestion)
         }
         onUpdateQuestionView()
     }

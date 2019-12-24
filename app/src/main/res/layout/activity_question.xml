@@ -104,12 +104,6 @@
 		android:layout_below="@+id/pb_questions_progress"
 		android:layout_above="@+id/bottom_bar" />
 
-	<FrameLayout
-		android:id="@+id/complete_question_fragment_container"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:visibility="gone" />
-
 	<RelativeLayout
 		android:id="@+id/bottom_bar"
 		android:layout_width="match_parent"
@@ -182,5 +176,11 @@
 			android:indeterminateTint="@color/blue"/>
 
 	</FrameLayout>
+
+	<FrameLayout
+		android:id="@+id/complete_question_fragment_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:visibility="visible" />
 
 </RelativeLayout>

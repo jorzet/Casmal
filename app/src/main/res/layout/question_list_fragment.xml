@@ -2,11 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:background="@color/colorWhite">
+
+	<androidx.appcompat.widget.AppCompatImageView
+		android:id="@+id/iv_close_questions"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp"
+		android:layout_marginStart="10dp"
+		android:layout_marginTop="10dp"
+		android:src="@drawable/close_icon" />
 
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/rv_question_list"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"/>
+		android:layout_height="match_parent"
+		android:layout_margin="20dp"/>
 
 </LinearLayout>

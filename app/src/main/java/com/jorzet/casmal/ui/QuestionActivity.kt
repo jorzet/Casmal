@@ -21,15 +21,18 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseQuestionFragment
+import com.jorzet.casmal.fragments.QuestionListFragment
 import com.jorzet.casmal.fragments.question.MatchQuestionFragment
 import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
 import com.jorzet.casmal.fragments.question.TrueFalseQuestionFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.models.QuestionType
+import java.text.FieldPosition
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -44,6 +47,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     companion object {
         const val QUESTION_LIST: String = "question_list"
         const val IS_EXAM: String = "is_exam"
+        const val TAG_FRAGMENT_QUESTIONS: String = "questions_list_fragment"
     }
 
     /**
@@ -61,6 +65,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
      * Models
      */
     private var mQuestions: List<String>? = arrayListOf()
+    private var mQuestionsList: ArrayList<Question> = arrayListOf()
     private var mCurrectQuestionIndex = 0
     private var mCurrentQuestionProgress = 0
     private var mIsExam: Boolean = false
@@ -93,12 +98,38 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         mQuestions = intent.extras!!.getStringArrayList(QUESTION_LIST)
         mIsExam = intent.extras!!.getBoolean(IS_EXAM)
 
+        if (mQuestions != null) {
+            for (question in mQuestions!!) {
+                val mQuestion = Question()
+                mQuestion.questionId = question
+                mQuestionsList.add(mQuestion)
+            }
+        }
+
         mLoadingQuestionProgressBar.visibility = View.VISIBLE
-        onChangeQuestion()
+        if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
+            val question = mQuestions?.get(mCurrectQuestionIndex)
+            onChangeQuestion(question, mCurrectQuestionIndex)
+        }
+    }
+
+    override fun onBackPressed() {
+        val fragment: Fragment? = supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_QUESTIONS)
+        if (fragment != null) {
+            supportFragmentManager.beginTransaction().remove(fragment).commit()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     private val mShowQuestionsClickListener = View.OnClickListener {
+        val questionListFragment = QuestionListFragment.getInstance(mQuestionsList, mCurrectQuestionIndex)
 
+        // add to fragment manager
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.complete_question_fragment_container, questionListFragment, TAG_FRAGMENT_QUESTIONS)
+            .commitAllowingStateLoss()
     }
 
     private val mCloseQuestionsClickListener = View.OnClickListener {
@@ -106,7 +137,10 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     private val mNextQuestionClickListener = View.OnClickListener {
-        onChangeQuestion()
+        if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
+            val question = mQuestions?.get(mCurrectQuestionIndex)
+            onChangeQuestion(question, mCurrectQuestionIndex)
+        }
     }
 
     private val mShowAnswerClickListener = View.OnClickListener {
@@ -118,70 +152,67 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     /**
      *
      */
-    private fun onChangeQuestion() {
-        if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
-            val question = mQuestions?.get(mCurrectQuestionIndex)
+    public fun onChangeQuestion(question: String?, position: Int) {
+        if (::currentFragment.isInitialized) {
+            currentFragment.onPushQuestion(mIsExam)
+        }
 
-            if (::currentFragment.isInitialized) {
-                currentFragment.onPushQuestion(mIsExam)
-            }
+        if (question != null) {
+            FirebaseRequestManager.getInstance(this).requestQuestion(
+                question,
+                object : FirebaseRequestManager.OnGetQuestionListener {
+                    override fun onGetQuestionLoaded(question: Question) {
+                        Log.d("", "")
 
-            if (question != null) {
-                FirebaseRequestManager.getInstance(this).requestQuestion(
-                    question,
-                    object : FirebaseRequestManager.OnGetQuestionListener {
-                        override fun onGetQuestionLoaded(question: Question) {
-                            Log.d("", "")
+                        mLoadingQuestionProgressBar.visibility = View.GONE
+                        mQuestionTitle.text = question.subject.value
 
-                            mLoadingQuestionProgressBar.visibility = View.GONE
-                            mQuestionTitle.text = question.subject.value
-
-                            // instance question fragment
-                            when (question.questionType) {
-                                QuestionType.MULTIPLE -> {
-                                    currentFragment =
-                                        MultipleQuestionFragment(question,
-                                            this@QuestionActivity)
-                                }
-                                QuestionType.TRUE_FALSE -> {
-                                    currentFragment =
-                                        TrueFalseQuestionFragment(question,
-                                            this@QuestionActivity)
-                                }
-                                QuestionType.MATCH -> {
-                                    currentFragment =
-                                        MatchQuestionFragment(question,
-                                            this@QuestionActivity)
-                                }
-                                else -> {}
+                        // instance question fragment
+                        when (question.questionType) {
+                            QuestionType.MULTIPLE -> {
+                                currentFragment =
+                                    MultipleQuestionFragment(question,
+                                        this@QuestionActivity)
                             }
-
-                            onButtonsEnable()
-
-                            // add to fragment manager
-                            supportFragmentManager
-                                .beginTransaction()
-                                .replace(R.id.question_fragment_container, currentFragment)
-                                .commitAllowingStateLoss()
-
+                            QuestionType.TRUE_FALSE -> {
+                                currentFragment =
+                                    TrueFalseQuestionFragment(question,
+                                        this@QuestionActivity)
+                            }
+                            QuestionType.MATCH -> {
+                                currentFragment =
+                                    MatchQuestionFragment(question,
+                                        this@QuestionActivity)
+                            }
+                            else -> {}
                         }
 
-                        override fun onGetQuestionError(throwable: Throwable) {
-                            Log.d("", "")
-                            mLoadingQuestionProgressBar.visibility = View.GONE
-                        }
-                    })
+                        onButtonsEnable()
 
-                // increase questionIndex
-                mCurrectQuestionIndex += 1
+                        // add to fragment manager
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.question_fragment_container, currentFragment)
+                            .commitAllowingStateLoss()
 
-                // update progress
-                if (mQuestions != null) {
-                    mCurrentQuestionProgress = (mCurrectQuestionIndex * 100) / mQuestions?.size!!
-                    mProgresBarQuestions.progress = mCurrentQuestionProgress
-                }
+                    }
+
+                    override fun onGetQuestionError(throwable: Throwable) {
+                        Log.d("", "")
+                        mLoadingQuestionProgressBar.visibility = View.GONE
+                    }
+                })
+
+            // increase questionIndex
+            mCurrectQuestionIndex = position + 1
+
+            // update progress
+            if (mQuestions != null) {
+                mCurrentQuestionProgress = (mCurrectQuestionIndex * 100) / mQuestions?.size!!
+                mProgresBarQuestions.progress = mCurrentQuestionProgress
             }
         }
+
     }
 
     override fun onButtonsEnable() {
@@ -197,15 +228,14 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         }
     }
 
-    override fun onOptionCorrect() {
+    override fun onOptionSelected(question: Question) {
         if (::mShowAnswer.isInitialized) {
-            mShowAnswer.isEnabled = false
+            mShowAnswer.isEnabled = !question.answered
+        }
+
+        if (mQuestionsList.isNotEmpty()) {
+            mQuestionsList[mCurrectQuestionIndex - 1] = question
         }
     }
 
-    override fun onOptionIncorrect() {
-        if (::mShowAnswer.isInitialized) {
-            mShowAnswer.isEnabled = true
-        }
-    }
 }
