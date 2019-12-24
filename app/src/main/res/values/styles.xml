@@ -15,4 +15,24 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="style_button_positive">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:background">@drawable/bg_button_positive</item>
+        <item name="android:clickable">true</item>
+        <item name="android:selectable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="style_button_negative">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:background">@drawable/bg_button_negative</item>
+        <item name="android:clickable">true</item>
+        <item name="android:selectable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
 </resources>

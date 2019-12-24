@@ -32,7 +32,7 @@ abstract class AbstractUpdateDatabase<A, B>: AbstractDatabase<A, B>() {
         // get firebase data base reference
         mFirebaseDatabase = getDatabaseInstance()
 
-        mFirebaseDatabase.keepSynced(true)
+        mFirebaseDatabase.keepSynced(false)
 
         val params = getParams()
         if (params != null) {

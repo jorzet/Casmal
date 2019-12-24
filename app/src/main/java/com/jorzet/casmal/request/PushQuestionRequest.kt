@@ -1,9 +1,10 @@
 package com.jorzet.casmal.request
 
-import android.annotation.SuppressLint
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.jorzet.casmal.models.Question
+import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -33,7 +34,6 @@ class PushQuestionRequest(isExam: Boolean, question: Question): AbstractUpdateDa
     private val mIsExam: Boolean = isExam
     private val mQuestion: Question = question
 
-    @SuppressLint("DefaultLocale")
     override fun getReference(): String? {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
@@ -41,21 +41,20 @@ class PushQuestionRequest(isExam: Boolean, question: Question): AbstractUpdateDa
                     if (mIsExam) {
                         ANSWERED_EXAMS_PARAM
                     } else {
-                        ANSWERED_QUESTIONS_PARAM + "/"  + mQuestion.subject.name.toLowerCase()
+                        ANSWERED_QUESTIONS_PARAM + "/"  + mQuestion.subject.name.toLowerCase(Locale.getDefault())
                     }
         }
         return null
     }
 
-    @SuppressLint("DefaultLocale")
     override fun getParams(): HashMap<String, Any>? {
         val questionMap = HashMap<String, Any>()
         val questionParams = HashMap<String, Any>()
 
         questionParams[CHOSEN_OPTION_PARAM] = mQuestion.chosenOption
-        questionParams[QUESTION_TYPE_PARAM] = mQuestion.questionType.name.toLowerCase()
+        questionParams[QUESTION_TYPE_PARAM] = mQuestion.questionType.name.toLowerCase(Locale.getDefault())
         questionParams[IS_CORRECT_PARAM] = mQuestion.wasOK
-        questionParams[SUBJECT_PARAM] = mQuestion.subject.name.toLowerCase()
+        questionParams[SUBJECT_PARAM] = mQuestion.subject.name.toLowerCase(Locale.getDefault())
         questionMap[mQuestion.questionId] = questionParams
 
         return questionMap

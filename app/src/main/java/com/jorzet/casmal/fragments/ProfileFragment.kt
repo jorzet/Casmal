@@ -53,6 +53,7 @@ class ProfileFragment: BaseFragment() {
         tvUserEmail = rootView.findViewById(R.id.tvUserEmail)
         ivPhoto = rootView.findViewById(R.id.ivPhoto)
         ivFacebookCircle = rootView.findViewById(R.id.ivFacebookCircle)
+        ivGoogleCircle = rootView.findViewById(R.id.ivGoogleCircle)
         ivEmailCircle = rootView.findViewById(R.id.ivEmailCircle)
     }
 

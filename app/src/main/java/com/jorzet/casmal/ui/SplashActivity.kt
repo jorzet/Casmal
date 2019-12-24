@@ -39,15 +39,11 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
+import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Account
 import com.jorzet.casmal.models.User
-import com.jorzet.casmal.utils.Constants
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
@@ -154,43 +150,39 @@ class SplashActivity: BaseActivity() {
     private fun goMainActivity(currentUser: FirebaseUser?) {
         val intent = Intent(this, MainActivity::class.java)
 
-        FirebaseDatabase.getInstance().reference.child(Constants.tableUsers).orderByChild("uid").equalTo(currentUser?.uid).addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val dataSnapshots: Iterator<DataSnapshot> = dataSnapshot.children.iterator()
-                val users: MutableList<User> = ArrayList()
-
-                while (dataSnapshots.hasNext()) {
-                    val dataSnapshotChild: DataSnapshot = dataSnapshots.next()
-                    Utils.print(dataSnapshot.toString())
-                    val user: User? = dataSnapshotChild.getValue(User::class.java)
-                    users.add(user!!)
-
-                    Utils.print("Adding: " + user.uid)
-                }
-
-                val temp: MutableList<User> = ArrayList()
-
-                if(users.isEmpty()) {
-                    Utils.print("¡Usuario nuevo!")
-                    return
+        FirebaseRequestManager.getInstance(this).requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
+            override fun onGetUserLoaded(user: User?) {
+                if(user != null) {
+                    startActivity(intent)
+                    finish()
                 } else {
-                    Utils.print("Users size: " + users.size)
+                    //TODO InsertNewEmptyModel
+                    pushUser(currentUser)
                 }
+            }
 
-                Utils.print("User found: " + currentUser?.uid)
+            override fun onGetUserError(throwable: Throwable) {
+                Utils.print("Error 1: " + throwable.message)
+                //TODO Protocol to exception
+                finish()
+            }
+        })
+    }
 
-                if (users[0].uid == currentUser?.uid) {
-                    temp.add(users[0])
-                    //Here you can find your searchable user
-                    Utils.print(temp[0].uid)
-                }
+    private fun pushUser(firebaseUser: FirebaseUser) {
+        Utils.print("start PushUser: " + firebaseUser.uid)
+        val intent = Intent(this, MainActivity::class.java)
 
+        FirebaseRequestManager.getInstance(this).insertUser(firebaseUser.uid, object : FirebaseRequestManager.OnInsertUserListener {
+            override fun onSuccessUserInserted() {
                 startActivity(intent)
                 finish()
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Utils.print("Operación cancelada: " + databaseError.details)
+            override fun onErrorUserInserted(throwable: Throwable) {
+                Utils.print("Error 2: " + throwable.message)
+                //TODO Protocol to exception
+                finish()
             }
         })
     }

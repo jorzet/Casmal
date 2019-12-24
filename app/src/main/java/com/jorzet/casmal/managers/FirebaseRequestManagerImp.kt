@@ -133,8 +133,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestUser(uid: String, onGetUserListener: OnGetUserListener) {
         val usersRequest = UserRequest(uid)
 
-        usersRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<User> {
-            override fun onSuccess(result: User) {
+        usersRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<User?> {
+            override fun onSuccess(result: User?) {
                 onGetUserListener.onGetUserLoaded(result)
             }
         })
@@ -143,7 +143,26 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
             override fun onFailed(throwable: Throwable) {
                 onGetUserListener.onGetUserError(throwable)
             }
-
         })
+
+        usersRequest.request()
+    }
+
+    override fun insertUser(uid: String, onGetUserListener: OnInsertUserListener) {
+        val insertUserRequest = PushUserRequest(uid)
+
+        insertUserRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<Boolean> {
+            override fun onSuccess(result: Boolean) {
+                onGetUserListener.onSuccessUserInserted()
+            }
+        })
+
+        insertUserRequest.setOnRequestFailed(object : AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onGetUserListener.onErrorUserInserted(throwable)
+            }
+        })
+
+        insertUserRequest.update()
     }
 }
