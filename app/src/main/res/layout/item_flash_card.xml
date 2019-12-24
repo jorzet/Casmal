@@ -5,6 +5,7 @@
 	android:orientation="vertical">
 
 	<ImageView
+		android:id="@+id/ivFlashCard"
 		android:layout_width="100dp"
 		android:layout_height="100dp"
 		android:src="@drawable/ic_anatomy_white"
