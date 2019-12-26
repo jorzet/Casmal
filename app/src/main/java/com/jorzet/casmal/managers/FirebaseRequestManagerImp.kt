@@ -91,42 +91,40 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
         pushQuestionRequest.update()
     }
 
-    override fun requestFlashcard(flashcardId: String, onGetFlashcardListener: OnGetFlashcardListener) {
-        val flashcardRequest = FlashcardRequest(flashcardId)
+    override fun requestFlashCard(flashCardId: String, onGetFlashCardListener: OnGetFlashCardListener) {
+        val flashCardRequest = FlashCardRequest(flashCardId)
 
-        flashcardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<Any> {
-            override fun onSuccess(result: Any) {
-                val flashcard = result as Flashcard
-                onGetFlashcardListener.onGetFlashcardSuccess(flashcard)
+        flashCardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
+            override fun onSuccess(result: List<FlashCard>) {
+                onGetFlashCardListener.onGetFlashCardSuccess(result[0])
             }
         })
 
-        flashcardRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+        flashCardRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
-                onGetFlashcardListener.onFlashcardFail(throwable)
+                onGetFlashCardListener.onFlashCardFail(throwable)
             }
         })
 
-        flashcardRequest.request()
+        flashCardRequest.request()
     }
 
-    override fun requestFlashcards(onGetFlashcardListener: OnGetFlashcardListener) {
-        val flashcardRequest = FlashcardRequest()
+    override fun requestFlashCards(onGetFlashCardListener: OnGetFlashCardListener) {
+        val flashCardRequest = FlashCardRequest()
 
-        flashcardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<Any> {
-            override fun onSuccess(result: Any) {
-                val flashcards = result as List<Flashcard>
-                onGetFlashcardListener.onGetFlashcardsSuccess(flashcards)
+        flashCardRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
+            override fun onSuccess(result: List<FlashCard>) {
+                onGetFlashCardListener.onGetFlashCardsSuccess(result)
             }
         })
 
-        flashcardRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+        flashCardRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
-                onGetFlashcardListener.onFlashcardFail(throwable)
+                onGetFlashCardListener.onFlashCardFail(throwable)
             }
         })
 
-        flashcardRequest.request()
+        flashCardRequest.request()
     }
 
     override fun requestModules(onGetModulesListener: OnGetModulesListener) {

@@ -109,21 +109,21 @@ abstract class FirebaseRequestManager(context: Context) {
         fun onPushQuestionFail(throwable: Throwable)
     }
 
-    interface OnGetFlashcardListener {
+    interface OnGetFlashCardListener {
         /**
          *
          */
-        fun onGetFlashcardSuccess(flashcard: Flashcard)
+        fun onGetFlashCardSuccess(flashCard: FlashCard)
 
         /**
          *
          */
-        fun onGetFlashcardsSuccess(flashcards: List<Flashcard>)
+        fun onGetFlashCardsSuccess(flashCards: List<FlashCard>)
 
         /**
          *
          */
-        fun onFlashcardFail(throwable: Throwable)
+        fun onFlashCardFail(throwable: Throwable)
     }
 
     /**
@@ -159,12 +159,12 @@ abstract class FirebaseRequestManager(context: Context) {
     /**
      *
      */
-    abstract fun requestFlashcard(flashcardId: String, onGetFlashcardListener: OnGetFlashcardListener)
+    abstract fun requestFlashCard(flashCardId: String, onGetFlashCardListener: OnGetFlashCardListener)
 
     /**
      *
      */
-    abstract fun requestFlashcards(onGetFlashcardListener: OnGetFlashcardListener)
+    abstract fun requestFlashCards(onGetFlashCardListener: OnGetFlashCardListener)
 
     /**
      * Destroy [FirebaseRequestManager] instance

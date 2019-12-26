@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.gson.Gson
-import com.jorzet.casmal.models.Flashcard
+import com.jorzet.casmal.models.FlashCard
 import org.json.JSONObject
 
 /**
@@ -13,56 +13,58 @@ import org.json.JSONObject
  * @date 24/12/19.
  */
 
-class FlashcardRequest(): AbstractRequestDatabase<String, Any>() {
+class FlashCardRequest(): AbstractRequestDatabase<String, List<FlashCard>>() {
 
     companion object {
-        const val TAG: String = "FlashcardRequest"
+        const val TAG: String = "FlashCardRequest"
         const val FLASHCARD_REFERENCE: String = "flashcards"
     }
 
-    private lateinit var mFlashcardId: String
+    private lateinit var mFlashCardId: String
 
     override fun getReference(): String? {
-        if (::mFlashcardId.isInitialized) {
-            return "$FLASHCARD_REFERENCE/$mFlashcardId"
+        return if (::mFlashCardId.isInitialized) {
+            "$FLASHCARD_REFERENCE/$mFlashCardId"
         } else {
-            return FLASHCARD_REFERENCE
+            FLASHCARD_REFERENCE
         }
     }
 
     /**
      * This constructor is to call just one flashcard
      */
-    constructor(flashcardId: String): this() {
-        mFlashcardId = flashcardId
+    constructor(flashCardId: String): this() {
+        mFlashCardId = flashCardId
     }
 
     override fun onGettingResponse(successResponse: DataSnapshot) {
-        Log.d(TAG,"flashcard request success")
+        Log.d(TAG,"flashCardRequest success")
 
-        if (::mFlashcardId.isInitialized) {
-            val flashcard: Flashcard? = successResponse.getValue(Flashcard::class.java)
-            if (flashcard != null) {
-                onRequestListenerSuccess.onSuccess(flashcard)
+        if (::mFlashCardId.isInitialized) {
+            val flashCard: FlashCard? = successResponse.getValue(FlashCard::class.java)
+            if (flashCard != null) {
+                val list: ArrayList<FlashCard> = ArrayList()
+                list.add(flashCard)
+                onRequestListenerSuccess.onSuccess(list)
             } else {
                 onRequestListenerFailed.onFailed(Throwable())
             }
         } else {
             val post = successResponse.value
             if (post != null) {
-                val flashcardsMap = (post as HashMap<*, *>)
-                val mFlashcards = ArrayList<Flashcard>()
-                for (key in flashcardsMap.keys) {
-                    val flashcardMap = flashcardsMap[key] as HashMap<*, *>
+                val flashCardsMap = (post as HashMap<*, *>)
+                val mFlashCards = ArrayList<FlashCard>()
+                for (key in flashCardsMap.keys) {
+                    val flashCardMap = flashCardsMap[key] as HashMap<*, *>
                     try {
-                        val flashcard = Gson().fromJson(JSONObject(flashcardMap).toString(), Flashcard::class.java)
+                        val flashCard = Gson().fromJson(JSONObject(flashCardMap).toString(), FlashCard::class.java)
                         // just save enabled subject
-                        mFlashcards.add(flashcard)
+                        mFlashCards.add(flashCard)
                     } catch (ex: Exception) {
                         ex.printStackTrace()
                     }
                 }
-                onRequestListenerSuccess.onSuccess(mFlashcards)
+                onRequestListenerSuccess.onSuccess(mFlashCards)
             } else {
                 onRequestListenerFailed.onFailed(Throwable())
             }
@@ -70,7 +72,7 @@ class FlashcardRequest(): AbstractRequestDatabase<String, Any>() {
     }
 
     override fun onGettingError(errorResponse: DatabaseError) {
-        Log.d(TAG,"flashcard request fail")
+        Log.d(TAG,"flashCardRequest fail")
         onRequestListenerFailed.onFailed(Throwable())
     }
 }
