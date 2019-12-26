@@ -2,7 +2,6 @@ package com.jorzet.casmal.managers
 
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.jorzet.casmal.utils.Utils
 
 /**
  * @author Bani Azarael Mejia Flores
@@ -34,10 +33,7 @@ class FirebaseStorageManager {
         }
 
         fun getImage(storageName: String): StorageReference {
-            val path = getInstance().reference.child(storageName)
-
-            Utils.print("Image: $path")
-            return path
+            return getInstance().reference.child(storageName)
         }
     }
 }

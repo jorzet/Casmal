@@ -14,7 +14,6 @@ import org.json.JSONObject
  */
 
 class FlashCardsRequest(): AbstractRequestDatabase<String, List<FlashCard>>() {
-
     companion object {
         const val TAG: String = "FlashCardsRequest"
         const val FLASHCARD_REFERENCE: String = "flashcards"

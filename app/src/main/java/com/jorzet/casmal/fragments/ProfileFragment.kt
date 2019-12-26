@@ -27,6 +27,7 @@ import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.FlashCardAdapter
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.interfaces.ItemListener
+import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.managers.ImageManager
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.utils.Utils
@@ -106,7 +107,7 @@ class ProfileFragment: BaseFragment() {
         list.add(FlashCard("f2", "medicine_antidotes.png", 1))
         list.add(FlashCard("f3", "triada_carcot_colangitis.png", 1))
         list.add(FlashCard("f4", "virchow_trombosis.png", 1))
-        list.add(FlashCard("0", "", 0))
+        list.add(FlashCard("0", "LoadModel", 0))
 
         val adapter = FlashCardAdapter(context!!, list, object: ItemListener<FlashCard> {
             override fun onItemSelected(model: FlashCard) {
@@ -117,5 +118,29 @@ class ProfileFragment: BaseFragment() {
         recyclerView?.setHasFixedSize(true)
         recyclerView?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView?.adapter = adapter
+
+        FirebaseRequestManager.getInstance(context!!).requestFlashCards(object : FirebaseRequestManager.OnGetFlashCardListener {
+            override fun onGetFlashCardsSuccess(flashCards: List<FlashCard>) {
+                for((index, item) in list.withIndex()) {
+                    Utils.print("Item($index) id: ${item.id}")
+                    Utils.print("Item($index) storageName: ${item.storageName}")
+                    Utils.print("Item($index) level: ${item.level}")
+                }
+            }
+
+            override fun onFlashCardFail(throwable: Throwable) {
+                Utils.print("Error Single: $throwable.message")
+            }
+        })
+
+        FirebaseRequestManager.getInstance(context!!).requestFlashCard("f2", object : FirebaseRequestManager.OnGetFlashCardListener {
+            override fun onGetFlashCardSuccess(flashCard: FlashCard) {
+                Utils.print("Item WithId f2: ${flashCard.storageName}")
+            }
+
+            override fun onFlashCardFail(throwable: Throwable) {
+                Utils.print("Error Multiple: $throwable.message")
+            }
+        })
     }
 }

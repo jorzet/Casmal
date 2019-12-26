@@ -113,12 +113,12 @@ abstract class FirebaseRequestManager(context: Context) {
         /**
          *
          */
-        fun onGetFlashCardSuccess(flashCard: FlashCard)
+        fun onGetFlashCardSuccess(flashCard: FlashCard) {}
 
         /**
          *
          */
-        fun onGetFlashCardsSuccess(flashCards: List<FlashCard>)
+        fun onGetFlashCardsSuccess(flashCards: List<FlashCard>) {}
 
         /**
          *

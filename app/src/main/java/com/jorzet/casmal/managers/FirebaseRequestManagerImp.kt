@@ -19,6 +19,7 @@ package com.jorzet.casmal.managers
 import android.content.Context
 import com.jorzet.casmal.models.*
 import com.jorzet.casmal.request.*
+import com.jorzet.casmal.utils.Utils
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -110,21 +111,21 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     }
 
     override fun requestFlashCards(onGetFlashCardListener: OnGetFlashCardListener) {
-        val flashCardRequest = FlashCardsRequest()
+        val flashCardsRequest = FlashCardsRequest()
 
-        flashCardRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
+        flashCardsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
             override fun onSuccess(result: List<FlashCard>) {
                 onGetFlashCardListener.onGetFlashCardsSuccess(result)
             }
         })
 
-        flashCardRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+        flashCardsRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
                 onGetFlashCardListener.onFlashCardFail(throwable)
             }
         })
 
-        flashCardRequest.request()
+        flashCardsRequest.request()
     }
 
     override fun requestModules(onGetModulesListener: OnGetModulesListener) {
