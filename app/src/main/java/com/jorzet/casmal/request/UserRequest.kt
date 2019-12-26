@@ -5,6 +5,12 @@ import com.google.firebase.database.DatabaseError
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.utils.Utils
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 class UserRequest(private val uid: String): AbstractRequestDatabase<String, User?>() {
     companion object {
         /**

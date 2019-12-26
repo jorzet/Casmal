@@ -5,6 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.jorzet.casmal.room.RoomConstants
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 @Entity(tableName = RoomConstants.tbl_accounts)
 data class Account(
     @PrimaryKey

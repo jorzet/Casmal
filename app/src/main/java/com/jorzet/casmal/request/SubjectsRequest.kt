@@ -13,9 +13,7 @@ import org.json.JSONObject
  * @date 17/12/19.
  */
 
-
 class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
-
     companion object {
         /**
          * Constants

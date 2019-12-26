@@ -2,6 +2,11 @@ package com.jorzet.casmal.request
 
 import com.jorzet.casmal.models.User
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
 
 class PushUserRequest(private val uid: String): AbstractUpdateDatabase<User, Boolean>() {
     companion object {

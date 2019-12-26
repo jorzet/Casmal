@@ -4,6 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.jorzet.casmal.models.Account
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 @Dao
 interface AccountDao {
     @Query("SELECT * FROM tbl_accounts")

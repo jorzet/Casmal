@@ -61,7 +61,7 @@ class ProfileFragment: BaseFragment() {
         ivFacebookCircle = rootView.findViewById(R.id.ivFacebookCircle)
         ivGoogleCircle = rootView.findViewById(R.id.ivGoogleCircle)
         ivEmailCircle = rootView.findViewById(R.id.ivEmailCircle)
-        recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView = rootView.findViewById(R.id.recyclerView)
     }
 
     override fun prepareComponents() {

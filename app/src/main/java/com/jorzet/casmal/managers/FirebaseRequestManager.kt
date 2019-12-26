@@ -32,7 +32,7 @@ abstract class FirebaseRequestManager(context: Context) {
     companion object {
         /**
          * Manager constructor
-         * @param activity Base Activity or Fragment [Context]
+         * @param context Base Activity or Fragment [Context]
          */
         fun getInstance(context: Context): FirebaseRequestManager {
             return FirebaseRequestManagerImp.getInstance(context)

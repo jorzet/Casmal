@@ -16,6 +16,12 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 @GlideModule
 public final class MyAppGlideModule extends AppGlideModule {
     @Override

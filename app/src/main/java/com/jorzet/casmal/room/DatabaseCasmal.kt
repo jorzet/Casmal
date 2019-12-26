@@ -7,6 +7,12 @@ import androidx.room.RoomDatabase
 import com.jorzet.casmal.models.Account
 import com.jorzet.casmal.room.dao.AccountDao
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 @Database(entities = [Account::class], version = RoomConstants.databaseVersion, exportSchema = false)
 abstract class DatabaseCasmal: RoomDatabase() {
     abstract fun accountDao(): AccountDao

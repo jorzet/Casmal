@@ -7,6 +7,12 @@ import com.jorzet.casmal.models.Account
 import com.jorzet.casmal.room.dao.AccountDao
 import com.jorzet.casmal.utils.Utils
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 class AccountsRepository(private val accountDao: AccountDao) {
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.

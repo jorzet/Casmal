@@ -6,6 +6,12 @@ import com.jorzet.casmal.utils.Utils
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 class AppExecutors private constructor(
     private val diskIO: Executor = Executors.newSingleThreadExecutor(),
     private val networkIO: Executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS),

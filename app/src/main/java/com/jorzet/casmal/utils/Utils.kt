@@ -2,6 +2,12 @@ package com.jorzet.casmal.utils
 
 import android.util.Log
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 class Utils {
     companion object {
         const val PROVIDER_FACEBOOK = "Facebook"

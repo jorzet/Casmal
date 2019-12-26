@@ -13,10 +13,10 @@ import org.json.JSONObject
  * @date 24/12/19.
  */
 
-class FlashCardRequest(): AbstractRequestDatabase<String, List<FlashCard>>() {
+class FlashCardsRequest(): AbstractRequestDatabase<String, List<FlashCard>>() {
 
     companion object {
-        const val TAG: String = "FlashCardRequest"
+        const val TAG: String = "FlashCardsRequest"
         const val FLASHCARD_REFERENCE: String = "flashcards"
     }
 

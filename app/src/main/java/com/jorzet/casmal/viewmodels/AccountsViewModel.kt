@@ -9,6 +9,12 @@ import com.jorzet.casmal.repositories.AccountsRepository
 import com.jorzet.casmal.room.DatabaseCasmal
 import com.jorzet.casmal.room.dao.AccountDao
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 class AccountsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: AccountsRepository
     private val accounts: LiveData<List<Account>>

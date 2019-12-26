@@ -1,5 +1,11 @@
 package com.jorzet.casmal.room
 
+/**
+ * @author Bani Azarael Mejia Flores
+ * @email banimejia@codequark.com
+ * @date 26/12/19
+ */
+
 class RoomConstants {
     companion object {
         const val databaseName = "DrCasmal"

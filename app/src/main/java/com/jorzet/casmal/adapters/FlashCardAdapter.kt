@@ -3,11 +3,11 @@ package com.jorzet.casmal.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseAdapter
 import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.FirebaseStorageManager
+import com.jorzet.casmal.managers.ImageManager
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.viewholders.FlashCardHolder
 import com.jorzet.casmal.viewholders.LoadMoreHolder
@@ -55,9 +55,9 @@ class FlashCardAdapter(
                 listener.onItemSelected(item)
             }
 
-            val storageReference = FirebaseStorageManager.getInstance().reference.child(item.storageName)
+            val storageReference = FirebaseStorageManager.getImage(item.storageName)
 
-            Glide.with(context).load(storageReference).into(holder.ivFlashCard)
+            ImageManager.getInstance().setImage(storageReference, holder.ivFlashCard)
         } else if(viewHolder is LoadMoreHolder) {
             val holder: LoadMoreHolder = viewHolder
 

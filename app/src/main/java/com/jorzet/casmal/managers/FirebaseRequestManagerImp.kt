@@ -92,7 +92,7 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     }
 
     override fun requestFlashCard(flashCardId: String, onGetFlashCardListener: OnGetFlashCardListener) {
-        val flashCardRequest = FlashCardRequest(flashCardId)
+        val flashCardRequest = FlashCardsRequest(flashCardId)
 
         flashCardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
             override fun onSuccess(result: List<FlashCard>) {
@@ -110,7 +110,7 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     }
 
     override fun requestFlashCards(onGetFlashCardListener: OnGetFlashCardListener) {
-        val flashCardRequest = FlashCardRequest()
+        val flashCardRequest = FlashCardsRequest()
 
         flashCardRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
             override fun onSuccess(result: List<FlashCard>) {
