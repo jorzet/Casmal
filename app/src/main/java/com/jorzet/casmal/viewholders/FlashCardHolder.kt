@@ -5,5 +5,5 @@ import android.widget.ImageView
 import com.jorzet.casmal.R
 
 class FlashCardHolder(itemView: View) : ViewHolder(itemView) {
-    var ivFlashCard: ImageView = itemView.findViewById(R.id.ivFlashCard)
+    val ivFlashCard: ImageView = itemView.findViewById(R.id.ivFlashCard)
 }

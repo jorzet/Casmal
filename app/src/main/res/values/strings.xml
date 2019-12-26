@@ -11,6 +11,7 @@
     <string name="text_error_login">Ocurrió un error al iniciar sesión, intentalo nuevamente</string>
     <string name="text_payment_methods">Métodos de pago</string>
     <string name="text_flash_cards">Mis FlashCards</string>
+    <string name="text_see_more">Ver más</string>
 
     <!--question fragments-->
     <string name="show_answer">VER SOLUCIÓN</string>

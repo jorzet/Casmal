@@ -106,10 +106,11 @@ class ProfileFragment: BaseFragment() {
         list.add(FlashCard("f2", "medicine_antidotes.png", 1))
         list.add(FlashCard("f3", "triada_carcot_colangitis.png", 1))
         list.add(FlashCard("f4", "virchow_trombosis.png", 1))
+        list.add(FlashCard("0", "", 0))
 
         val adapter = FlashCardAdapter(context!!, list, object: ItemListener<FlashCard> {
-            override fun onItemSelected(item: FlashCard) {
-                Utils.print("ItemId: ${item.id}")
+            override fun onItemSelected(model: FlashCard) {
+                Utils.print("ItemId: ${model.id}")
             }
         })
 
