@@ -32,7 +32,6 @@ import com.jorzet.casmal.fragments.question.TrueFalseQuestionFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.models.QuestionType
-import java.text.FieldPosition
 
 /**
  * @author Jorge Zepeda Tinoco

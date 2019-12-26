@@ -1,6 +1,5 @@
 package com.jorzet.casmal.fragments.question
 
-import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.base.BaseQuestionFragment
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.ui.QuestionActivity
