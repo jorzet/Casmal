@@ -1,7 +1,7 @@
 package com.jorzet.casmal.request
 
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
+
 
 /**
  * @author Jorge Zepeda Tinoco

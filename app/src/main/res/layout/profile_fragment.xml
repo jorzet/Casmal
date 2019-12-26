@@ -103,8 +103,7 @@
 
 	<RelativeLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_margin="25dp">
+		android:layout_height="match_parent">
 
 		<TextView
 			android:layout_width="match_parent"
@@ -119,10 +118,10 @@
 			android:id="@+id/recyclerView"
 			android:layout_width="match_parent"
 			android:layout_height="100dp"
-			tools:listitem="@layout/item_flash_card"
 			android:layout_alignParentBottom="true"
 			android:orientation="horizontal"
-			app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+			app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+			tools:listitem="@layout/item_flash_card"/>
 
 	</RelativeLayout>
 

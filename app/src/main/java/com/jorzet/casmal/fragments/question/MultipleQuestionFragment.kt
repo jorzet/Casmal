@@ -3,7 +3,6 @@ package com.jorzet.casmal.fragments.question
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseQuestionFragment
 import com.jorzet.casmal.models.Question
