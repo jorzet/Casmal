@@ -11,28 +11,6 @@ class AppExecutors private constructor(
     private val networkIO: Executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS),
     private val mainThread: Executor = MainThreadExecutor()
 ) {
-    fun diskIO(): Executor {
-        return diskIO
-    }
-
-    fun networkIO(): Executor {
-        return networkIO
-    }
-
-    fun mainThread(): Executor {
-        return mainThread
-    }
-
-    private class MainThreadExecutor : Executor {
-        private val mainThreadHandler = Handler(
-            Looper.getMainLooper()
-        )
-
-        override fun execute(command: Runnable) {
-            mainThreadHandler.post(command)
-        }
-    }
-
     companion object {
         @Volatile
         private var instance: AppExecutors? = null
@@ -50,6 +28,22 @@ class AppExecutors private constructor(
 
             Utils.print("Instance", "Instance AppExecutors = " + instance.hashCode())
             return instance!!
+        }
+    }
+
+    fun diskIO(): Executor = diskIO
+
+    fun networkIO(): Executor = networkIO
+
+    fun mainThread(): Executor = mainThread
+
+    private class MainThreadExecutor : Executor {
+        private val mainThreadHandler = Handler(
+            Looper.getMainLooper()
+        )
+
+        override fun execute(command: Runnable) {
+            mainThreadHandler.post(command)
         }
     }
 }
