@@ -2,12 +2,9 @@ package com.jorzet.casmal.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.jorzet.casmal.interfaces.RoomOperationListener
+import com.jorzet.casmal.AppExecutors
 import com.jorzet.casmal.models.Account
 import com.jorzet.casmal.room.dao.AccountDao
-import com.jorzet.casmal.room.tasks.DeleteAccount
-import com.jorzet.casmal.room.tasks.InsertAccount
-import com.jorzet.casmal.room.tasks.UpdateAccount
 import com.jorzet.casmal.utils.Utils
 
 class AccountsRepository(private val accountDao: AccountDao) {
@@ -18,41 +15,24 @@ class AccountsRepository(private val accountDao: AccountDao) {
     private val loginGoogle: MutableLiveData<Boolean> = MutableLiveData()
 
     fun insert(account: Account) {
-        InsertAccount(accountDao, account, object : RoomOperationListener {
-            override fun onBegin() {
-                Utils.print("Begin Insert Account: ${account.userName}")
-            }
-
-            override fun onFinish() {
-                Utils.print("Finish Insert Account: ${account.userName}")
-            }
-        }).execute()
+        AppExecutors.get().diskIO().execute {
+            accountDao.insert(account)
+            Utils.print("Insert Account: ${account.userName}")
+        }
     }
 
     fun update(account: Account) {
-        UpdateAccount(accountDao, account, object : RoomOperationListener {
-            override fun onBegin() {
-                Utils.print("Begin Update Account: ${account.userName}")
-            }
-
-            override fun onFinish() {
-                Utils.print("Finish Update Account: ${account.userName}")
-            }
-        }).execute()
+        AppExecutors.get().diskIO().execute {
+            accountDao.update(account)
+            Utils.print("Update Account: ${account.userName}")
+        }
     }
 
     fun delete(account: Account) {
-        Utils.print("Delete repository")
-
-        DeleteAccount(accountDao, account, object : RoomOperationListener {
-            override fun onBegin() {
-                Utils.print("Begin Delete Account: ${account.userName}")
-            }
-
-            override fun onFinish() {
-                Utils.print("Finish Delete Account: ${account.userName}")
-            }
-        }).execute()
+        AppExecutors.get().diskIO().execute {
+            accountDao.delete(account)
+            Utils.print("Delete Account: ${account.userName}")
+        }
     }
 
     fun loginWithFacebook() {
