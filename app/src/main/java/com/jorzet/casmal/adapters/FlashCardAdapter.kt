@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.firebase.ui.storage.images.FirebaseImageLoader
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseAdapter
 import com.jorzet.casmal.interfaces.ItemListener
@@ -12,6 +13,7 @@ import com.jorzet.casmal.managers.FirebaseStorageManager
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.viewholders.FlashCardHolder
 import com.jorzet.casmal.viewholders.ViewHolder
+
 
 class FlashCardAdapter(
     context: Context,

@@ -5,10 +5,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.viewholders.ViewHolder
 
-abstract class BaseAdapter<L>(
+abstract class BaseAdapter<Model>(
     protected val context: Context,
-    protected val list: ArrayList<L>,
-    protected val listener: ItemListener<L>
+    protected val list: ArrayList<Model>,
+    protected val listener: ItemListener<Model>
 
 ): RecyclerView.Adapter<ViewHolder>() {
 

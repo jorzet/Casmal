@@ -19,7 +19,7 @@ class FirebaseStorageManager {
             if (instance == null) {
                 synchronized(FirebaseStorageManager::class.java) {
                     if (instance == null) {
-                        instance = FirebaseStorage.getInstance("gs://drcasmal-62132.appspot.com")
+                        instance = FirebaseStorage.getInstance()
                     }
                 }
             }

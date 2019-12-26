@@ -1,5 +1,5 @@
 package com.jorzet.casmal.interfaces
 
-interface ItemListener<R> {
-    fun onItemSelected(item: R) {}
+interface ItemListener<Model> {
+    fun onItemSelected(model: Model) {}
 }
