@@ -109,6 +109,18 @@ abstract class FirebaseRequestManager(context: Context) {
         fun onPushQuestionFail(throwable: Throwable)
     }
 
+    interface OnPushAverageListener {
+        /**
+         *
+         */
+        fun onPushAverageSuccess()
+
+        /**
+         *
+         */
+        fun onPushAverageFail(throwable: Throwable)
+    }
+
     interface OnGetFlashCardListener {
         /**
          *
@@ -154,7 +166,7 @@ abstract class FirebaseRequestManager(context: Context) {
     /**
      *
      */
-    abstract fun pushQuestion(isExam: Boolean, question: Question, onPushQuestionListener: OnPushQuestionListener)
+    abstract fun pushAverage(isExam: Boolean, average: Average, onPushAverageListener: OnPushAverageListener)
 
     /**
      *

@@ -60,7 +60,7 @@ class SubjectsFragment: BaseFragment() {
                 mSubjectsAdapter = SubjectsAdapter(context!!, subjects)
                 mSubjectsAdapter.mSubjectClickListener = object: SubjectsAdapter.OnSubjectClickListener {
                     override fun onSubjectClick(subject: Subject) {
-                        goQuestionActivity(subject.questions, false)
+                        goQuestionActivity(subject.questions, false, null)
                     }
                 }
                 mSubjectsRecyclerView.adapter = mSubjectsAdapter

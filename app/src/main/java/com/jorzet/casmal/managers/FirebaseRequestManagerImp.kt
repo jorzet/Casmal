@@ -74,22 +74,22 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
         questionsRequest.request()
     }
 
-    override fun pushQuestion(isExam: Boolean, question: Question, onPushQuestionListener: OnPushQuestionListener) {
-        val pushQuestionRequest = PushQuestionRequest(isExam, question)
+    override fun pushAverage(isExam: Boolean, average: Average, onPushAverageListener: OnPushAverageListener) {
+        val pushAverageRequest =  PushAverageRequets(isExam, average)
 
-        pushQuestionRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Boolean> {
+        pushAverageRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Boolean> {
             override fun onSuccess(result: Boolean) {
-                onPushQuestionListener.onPushQuestionSuccess()
+                onPushAverageListener.onPushAverageSuccess()
             }
         })
 
-        pushQuestionRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+        pushAverageRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
-                onPushQuestionListener.onPushQuestionFail(throwable)
+                onPushAverageListener.onPushAverageFail(throwable)
             }
         })
 
-        pushQuestionRequest.update()
+        pushAverageRequest.update()
     }
 
     override fun requestFlashCard(flashCardId: String, onGetFlashCardListener: OnGetFlashCardListener) {

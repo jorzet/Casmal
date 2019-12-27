@@ -2,28 +2,28 @@ package com.jorzet.casmal.request
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.jorzet.casmal.models.Question
+import com.jorzet.casmal.models.Average
 import java.util.*
 import kotlin.collections.HashMap
 
 /**
  * @author Jorge Zepeda Tinoco
  * @email jorzet.94@gmail.com
- * @date 17/12/19.
+ * @date 27/12/19.
  */
 
-class PushQuestionRequest(isExam: Boolean, question: Question): AbstractUpdateDatabase<Question, Boolean>() {
+class PushAverageRequets(isExam: Boolean, average: Average): AbstractUpdateDatabase<Average, Boolean>() {
 
     /**
      * Constants
      */
     companion object {
-        private const val TAG: String = "QuestionsTask"
+        private const val TAG: String = "PushAverageRequets"
         private const val USERS_REFERENCE: String = "users"
-        private const val CHOSEN_OPTION_PARAM: String = "chosenOption"
-        private const val QUESTION_TYPE_PARAM: String = "question_type"
-        private const val IS_CORRECT_PARAM: String = "isCorrect"
-        private const val SUBJECT_PARAM: String = "subject"
+        private const val TOTAL_QUESTIONS: String = "total_questions"
+        private const val ANSWERED_QUESTIONS: String = "answered_questions"
+        private const val CORRECT: String = "correct"
+        private const val INCORRECT: String = "incorrect"
         private const val ANSWERED_EXAMS_PARAM: String = "answeredExams"
         private const val ANSWERED_QUESTIONS_PARAM: String = "answeredQuestions"
     }
@@ -32,32 +32,30 @@ class PushQuestionRequest(isExam: Boolean, question: Question): AbstractUpdateDa
      * Attributes
      */
     private val mIsExam: Boolean = isExam
-    private val mQuestion: Question = question
+    private val mAverage: Average = average
 
     override fun getReference(): String? {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
             return USERS_REFERENCE + "/" + user.uid + "/" +
                     if (mIsExam) {
-                        ANSWERED_EXAMS_PARAM
+                        ANSWERED_EXAMS_PARAM + "/"  + mAverage.moduleId.toLowerCase(Locale.getDefault())
                     } else {
-                        ANSWERED_QUESTIONS_PARAM + "/"  + mQuestion.subject.name.toLowerCase(Locale.getDefault())
+                        ANSWERED_QUESTIONS_PARAM + "/"  + mAverage.subjectType.name.toLowerCase(Locale.getDefault())
                     }
         }
         return null
     }
 
     override fun getParams(): HashMap<String, Any>? {
-        val questionMap = HashMap<String, Any>()
-        val questionParams = HashMap<String, Any>()
+        val averageParams = HashMap<String, Any>()
 
-        questionParams[CHOSEN_OPTION_PARAM] = mQuestion.chosenOption
-        questionParams[QUESTION_TYPE_PARAM] = mQuestion.questionType.name.toLowerCase(Locale.getDefault())
-        questionParams[IS_CORRECT_PARAM] = mQuestion.wasOK
-        questionParams[SUBJECT_PARAM] = mQuestion.subject.name.toLowerCase(Locale.getDefault())
-        questionMap[mQuestion.questionId] = questionParams
+        averageParams[TOTAL_QUESTIONS] = mAverage.totalQuestions
+        averageParams[ANSWERED_QUESTIONS] = mAverage.answeredQuestions
+        averageParams[CORRECT] = mAverage.correct
+        averageParams[INCORRECT] = mAverage.incorrect
 
-        return questionMap
+        return averageParams
     }
 
     override fun onUpdateSuccess() {

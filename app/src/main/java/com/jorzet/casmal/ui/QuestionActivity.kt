@@ -30,6 +30,7 @@ import com.jorzet.casmal.fragments.question.MatchQuestionFragment
 import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
 import com.jorzet.casmal.fragments.question.TrueFalseQuestionFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
+import com.jorzet.casmal.models.Average
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.models.QuestionType
 
@@ -46,6 +47,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     companion object {
         const val QUESTION_LIST: String = "question_list"
         const val IS_EXAM: String = "is_exam"
+        const val MODULE_ID: String = "module_id"
         const val TAG_FRAGMENT_QUESTIONS: String = "questions_list_fragment"
     }
 
@@ -65,9 +67,15 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
      */
     private var mQuestions: List<String>? = arrayListOf()
     private var mQuestionsList: ArrayList<Question> = arrayListOf()
+    private lateinit var mAverage: Average
+
+    /**
+     * Attributes
+     */
     private var mCurrectQuestionIndex = 0
     private var mCurrentQuestionProgress = 0
     private var mIsExam: Boolean = false
+    private var mModuleId: String = ""
 
     /**
      * Fragment
@@ -96,6 +104,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
 
         mQuestions = intent.extras!!.getStringArrayList(QUESTION_LIST)
         mIsExam = intent.extras!!.getBoolean(IS_EXAM)
+        mModuleId = intent.extras!!.getString(MODULE_ID, "")
 
         if (mQuestions != null) {
             for (question in mQuestions!!) {
@@ -104,6 +113,9 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                 mQuestionsList.add(mQuestion)
             }
         }
+
+        mAverage = Average()
+        mAverage.totalQuestions = mQuestionsList.size
 
         mLoadingQuestionProgressBar.visibility = View.VISIBLE
         if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
@@ -153,7 +165,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
      */
     public fun onChangeQuestion(question: String?, position: Int) {
         if (::currentFragment.isInitialized) {
-            currentFragment.onPushQuestion(mIsExam)
+            currentFragment.onPushAverage(mAverage, mIsExam)
         }
 
         if (question != null) {
@@ -187,6 +199,12 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                         }
 
                         onButtonsEnable()
+
+                        if (mIsExam) {
+                            mAverage.moduleId = mModuleId
+                        } else {
+                            mAverage.subjectType = question.subject
+                        }
 
                         // add to fragment manager
                         supportFragmentManager
@@ -235,6 +253,12 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         if (mQuestionsList.isNotEmpty()) {
             mQuestionsList[mCurrectQuestionIndex - 1] = question
         }
-    }
 
+        if (::mAverage.isInitialized) {
+            mAverage.answeredQuestions++
+
+            if (question.wasOK) mAverage.correct++
+            else mAverage.incorrect++
+        }
+    }
 }

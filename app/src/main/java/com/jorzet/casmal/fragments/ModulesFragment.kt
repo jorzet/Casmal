@@ -58,7 +58,7 @@ class ModulesFragment: BaseFragment() {
                 mModulesAdapter = ModulesAdapter(modules)
                 mModulesAdapter.mModuleClickListener = object: ModulesAdapter.OnModuleClickListener {
                     override fun onModuleClick(module: Module) {
-                        goQuestionActivity(module.questions, true)
+                        goQuestionActivity(module.questions, true, module.moduleId)
                     }
                 }
 

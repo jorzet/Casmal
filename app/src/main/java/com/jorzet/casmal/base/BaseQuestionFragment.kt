@@ -2,6 +2,7 @@ package com.jorzet.casmal.base
 
 import android.util.Log
 import com.jorzet.casmal.managers.FirebaseRequestManager
+import com.jorzet.casmal.models.Average
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.ui.QuestionActivity
 
@@ -45,16 +46,16 @@ abstract class BaseQuestionFragment: BaseFragment() {
      */
     abstract fun showAnswer()
 
-    open fun onPushQuestion(isExam: Boolean) {
+    open fun onPushAverage(average: Average, isExam: Boolean) {
         val mFirebaseRequestManager: FirebaseRequestManager =
             FirebaseRequestManager.getInstance(mActivity)
 
-        mFirebaseRequestManager.pushQuestion(isExam, mQuestion, object: FirebaseRequestManager.OnPushQuestionListener {
-            override fun onPushQuestionSuccess() {
+        mFirebaseRequestManager.pushAverage(isExam, average, object: FirebaseRequestManager.OnPushAverageListener {
+            override fun onPushAverageSuccess() {
                 Log.d(TAG, "push question success")
             }
 
-            override fun onPushQuestionFail(throwable: Throwable) {
+            override fun onPushAverageFail(throwable: Throwable) {
                 Log.d(TAG, "push question fail")
             }
         })
