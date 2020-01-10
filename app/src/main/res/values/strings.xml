@@ -46,4 +46,10 @@
     <string name="actionToggleHorizontalCubic">Toggle Horizontal Cubic</string>
 
     <string name="dash">-</string>
+
+    <!-- level up -->
+    <string name="level_up_text">Subiste de nivel</string>
+    <string name="level_text">Nivel: </string>
+    <string name="win_flashcard">Ganaste una flashcard</string>
+
 </resources>

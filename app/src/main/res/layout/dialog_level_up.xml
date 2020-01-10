@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:background="@color/background">
+
+
+	<TextView
+		android:id="@+id/tv_level_up_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:text="@string/level_up_text"
+		android:textColor="@color/black"
+		android:textSize="25sp"/>
+
+	<TextView
+		android:id="@+id/tv_level"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/tv_level_up_title"
+		android:text="25"
+		android:textColor="@color/black"
+		android:textSize="25sp"/>
+
+	<TextView
+		android:id="@+id/tv_win_flashcard"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/tv_level"
+		android:text="@string/win_flashcard"
+		android:textColor="@color/black"
+		android:textSize="25sp"/>
+
+	<androidx.cardview.widget.CardView
+		android:id="@+id/cv_flashcard"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_below="@+id/tv_win_flashcard"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="20dp"
+		android:layout_margin="2dp"
+		app:cardCornerRadius="10dp">
+
+		<ImageView
+			android:id="@+id/ivFlashCard"
+			android:layout_width="200dp"
+			android:layout_height="200dp"
+			android:background="@color/colorBlack"
+			android:contentDescription="@string/app_name"
+			style="@style/RippleEffect"/>
+
+	</androidx.cardview.widget.CardView>
+
+	<RelativeLayout
+		android:id="@+id/btn_ok"
+		android:layout_width="150dp"
+		android:layout_height="30dp"
+		android:layout_below="@+id/cv_flashcard"
+		android:layout_marginTop="20dp"
+		android:layout_centerHorizontal="true"
+		android:background="@drawable/next_question_button_background">
+
+		<TextView
+			android:id="@+id/btn_next_question_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_centerVertical="true"
+			android:text="O K"
+			android:textSize="15sp"
+			android:textColor="@color/colorWhite"/>
+
+	</RelativeLayout>
+
+</RelativeLayout>

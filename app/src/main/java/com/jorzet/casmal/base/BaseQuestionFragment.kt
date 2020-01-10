@@ -36,6 +36,10 @@ abstract class BaseQuestionFragment: BaseFragment() {
         fun onOptionSelected(question: Question)
     }
 
+    interface OnLevelUpListener {
+        fun onLevelUp()
+    }
+
     /**
      *
      */

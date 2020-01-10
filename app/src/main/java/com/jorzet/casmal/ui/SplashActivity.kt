@@ -42,6 +42,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.managers.FirebaseRequestManager
+import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.Account
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.utils.Utils
@@ -153,6 +154,7 @@ class SplashActivity: BaseActivity() {
         FirebaseRequestManager.getInstance(this).requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
             override fun onGetUserLoaded(user: User?) {
                 if(user != null) {
+                    ServiceManager.getInstance().user = user
                     startActivity(intent)
                     finish()
                 } else {

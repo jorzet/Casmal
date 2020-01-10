@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.jorzet.casmal.utils.Utils
 import kotlinx.android.parcel.Parcelize
+import okhttp3.internal.Util
 
 /**
  * @author Bani Azarael Mejia Flores
@@ -24,7 +25,11 @@ data class User (
 
     @SerializedName("payment")
     @Expose
-    var payment: Payment = Payment()
+    var payment: Payment = Payment(),
+
+    @SerializedName("flashcards")
+    @Expose
+    var flashCards: List<String> = emptyList()
 ) : Parcelable {
     constructor() : this("Android", 0, Payment())
 
@@ -36,6 +41,7 @@ data class User (
         Utils.print("payment.isPremium ${payment.isPremium}")
         Utils.print("payment.subscription ${payment.subscription}")
         Utils.print("payment.timeStamp ${payment.timeStamp}")
+        Utils.print("flashcards $flashCards")
 
         return "User"
     }

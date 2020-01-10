@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseQuestionFragment
+import com.jorzet.casmal.dialogs.LevelUpDialog
 import com.jorzet.casmal.fragments.QuestionListFragment
 import com.jorzet.casmal.fragments.question.MatchQuestionFragment
 import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
@@ -40,7 +41,8 @@ import com.jorzet.casmal.models.QuestionType
  * @date 20/08/19.
  */
 
-class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedListener {
+class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedListener,
+    BaseQuestionFragment.OnLevelUpListener {
     /**
      * Tags
      */
@@ -247,7 +249,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
 
     override fun onOptionSelected(question: Question) {
         if (::mShowAnswer.isInitialized) {
-            mShowAnswer.isEnabled = !question.answered
+            mShowAnswer.isEnabled = !question.wasOK
         }
 
         if (mQuestionsList.isNotEmpty()) {
@@ -260,5 +262,13 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
             if (question.wasOK) mAverage.correct++
             else mAverage.incorrect++
         }
+    }
+
+    override fun onLevelUp() {
+        LevelUpDialog.newInstance(10, "hematology_generalities.png", object: LevelUpDialog.OnOkButtonListener{
+            override fun onOkButtonClick() {
+
+            }
+        }).show(supportFragmentManager, "level_up_dialog")
     }
 }
