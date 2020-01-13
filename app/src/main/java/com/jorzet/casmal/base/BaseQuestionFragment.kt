@@ -3,6 +3,7 @@ package com.jorzet.casmal.base
 import android.util.Log
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Average
+import com.jorzet.casmal.models.Level
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.ui.QuestionActivity
 
@@ -34,6 +35,11 @@ abstract class BaseQuestionFragment: BaseFragment() {
         fun onButtonsEnable()
         fun onNextQuestionButtonEnable(enable: Boolean)
         fun onOptionSelected(question: Question)
+    }
+
+    interface OnLevelUpListener {
+        fun onLevelUp(level: Level)
+        fun getFlashCard(level: Level): String?
     }
 
     /**

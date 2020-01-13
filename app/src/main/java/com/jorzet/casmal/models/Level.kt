@@ -8,17 +8,18 @@ import kotlinx.android.parcel.Parcelize
 /**
  * @author Jorge Zepeda Tinoco
  * @email jorzet.94@gmail.com
- * @date 24/12/19.
+ * @date 07/01/20.
  */
 
 @Parcelize
-data class FlashCard(
+data class Level(
+    @SerializedName("flashcard")
+    @Expose
+    var flashcard: String,
     @SerializedName("id")
     @Expose
-    var id: String,
-    @SerializedName("storageName")
+    var id: Int = 0,
+    @SerializedName("points")
     @Expose
-    var storageName: String
-): Parcelable {
-    constructor(): this("", "")
-}
+    var points: Int = 0
+): Parcelable

@@ -67,6 +67,7 @@ class MultipleQuestionFragment(override var mQuestion: Question,
                 else
                     ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
+            mOptionABackgroundView.setOnClickListener(null)
             mOptionBBackgroundView.setOnClickListener(null)
             mOptionCBackgroundView.setOnClickListener(null)
             mOptionDBackgroundView.setOnClickListener(null)
@@ -88,6 +89,7 @@ class MultipleQuestionFragment(override var mQuestion: Question,
                     ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
             mOptionABackgroundView.setOnClickListener(null)
+            mOptionBBackgroundView.setOnClickListener(null)
             mOptionCBackgroundView.setOnClickListener(null)
             mOptionDBackgroundView.setOnClickListener(null)
 
@@ -109,6 +111,7 @@ class MultipleQuestionFragment(override var mQuestion: Question,
 
             mOptionABackgroundView.setOnClickListener(null)
             mOptionBBackgroundView.setOnClickListener(null)
+            mOptionCBackgroundView.setOnClickListener(null)
             mOptionDBackgroundView.setOnClickListener(null)
 
             mQuestion.wasOK = mQuestion.answer == "3"
@@ -130,6 +133,7 @@ class MultipleQuestionFragment(override var mQuestion: Question,
             mOptionABackgroundView.setOnClickListener(null)
             mOptionBBackgroundView.setOnClickListener(null)
             mOptionCBackgroundView.setOnClickListener(null)
+            mOptionDBackgroundView.setOnClickListener(null)
 
             mQuestion.wasOK = mQuestion.answer == "4"
             mQuestion.answered = true

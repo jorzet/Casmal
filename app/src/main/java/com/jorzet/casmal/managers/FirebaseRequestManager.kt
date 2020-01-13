@@ -125,17 +125,41 @@ abstract class FirebaseRequestManager(context: Context) {
         /**
          *
          */
-        fun onGetFlashCardSuccess(flashCard: FlashCard) {}
+        fun onGetFlashCardSuccess(flashCard: FlashCard)
 
         /**
          *
          */
-        fun onGetFlashCardsSuccess(flashCards: List<FlashCard>) {}
+        fun onGetFlashCardsSuccess(flashCards: List<FlashCard>)
 
         /**
          *
          */
         fun onFlashCardFail(throwable: Throwable)
+    }
+
+    interface OnGetLevelsListener {
+        /**
+         *
+         */
+        fun onGetLevelsSuccess(levels: List<Level>)
+
+        /**
+         *
+         */
+        fun onGetLevelsFail(throwable: Throwable)
+    }
+
+    interface OnUpdateUserLevelListener {
+        /**
+         *
+         */
+        fun onUpdateUserLevelSuccess()
+
+        /**
+         *
+         */
+        fun onUpdateUserLevelFail(throwable: Throwable)
     }
 
     /**
@@ -177,6 +201,16 @@ abstract class FirebaseRequestManager(context: Context) {
      *
      */
     abstract fun requestFlashCards(onGetFlashCardListener: OnGetFlashCardListener)
+
+    /**
+     *
+     */
+    abstract fun requestLevels(onGetLevelsListener: OnGetLevelsListener)
+
+    /**
+     *
+     */
+    abstract fun updateUserLevel(onUpdateUserLevelListener: OnUpdateUserLevelListener)
 
     /**
      * Destroy [FirebaseRequestManager] instance

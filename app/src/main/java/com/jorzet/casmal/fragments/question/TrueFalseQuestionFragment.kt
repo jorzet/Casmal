@@ -55,6 +55,7 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
                 else
                     ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
+            mOptionTrueBackgroundView.setOnClickListener(null)
             mOptionFalseBackgroundView.setOnClickListener(null)
 
             mQuestion.wasOK = mQuestion.answer == "1"
@@ -74,6 +75,7 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
                     ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
             mOptionTrueBackgroundView.setOnClickListener(null)
+            mOptionFalseBackgroundView.setOnClickListener(null)
 
             mQuestion.wasOK = mQuestion.answer == "0"
             mQuestion.answered = true
@@ -94,16 +96,21 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
 
     override fun showAnswer() {
         if (mQuestion.answer.isNotEmpty()) {
-            when(mQuestion.answer) {
-                "0" -> {
-                    mOptionFalseBackgroundView.background =
-                        ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
+
+            mOptionFalseBackgroundView.background =
+                if (mQuestion.answer == "0") {
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
+                } else {
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_unselected_option_background)
                 }
-                "1" -> {
-                    mOptionTrueBackgroundView.background =
-                        ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
+
+            mOptionTrueBackgroundView.background =
+                if (mQuestion.answer == "1") {
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_response_background)
+                } else {
+                    ContextCompat.getDrawable(mActivity, R.drawable.answer_unselected_option_background)
                 }
-            }
+
             mQuestion.wasOK = false
             mQuestion.answered = false
             mQuestion.chosenOption = "-1"

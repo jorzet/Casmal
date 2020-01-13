@@ -29,6 +29,7 @@ import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.managers.ImageManager
+import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
@@ -50,6 +51,7 @@ class ProfileFragment: BaseFragment() {
     private var ivGoogleCircle: ImageView? = null
     private var ivEmailCircle: ImageView? = null
     private var recyclerView: RecyclerView? = null
+    private var noFlashcards: TextView? = null
 
     override fun getLayoutId(): Int {
         return R.layout.profile_fragment
@@ -63,6 +65,7 @@ class ProfileFragment: BaseFragment() {
         ivGoogleCircle = rootView.findViewById(R.id.ivGoogleCircle)
         ivEmailCircle = rootView.findViewById(R.id.ivEmailCircle)
         recyclerView = rootView.findViewById(R.id.recyclerView)
+        noFlashcards = rootView.findViewById(R.id.tv_no_flashcards)
     }
 
     override fun prepareComponents() {
@@ -102,45 +105,29 @@ class ProfileFragment: BaseFragment() {
             }
         })
 
-        val list: ArrayList<FlashCard> = ArrayList()
-        list.add(FlashCard("f1", "hematology_generalities.png", 1))
-        list.add(FlashCard("f2", "medicine_antidotes.png", 1))
-        list.add(FlashCard("f3", "triada_carcot_colangitis.png", 1))
-        list.add(FlashCard("f4", "virchow_trombosis.png", 1))
-        list.add(FlashCard("0", "LoadModel", 0))
+        val userFlashCards = ServiceManager.getInstance().userFlashCards
 
-        val adapter = FlashCardAdapter(context!!, list, object: ItemListener<FlashCard> {
-            override fun onItemSelected(model: FlashCard) {
-                Utils.print("ItemId: ${model.id}")
+        if (userFlashCards.isNotEmpty()) {
+            val list: ArrayList<FlashCard> = ArrayList()
+            list.addAll(userFlashCards)
+            if (userFlashCards.size > 3) {
+                list.add(FlashCard("0", "LoadModel"))
             }
-        })
 
-        recyclerView?.setHasFixedSize(true)
-        recyclerView?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView?.adapter = adapter
-
-        FirebaseRequestManager.getInstance(context!!).requestFlashCards(object : FirebaseRequestManager.OnGetFlashCardListener {
-            override fun onGetFlashCardsSuccess(flashCards: List<FlashCard>) {
-                for((index, item) in list.withIndex()) {
-                    Utils.print("Item($index) id: ${item.id}")
-                    Utils.print("Item($index) storageName: ${item.storageName}")
-                    Utils.print("Item($index) level: ${item.level}")
+            val adapter = FlashCardAdapter(context!!, list, object : ItemListener<FlashCard> {
+                override fun onItemSelected(model: FlashCard) {
+                    Utils.print("ItemId: ${model.id}")
                 }
-            }
+            })
 
-            override fun onFlashCardFail(throwable: Throwable) {
-                Utils.print("Error Single: $throwable.message")
-            }
-        })
+            recyclerView?.setHasFixedSize(true)
+            recyclerView?.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView?.adapter = adapter
+            noFlashcards?.visibility = View.GONE
 
-        FirebaseRequestManager.getInstance(context!!).requestFlashCard("f2", object : FirebaseRequestManager.OnGetFlashCardListener {
-            override fun onGetFlashCardSuccess(flashCard: FlashCard) {
-                Utils.print("Item WithId f2: ${flashCard.storageName}")
-            }
-
-            override fun onFlashCardFail(throwable: Throwable) {
-                Utils.print("Error Multiple: $throwable.message")
-            }
-        })
+        } else {
+            noFlashcards?.visibility = View.VISIBLE
+        }
     }
 }
