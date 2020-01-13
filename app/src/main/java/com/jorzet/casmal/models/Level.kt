@@ -13,10 +13,13 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Level(
-    @SerializedName("")
+    @SerializedName("flashcard")
     @Expose
-    var id: String = "",
-    @SerializedName("")
+    var flashcard: String,
+    @SerializedName("id")
+    @Expose
+    var id: Int = 0,
+    @SerializedName("points")
     @Expose
     var points: Int = 0
 ): Parcelable

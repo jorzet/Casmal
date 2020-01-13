@@ -31,9 +31,9 @@ import com.jorzet.casmal.fragments.question.MatchQuestionFragment
 import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
 import com.jorzet.casmal.fragments.question.TrueFalseQuestionFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
-import com.jorzet.casmal.models.Average
-import com.jorzet.casmal.models.Question
-import com.jorzet.casmal.models.QuestionType
+import com.jorzet.casmal.managers.ServiceManager
+import com.jorzet.casmal.models.*
+import com.jorzet.casmal.utils.Utils
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -42,7 +42,7 @@ import com.jorzet.casmal.models.QuestionType
  */
 
 class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedListener,
-    BaseQuestionFragment.OnLevelUpListener {
+    BaseQuestionFragment.OnLevelUpListener,  LevelUpDialog.OnOkButtonListener {
     /**
      * Tags
      */
@@ -262,13 +262,75 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
             if (question.wasOK) mAverage.correct++
             else mAverage.incorrect++
         }
+
+        val user = ServiceManager.getInstance().user
+        if (user != null && question.wasOK) {
+            user.points += question.points.toInt()
+
+            val levels = ServiceManager.getInstance().levels
+            for (level in levels) {
+                if (user.points >= level.points) {
+                    // on level up just when change level
+                    if (level.id != user.level) {
+                        user.level = level.id
+                        onLevelUp(level)
+                    }
+                }
+            }
+        }
     }
 
-    override fun onLevelUp() {
-        LevelUpDialog.newInstance(10, "hematology_generalities.png", object: LevelUpDialog.OnOkButtonListener{
-            override fun onOkButtonClick() {
+    override fun onLevelUp(level: Level) {
+        val user = ServiceManager.getInstance().user
+        val flashCardGotIt = getFlashCard(level)
+        if (user != null && flashCardGotIt != null) {
 
+            // show level up dialog
+            LevelUpDialog.newInstance(
+                user.level,
+                flashCardGotIt,
+                this).show(supportFragmentManager, "level_up_dialog")
+
+            // update flashcards
+            val flashCards: ArrayList<String> = arrayListOf()
+            flashCards.addAll(user.flashCards)
+            flashCards.add(level.flashcard)
+            user.flashCards = flashCards
+
+            // update user flash cards
+            val userFlashCards: ArrayList<FlashCard> = arrayListOf()
+            userFlashCards.addAll(ServiceManager.getInstance().userFlashCards)
+            userFlashCards.add(FlashCard(level.flashcard, flashCardGotIt))
+            ServiceManager.getInstance().userFlashCards = userFlashCards
+
+            // update user level
+            FirebaseRequestManager.getInstance(this).updateUserLevel(object: FirebaseRequestManager.OnUpdateUserLevelListener {
+                override fun onUpdateUserLevelSuccess() {
+                    Utils.print("QuestionActivity update level success")
+                }
+
+                override fun onUpdateUserLevelFail(throwable: Throwable) {
+                    Utils.print("QuestionActivity update level fail")
+                }
+            })
+        }
+    }
+
+    override fun getFlashCard(level: Level): String? {
+        val flashCards = ServiceManager.getInstance().flashCards
+        val user = ServiceManager.getInstance().user
+
+        if (user != null) {
+            for (flashcard in flashCards) {
+                if (flashcard.id == level.flashcard) {
+                    return flashcard.storageName
+                }
             }
-        }).show(supportFragmentManager, "level_up_dialog")
+        }
+        return null
+    }
+
+    override fun onOkButtonClick() {
+
     }
 }

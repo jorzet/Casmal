@@ -55,6 +55,7 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
                 else
                     ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
+            mOptionTrueBackgroundView.setOnClickListener(null)
             mOptionFalseBackgroundView.setOnClickListener(null)
 
             mQuestion.wasOK = mQuestion.answer == "1"
@@ -74,6 +75,7 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
                     ContextCompat.getDrawable(mActivity, R.drawable.answer_wrong_option_background)
 
             mOptionTrueBackgroundView.setOnClickListener(null)
+            mOptionFalseBackgroundView.setOnClickListener(null)
 
             mQuestion.wasOK = mQuestion.answer == "0"
             mQuestion.answered = true

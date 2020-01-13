@@ -44,6 +44,8 @@ import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.Account
+import com.jorzet.casmal.models.FlashCard
+import com.jorzet.casmal.models.Level
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
@@ -151,12 +153,50 @@ class SplashActivity: BaseActivity() {
     private fun goMainActivity(currentUser: FirebaseUser?) {
         val intent = Intent(this, MainActivity::class.java)
 
+        FirebaseRequestManager.getInstance(this).requestLevels(object: FirebaseRequestManager.OnGetLevelsListener {
+            override fun onGetLevelsSuccess(levels: List<Level>) {
+                ServiceManager.getInstance().levels = levels
+            }
+
+            override fun onGetLevelsFail(throwable: Throwable) {
+            }
+        })
+
         FirebaseRequestManager.getInstance(this).requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
             override fun onGetUserLoaded(user: User?) {
                 if(user != null) {
-                    ServiceManager.getInstance().user = user
-                    startActivity(intent)
-                    finish()
+                    FirebaseRequestManager.getInstance(this@SplashActivity).requestFlashCards(object: FirebaseRequestManager.OnGetFlashCardListener {
+                        override fun onGetFlashCardSuccess(flashCard: FlashCard) {
+
+                        }
+
+                        override fun onGetFlashCardsSuccess(flashCards: List<FlashCard>) {
+
+                            val userFlashcards: ArrayList<FlashCard> = arrayListOf()
+
+                            for (userFlashCard in user.flashCards) {
+                                for (flashCard in flashCards) {
+                                    if (flashCard.id == userFlashCard) {
+                                        userFlashcards.add(flashCard)
+                                    }
+                                }
+                            }
+
+                            ServiceManager.getInstance().user = user
+                            ServiceManager.getInstance().userFlashCards = userFlashcards
+                            ServiceManager.getInstance().flashCards = flashCards
+                            startActivity(intent)
+                            finish()
+                        }
+
+                        override fun onFlashCardFail(throwable: Throwable) {
+                            ServiceManager.getInstance().user = user
+                            startActivity(intent)
+                            finish()
+                        }
+
+                    })
+
                 } else {
                     //TODO InsertNewEmptyModel
                     pushUser(currentUser)

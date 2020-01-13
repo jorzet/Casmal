@@ -23,15 +23,20 @@ data class User (
     @Expose
     var level: Int = 0,
 
+    @SerializedName("points")
+    @Expose
+    var points: Int = 0,
+
     @SerializedName("payment")
     @Expose
     var payment: Payment = Payment(),
 
     @SerializedName("flashcards")
     @Expose
-    var flashCards: List<String> = emptyList()
+    var flashCards: ArrayList<String> = arrayListOf()
+
 ) : Parcelable {
-    constructor() : this("Android", 0, Payment())
+    constructor() : this("Android", 0, 0, Payment())
 
     override fun toString(): String {
         Utils.print("deviceOS: $deviceOS")

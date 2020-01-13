@@ -47,9 +47,13 @@
 
     <string name="dash">-</string>
 
+    <!-- profile -->
+    <string name="no_flashcards_text">Por el momento no tienes FlashCards</string>
+
     <!-- level up -->
     <string name="level_up_text">Subiste de nivel</string>
     <string name="level_text">Nivel: </string>
     <string name="win_flashcard">Ganaste una flashcard</string>
+    <string name="ok_text">O K</string>
 
 </resources>

@@ -25,6 +25,7 @@ class PushUserRequest(private val uid: String): AbstractUpdateDatabase<User, Boo
 
         userParams["deviceOS"] = user.deviceOS
         userParams["level"] = user.level
+        userParams["points"] = user.points
         userParams["payment"] = user.payment
         userMap[uid] = userParams
 

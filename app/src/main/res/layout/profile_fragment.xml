@@ -123,6 +123,17 @@
 			app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
 			tools:listitem="@layout/item_flash_card"/>
 
+		<TextView
+			android:id="@+id/tv_no_flashcards"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="50dp"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			android:text="@string/no_flashcards_text"
+			android:textColor="@color/black"
+			android:visibility="gone"/>
+
 	</RelativeLayout>
 
 </LinearLayout>

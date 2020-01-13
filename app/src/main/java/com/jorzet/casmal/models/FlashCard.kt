@@ -16,7 +16,7 @@ data class FlashCard(
     @SerializedName("id")
     @Expose
     var id: String,
-    @SerializedName("storage_name")
+    @SerializedName("storageName")
     @Expose
     var storageName: String
 ): Parcelable {

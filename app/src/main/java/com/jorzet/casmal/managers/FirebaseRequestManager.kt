@@ -150,6 +150,18 @@ abstract class FirebaseRequestManager(context: Context) {
         fun onGetLevelsFail(throwable: Throwable)
     }
 
+    interface OnUpdateUserLevelListener {
+        /**
+         *
+         */
+        fun onUpdateUserLevelSuccess()
+
+        /**
+         *
+         */
+        fun onUpdateUserLevelFail(throwable: Throwable)
+    }
+
     /**
      *
      */
@@ -194,6 +206,11 @@ abstract class FirebaseRequestManager(context: Context) {
      *
      */
     abstract fun requestLevels(onGetLevelsListener: OnGetLevelsListener)
+
+    /**
+     *
+     */
+    abstract fun updateUserLevel(onUpdateUserLevelListener: OnUpdateUserLevelListener)
 
     /**
      * Destroy [FirebaseRequestManager] instance

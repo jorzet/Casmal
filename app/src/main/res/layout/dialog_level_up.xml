@@ -3,7 +3,8 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:background="@color/background">
+	android:background="@color/background"
+	android:padding="30dp">
 
 
 	<TextView
@@ -21,7 +22,6 @@
 		android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
 		android:layout_below="@+id/tv_level_up_title"
-		android:text="25"
 		android:textColor="@color/black"
 		android:textSize="25sp"/>
 
@@ -31,9 +31,10 @@
 		android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
 		android:layout_below="@+id/tv_level"
+		android:gravity="center"
 		android:text="@string/win_flashcard"
 		android:textColor="@color/black"
-		android:textSize="25sp"/>
+		android:textSize="20sp"/>
 
 	<androidx.cardview.widget.CardView
 		android:id="@+id/cv_flashcard"
@@ -71,7 +72,7 @@
 			android:layout_height="wrap_content"
 			android:layout_centerHorizontal="true"
 			android:layout_centerVertical="true"
-			android:text="O K"
+			android:text="@string/ok_text"
 			android:textSize="15sp"
 			android:textColor="@color/colorWhite"/>
 

@@ -145,6 +145,24 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
         levelsRequest.request()
     }
 
+    override fun updateUserLevel(onUpdateUserLevelListener: OnUpdateUserLevelListener) {
+        val pushLevelUpRequest = PushLevelUpRequest()
+
+        pushLevelUpRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Boolean> {
+            override fun onSuccess(result: Boolean) {
+                onUpdateUserLevelListener.onUpdateUserLevelSuccess()
+            }
+        })
+
+        pushLevelUpRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onUpdateUserLevelListener.onUpdateUserLevelFail(throwable)
+            }
+        })
+
+        pushLevelUpRequest.update()
+    }
+
     override fun requestModules(onGetModulesListener: OnGetModulesListener) {
         val modulesRequest = ModulesRequest()
 
