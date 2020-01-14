@@ -5,6 +5,7 @@
     <color name="colorAccent">#5fafde</color>
 
     <color name="background">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>

@@ -1,5 +1,5 @@
 /*
- * Copyright [2019] [Bani Azarael Mejia Flores]
+ * Copyright [2020] [Bani Azarael Mejia Flores]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.FlashCardAdapter
 import com.jorzet.casmal.base.BaseFragment
+import com.jorzet.casmal.dialogs.FullScreeImageDialog
 import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.managers.ImageManager
@@ -117,6 +118,11 @@ class ProfileFragment: BaseFragment() {
             val adapter = FlashCardAdapter(context!!, list, object : ItemListener<FlashCard> {
                 override fun onItemSelected(model: FlashCard) {
                     Utils.print("ItemId: ${model.id}")
+
+                    // show full screen image
+                    FullScreeImageDialog
+                        .newInstance(model.storageName)
+                        .show(fragmentManager!!,"full_screen_image")
                 }
             })
 

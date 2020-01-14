@@ -1,5 +1,20 @@
-package com.jorzet.casmal.dialogs
+/*
+ * Copyright [2020] [Jorge Zepeda Tinoco]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
+package com.jorzet.casmal.dialogs
 
 import android.content.Context
 import android.os.Bundle
@@ -10,6 +25,7 @@ import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseDialog
 import com.jorzet.casmal.managers.FirebaseStorageManager
 import com.jorzet.casmal.managers.ImageManager
+import java.lang.Exception
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -66,6 +82,14 @@ class LevelUpDialog: BaseDialog() {
         mOkButton = rootView.findViewById(R.id.btn_ok)
         mLevel = rootView.findViewById(R.id.tv_level)
         mFlashCard = rootView.findViewById(R.id.ivFlashCard)
+        mFlashCard.setOnClickListener {
+            val flashcard = arguments!!.getString(ARG_FLASH_CARD, null)
+
+            // show full screen image
+            FullScreeImageDialog
+                .newInstance(flashcard)
+                .show(fragmentManager!!,"full_screen_image")
+        }
     }
 
     override fun prepareComponents() {
@@ -85,10 +109,14 @@ class LevelUpDialog: BaseDialog() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (arguments!!.getBoolean(ARG_IS_LISTENER_ACTIVITY)) {
-            onOkButtonListener = activity as OnOkButtonListener;
-        } else {
-            onOkButtonListener = targetFragment as OnOkButtonListener
+        try {
+            if (arguments!!.getBoolean(ARG_IS_LISTENER_ACTIVITY)) {
+                onOkButtonListener = activity as OnOkButtonListener;
+            } else {
+                onOkButtonListener = targetFragment as OnOkButtonListener
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

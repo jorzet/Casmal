@@ -30,6 +30,9 @@ import com.jorzet.casmal.utils.Utils
 
 class ServiceManager {
 
+    /**
+     * Models
+     */
     var user: User? = null
     var userFlashCards: List<FlashCard> = emptyList()
     var flashCards: List<FlashCard> = emptyList()
@@ -57,10 +60,10 @@ class ServiceManager {
         }
     }
 
+    /**
+     * Destroy [ServiceManager] instance
+     */
     fun destroy() {
-        user = null
-        userFlashCards = emptyList()
-        flashCards = emptyList()
-        levels = emptyList()
+        instance = null
     }
 }
