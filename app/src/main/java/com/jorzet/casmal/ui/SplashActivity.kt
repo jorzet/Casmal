@@ -159,6 +159,7 @@ class SplashActivity: BaseActivity() {
             }
 
             override fun onGetLevelsFail(throwable: Throwable) {
+                
             }
         })
 
