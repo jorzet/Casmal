@@ -16,7 +16,9 @@
 
 package com.jorzet.casmal.fragments
 
+import android.content.Intent
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -28,10 +30,10 @@ import com.jorzet.casmal.adapters.FlashCardAdapter
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.dialogs.FullScreeImageDialog
 import com.jorzet.casmal.interfaces.ItemListener
-import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.managers.ImageManager
 import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.FlashCard
+import com.jorzet.casmal.ui.PaywayActivity
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
@@ -53,6 +55,7 @@ class ProfileFragment: BaseFragment() {
     private var ivEmailCircle: ImageView? = null
     private var recyclerView: RecyclerView? = null
     private var noFlashcards: TextView? = null
+    private var paywayButton: Button? = null
 
     override fun getLayoutId(): Int {
         return R.layout.profile_fragment
@@ -67,6 +70,7 @@ class ProfileFragment: BaseFragment() {
         ivEmailCircle = rootView.findViewById(R.id.ivEmailCircle)
         recyclerView = rootView.findViewById(R.id.recyclerView)
         noFlashcards = rootView.findViewById(R.id.tv_no_flashcards)
+        paywayButton = rootView.findViewById(R.id.btn_payway)
     }
 
     override fun prepareComponents() {
@@ -135,5 +139,12 @@ class ProfileFragment: BaseFragment() {
         } else {
             noFlashcards?.visibility = View.VISIBLE
         }
+
+        paywayButton?.setOnClickListener(paywayButtonClickListener)
+    }
+
+    private val paywayButtonClickListener = View.OnClickListener {
+        val intent = Intent(activity, PaywayActivity::class.java)
+        startActivity(intent)
     }
 }

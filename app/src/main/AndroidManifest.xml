@@ -55,6 +55,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.PaywayActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2"/>
+
     </application>
 
 </manifest>
