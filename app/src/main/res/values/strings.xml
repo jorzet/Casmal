@@ -56,4 +56,10 @@
     <string name="win_flashcard">Ganaste una flashcard</string>
     <string name="ok_text">O K</string>
 
+    <!-- payway -->
+    <string name="choose_payment_method_text">Elige un método de pago</string>
+    <string name="google_pay_text">Google Play</string>
+    <string name="subscription_text">Se pagará una suscripción mensual</string>
+    <string name="cash_text">Efectivo</string>
+
 </resources>
