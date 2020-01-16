@@ -56,11 +56,7 @@
 						android:layout_height="wrap_content"
 						android:minHeight="@dimen/min_height_option"
 						android:layout_centerVertical="true"
-						android:layout_toRightOf="@+id/rl_a_option"
-						android:layout_toEndOf="@+id/rl_a_option"
-						android:layout_marginLeft="@dimen/margin_left_option"
 						android:layout_marginStart="@dimen/margin_left_option"
-						android:layout_marginRight="@dimen/margin_right_option"
 						android:layout_marginEnd="@dimen/margin_right_option"
 						android:background="@drawable/answer_unselected_option_background" >
 
@@ -94,11 +90,7 @@
 						android:layout_height="wrap_content"
 						android:minHeight="@dimen/min_height_option"
 						android:layout_centerVertical="true"
-						android:layout_toRightOf="@+id/rl_b_option"
-						android:layout_toEndOf="@+id/rl_b_option"
-						android:layout_marginLeft="@dimen/margin_left_option"
 						android:layout_marginStart="@dimen/margin_left_option"
-						android:layout_marginRight="@dimen/margin_right_option"
 						android:layout_marginEnd="@dimen/margin_right_option"
 						android:background="@drawable/answer_unselected_option_background">
 

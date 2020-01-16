@@ -36,7 +36,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
 
     companion object {
         const val TAG = "PaywayActivity"
-        const val PRODUCT_ID = "casmal_subscription"
+        const val PRODUCT_ID = "casmal_monthly"
     }
 
     /**
@@ -90,39 +90,39 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
     }
 
     override fun onBillingResponseOk() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onBillingResponseUserCanceled() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onBillingResponseServiceUnavailable() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onBillingResponseBillingUnavailable() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onBillingResponseItemUnavailable() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onBillingResponseDeveloperError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onBillingResponseError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onBillingResponseItemAlreadyOwned() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onBillingResponseItemNotOwned() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     private fun createBillingClient() {
@@ -133,14 +133,13 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
                 if (billingResponse == BillingClient.BillingResponse.OK) {
                     Log.i(TAG, "onBillingSetupFinished() response: $billingResponse")
 
-                    //setting up a listener for the queries
-                    val responseListener = SkuDetailsResponseListener {
-                            responseCode, skuDetailsList ->
-                        Log.i(TAG, "response code: $responseCode ${skuDetailsList.size}")
-                    }
+                    val skuList = Arrays.asList("casmal")
+                    mBillingManager.querySkuDetailsAsync(BillingClient.SkuType.INAPP, skuList, object: SkuDetailsResponseListener {
+                        override fun onSkuDetailsResponse(responseCode: Int, skuDetailsList: MutableList<SkuDetails>?) {
+                            Log.i(TAG, "response code: $responseCode ${skuDetailsList?.size}")
+                        }
 
-                    val skuList = Arrays.asList("casmal.subscription")
-                    mBillingManager.querySkuDetailsAsync(BillingClient.SkuType.INAPP, skuList, responseListener)
+                    })
                 } else {
                     Log.w(TAG, "onBillingSetupFinished() error code: $billingResponse")
                 }
