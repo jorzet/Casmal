@@ -94,8 +94,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestFlashCard(flashCardId: String, onGetFlashCardListener: OnGetFlashCardListener) {
         val flashCardRequest = FlashCardsRequest(flashCardId)
 
-        flashCardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
-            override fun onSuccess(result: List<FlashCard>) {
+        flashCardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<MutableList<FlashCard>> {
+            override fun onSuccess(result: MutableList<FlashCard>) {
                 onGetFlashCardListener.onGetFlashCardSuccess(result[0])
             }
         })
@@ -112,8 +112,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestFlashCards(onGetFlashCardListener: OnGetFlashCardListener) {
         val flashCardsRequest = FlashCardsRequest()
 
-        flashCardsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
-            override fun onSuccess(result: List<FlashCard>) {
+        flashCardsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<MutableList<FlashCard>> {
+            override fun onSuccess(result: MutableList<FlashCard>) {
                 onGetFlashCardListener.onGetFlashCardsSuccess(result)
             }
         })
@@ -130,8 +130,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestLevels(onGetLevelsListener: OnGetLevelsListener) {
         val levelsRequest = LevelsRequest()
 
-        levelsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<Level>> {
-            override fun onSuccess(result: List<Level>) {
+        levelsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<MutableList<Level>> {
+            override fun onSuccess(result: MutableList<Level>) {
                 onGetLevelsListener.onGetLevelsSuccess(result)
             }
         })

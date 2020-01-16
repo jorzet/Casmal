@@ -12,7 +12,7 @@ import org.json.JSONObject
  * @date 07/01/20.
  */
 
-class LevelsRequest(): AbstractRequestDatabase<String, List<Level>>() {
+class LevelsRequest: AbstractRequestDatabase<String, MutableList<Level>>() {
 
     companion object {
         const val LEVELS_REFERENCE: String = "levels"
@@ -30,8 +30,8 @@ class LevelsRequest(): AbstractRequestDatabase<String, List<Level>>() {
             for (level in levelsList) {
                 try {
                     val levelMap = level as HashMap<*, *>
-                    val level_ = Gson().fromJson(JSONObject(levelMap).toString(), Level::class.java)
-                    mLevels.add(level_)
+                    val item = Gson().fromJson(JSONObject(levelMap).toString(), Level::class.java)
+                    mLevels.add(item)
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                 }

@@ -22,6 +22,8 @@ import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseQuestionFragment
@@ -31,9 +33,10 @@ import com.jorzet.casmal.fragments.question.MatchQuestionFragment
 import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
 import com.jorzet.casmal.fragments.question.TrueFalseQuestionFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
-import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.*
 import com.jorzet.casmal.utils.Utils
+import com.jorzet.casmal.viewmodels.LevelsViewModel
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -84,6 +87,12 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
      */
     private lateinit var currentFragment: BaseQuestionFragment
 
+    private lateinit var user: User
+    private lateinit var userFlashCards: MutableList<FlashCard>
+    private lateinit var levels: MutableList<Level>
+
+    private lateinit var userViewModel: UserViewModel
+
     override fun getLayoutId(): Int {
         return R.layout.activity_question
     }
@@ -99,6 +108,25 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     override fun prepareComponents() {
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+
+        val levelsViewModel = ViewModelProviders.of(this).get(LevelsViewModel::class.java)
+
+        userViewModel.user.observe(this, Observer {
+            Utils.print("User in repository: ${it.points}")
+            user = it
+        })
+
+        userViewModel.flashCards.observe(this, Observer {
+            Utils.print("UserFlasCards in repository: ${it.size}")
+            userFlashCards = it
+        })
+
+        levelsViewModel.levels.observe(this, Observer {
+            Utils.print("Levels in repository: ${it.size}")
+            levels = it
+        })
+
         mShowQuestions.setOnClickListener(mShowQuestionsClickListener)
         mCloseQuestions.setOnClickListener(mCloseQuestionsClickListener)
         mNextQuestion.setOnClickListener(mNextQuestionClickListener)
@@ -165,7 +193,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     /**
      *
      */
-    public fun onChangeQuestion(question: String?, position: Int) {
+    fun onChangeQuestion(question: String?, position: Int) {
         if (::currentFragment.isInitialized) {
             currentFragment.onPushAverage(mAverage, mIsExam)
         }
@@ -259,20 +287,24 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         if (::mAverage.isInitialized) {
             mAverage.answeredQuestions++
 
-            if (question.wasOK) mAverage.correct++
+            if(question.wasOK) mAverage.correct++
             else mAverage.incorrect++
         }
 
-        val user = ServiceManager.getInstance().user
-        if (user != null && question.wasOK) {
-            user.points += question.points.toInt()
+        if (question.wasOK) {
+            Utils.print("question.wasOK")
 
-            val levels = ServiceManager.getInstance().levels
+            Utils.print("before user.points: " + user.points)
+            user.points += question.points.toInt()
+            Utils.print("after user.points: " + user.points)
+
             for (level in levels) {
                 if (user.points >= level.points) {
                     // on level up just when change level
                     if (level.id != user.level) {
                         user.level = level.id
+
+                        Utils.print("¡LevelUp!")
                         onLevelUp(level)
                     }
                 }
@@ -281,52 +313,43 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     override fun onLevelUp(level: Level) {
-        val user = ServiceManager.getInstance().user
-        val flashCardGotIt = getFlashCard(level)
-        if (user != null && flashCardGotIt != null) {
+        val flashCardGotIt = getFlashCard(level) ?: return
+        Utils.print("flashCardGotIt not null")
 
-            // show level up dialog
-            LevelUpDialog.newInstance(
-                user.level,
-                flashCardGotIt,
-                this).show(supportFragmentManager, "level_up_dialog")
+        // show level up dialog
+        LevelUpDialog.newInstance(
+            user.level,
+            flashCardGotIt,
+            this
+        ).show(supportFragmentManager, "level_up_dialog")
 
-            // update flashcards
-            val flashCards: ArrayList<String> = arrayListOf()
-            flashCards.addAll(user.flashCards)
-            flashCards.add(level.flashcard)
-            user.flashCards = flashCards
+        // update flashcards
+        val flashCards: ArrayList<String> = arrayListOf()
+        flashCards.addAll(user.flashCards)
+        flashCards.add(level.flashcard)
+        user.flashCards = flashCards
 
-            // update user flash cards
-            val userFlashCards: ArrayList<FlashCard> = arrayListOf()
-            userFlashCards.addAll(ServiceManager.getInstance().userFlashCards)
-            userFlashCards.add(FlashCard(level.flashcard, flashCardGotIt))
-            ServiceManager.getInstance().userFlashCards = userFlashCards
+        userViewModel.addFlashCard(FlashCard(level.flashcard, flashCardGotIt))
 
-            // update user level
-            FirebaseRequestManager.getInstance(this).updateUserLevel(object: FirebaseRequestManager.OnUpdateUserLevelListener {
-                override fun onUpdateUserLevelSuccess() {
-                    Utils.print("QuestionActivity update level success")
-                }
+        // update user level
+        FirebaseRequestManager.getInstance(this).updateUserLevel(object: FirebaseRequestManager.OnUpdateUserLevelListener {
+            override fun onUpdateUserLevelSuccess() {
+                Utils.print("QuestionActivity update level success")
+            }
 
-                override fun onUpdateUserLevelFail(throwable: Throwable) {
-                    Utils.print("QuestionActivity update level fail")
-                }
-            })
-        }
+            override fun onUpdateUserLevelFail(throwable: Throwable) {
+                Utils.print("QuestionActivity update level fail")
+            }
+        })
     }
 
     override fun getFlashCard(level: Level): String? {
-        val flashCards = ServiceManager.getInstance().flashCards
-        val user = ServiceManager.getInstance().user
-
-        if (user != null) {
-            for (flashcard in flashCards) {
-                if (flashcard.id == level.flashcard) {
-                    return flashcard.storageName
-                }
+        for (flashcard in userFlashCards) {
+            if (flashcard.id == level.flashcard) {
+                return flashcard.storageName
             }
         }
+
         return null
     }
 

@@ -7,12 +7,22 @@ import com.jorzet.casmal.viewholders.ViewHolder
 
 abstract class BaseAdapter<Model>(
     protected val context: Context,
-    protected val list: ArrayList<Model>,
+    protected val list: MutableList<Model>? = null,
     protected val listener: ItemListener<Model>
 
 ): RecyclerView.Adapter<ViewHolder>() {
 
     override fun getItemCount(): Int {
-        return list.size
+        if(list != null) {
+            return list.size
+        }
+
+        return 0
+    }
+
+    open fun setList(list: MutableList<Model>) {
+        this.list?.clear()
+        this.list?.addAll(list)
+        notifyDataSetChanged()
     }
 }

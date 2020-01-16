@@ -2,7 +2,6 @@ package com.jorzet.casmal
 
 import android.os.Handler
 import android.os.Looper
-import com.jorzet.casmal.utils.Utils
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -40,22 +39,8 @@ class AppExecutors private constructor(
     }
 
     companion object {
-        @Volatile
-        private var instance: AppExecutors? = null
+        val instance: AppExecutors = AppExecutors()
 
         private const val NUMBER_OF_THREADS = 4
-
-        fun get(): AppExecutors {
-            if (instance == null) {
-                synchronized(AppExecutors::class.java) {
-                    if (instance == null) {
-                        instance = AppExecutors()
-                    }
-                }
-            }
-
-            Utils.print("Instance", "Instance AppExecutors = " + instance.hashCode())
-            return instance!!
-        }
     }
 }

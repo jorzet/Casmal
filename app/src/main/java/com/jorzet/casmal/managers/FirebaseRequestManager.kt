@@ -130,7 +130,7 @@ abstract class FirebaseRequestManager(context: Context) {
         /**
          *
          */
-        fun onGetFlashCardsSuccess(flashCards: List<FlashCard>)
+        fun onGetFlashCardsSuccess(flashCards: MutableList<FlashCard>)
 
         /**
          *
@@ -142,7 +142,7 @@ abstract class FirebaseRequestManager(context: Context) {
         /**
          *
          */
-        fun onGetLevelsSuccess(levels: List<Level>)
+        fun onGetLevelsSuccess(levels: MutableList<Level>)
 
         /**
          *

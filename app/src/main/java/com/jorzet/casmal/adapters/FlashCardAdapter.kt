@@ -9,13 +9,14 @@ import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.FirebaseStorageManager
 import com.jorzet.casmal.managers.ImageManager
 import com.jorzet.casmal.models.FlashCard
+import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.viewholders.FlashCardHolder
 import com.jorzet.casmal.viewholders.LoadMoreHolder
 import com.jorzet.casmal.viewholders.ViewHolder
 
 class FlashCardAdapter(
     context: Context,
-    list: ArrayList<FlashCard>,
+    list: MutableList<FlashCard>?,
     listener: ItemListener<FlashCard>
 ) : BaseAdapter<FlashCard>(context, list, listener) {
 
@@ -25,8 +26,10 @@ class FlashCardAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(list[position].id == "0") {
-            return ITEM_LOAD
+        if(list != null) {
+            if(list[position].id == "0") {
+                return ITEM_LOAD
+            }
         }
 
         return ITEM_CARD
@@ -46,6 +49,11 @@ class FlashCardAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        if(list == null) {
+            Utils.print("Error getting item of List")
+            return
+        }
+
         val item: FlashCard = list[position]
 
         if(viewHolder is FlashCardHolder) {
@@ -57,7 +65,7 @@ class FlashCardAdapter(
 
             val storageReference = FirebaseStorageManager.getImage(item.storageName)
 
-            ImageManager.getInstance().setImage(storageReference, holder.ivFlashCard)
+            ImageManager.instance.setImage(storageReference, holder.ivFlashCard)
         } else if(viewHolder is LoadMoreHolder) {
             val holder: LoadMoreHolder = viewHolder
 

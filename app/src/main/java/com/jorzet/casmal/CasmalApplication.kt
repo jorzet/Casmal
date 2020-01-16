@@ -31,14 +31,24 @@ import com.jorzet.casmal.managers.ImageManager
 class CasmalApplication: MultiDexApplication() {
     private val TAG: String = "CasmalApplication"
 
+    companion object {
+        private var application: CasmalApplication? = null
+
+        fun get() : CasmalApplication {
+            return application!!
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
+
+        application = this
 
         if(BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
 
-        ImageManager.getInstance().initialize(this)
+        ImageManager.instance.initialize(this)
 
         try {
             FirebaseDatabase

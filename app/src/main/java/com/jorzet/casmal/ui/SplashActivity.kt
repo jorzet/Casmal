@@ -42,15 +42,17 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.managers.FirebaseRequestManager
-import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.Account
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.models.Level
 import com.jorzet.casmal.models.User
+import com.jorzet.casmal.repositories.FlashCardsRepository
+import com.jorzet.casmal.repositories.LevelsRepository
+import com.jorzet.casmal.repositories.UserRepository
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
-import com.jorzet.casmal.viewmodels.AccountsViewModel
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -70,7 +72,7 @@ class SplashActivity: BaseActivity() {
 
     private val permissions: ArrayList<String> = ArrayList()
 
-    private var viewModel: AccountsViewModel? = null
+    private var viewModel: UserViewModel? = null
 
     /**
      * Constants
@@ -92,7 +94,7 @@ class SplashActivity: BaseActivity() {
     }
 
     override fun prepareComponents() {
-        viewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
         viewModel?.loginFacebook?.observe(this, Observer {
             if(it) {
@@ -154,54 +156,52 @@ class SplashActivity: BaseActivity() {
         val intent = Intent(this, MainActivity::class.java)
 
         FirebaseRequestManager.getInstance(this).requestLevels(object: FirebaseRequestManager.OnGetLevelsListener {
-            override fun onGetLevelsSuccess(levels: List<Level>) {
-                ServiceManager.getInstance().levels = levels
+            override fun onGetLevelsSuccess(levels: MutableList<Level>) {
+                LevelsRepository.instance.setLevels(levels)
             }
 
             override fun onGetLevelsFail(throwable: Throwable) {
-                
+
             }
         })
 
         FirebaseRequestManager.getInstance(this).requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
             override fun onGetUserLoaded(user: User?) {
-                if(user != null) {
-                    FirebaseRequestManager.getInstance(this@SplashActivity).requestFlashCards(object: FirebaseRequestManager.OnGetFlashCardListener {
-                        override fun onGetFlashCardSuccess(flashCard: FlashCard) {
-
-                        }
-
-                        override fun onGetFlashCardsSuccess(flashCards: List<FlashCard>) {
-
-                            val userFlashcards: ArrayList<FlashCard> = arrayListOf()
-
-                            for (userFlashCard in user.flashCards) {
-                                for (flashCard in flashCards) {
-                                    if (flashCard.id == userFlashCard) {
-                                        userFlashcards.add(flashCard)
-                                    }
-                                }
-                            }
-
-                            ServiceManager.getInstance().user = user
-                            ServiceManager.getInstance().userFlashCards = userFlashcards
-                            ServiceManager.getInstance().flashCards = flashCards
-                            startActivity(intent)
-                            finish()
-                        }
-
-                        override fun onFlashCardFail(throwable: Throwable) {
-                            ServiceManager.getInstance().user = user
-                            startActivity(intent)
-                            finish()
-                        }
-
-                    })
-
-                } else {
+                if(user == null) {
                     //TODO InsertNewEmptyModel
                     pushUser(currentUser)
+                    return
                 }
+
+                FirebaseRequestManager.getInstance(this@SplashActivity).requestFlashCards(object: FirebaseRequestManager.OnGetFlashCardListener {
+                    override fun onGetFlashCardSuccess(flashCard: FlashCard) {
+
+                    }
+
+                    override fun onGetFlashCardsSuccess(flashCards: MutableList<FlashCard>) {
+                        val userFlashcards: MutableList<FlashCard> = arrayListOf()
+
+                        for (userFlashCard in user.flashCards) {
+                            for (flashCard in flashCards) {
+                                if (flashCard.id == userFlashCard) {
+                                    userFlashcards.add(flashCard)
+                                }
+                            }
+                        }
+
+                        UserRepository.instance.setUser(user)
+                        UserRepository.instance.setUserFlashCards(userFlashcards)
+                        FlashCardsRepository.instance.setFlashCards(flashCards)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    override fun onFlashCardFail(throwable: Throwable) {
+                        UserRepository.instance.setUser(user)
+                        startActivity(intent)
+                        finish()
+                    }
+                })
             }
 
             override fun onGetUserError(throwable: Throwable) {

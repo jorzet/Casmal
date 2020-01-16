@@ -27,14 +27,12 @@ import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.FlashCardAdapter
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.interfaces.ItemListener
-import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.managers.ImageManager
-import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
-import com.jorzet.casmal.viewmodels.AccountsViewModel
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Bani Azarael Mejia Flores
@@ -43,7 +41,7 @@ import com.jorzet.casmal.viewmodels.AccountsViewModel
  */
 
 class ProfileFragment: BaseFragment() {
-    private var viewModel: AccountsViewModel? = null
+    private var viewModel: UserViewModel? = null
     private var tvUserName: TextView? = null
     private var tvUserEmail: TextView? = null
     private var ivPhoto: ImageView? = null
@@ -52,6 +50,7 @@ class ProfileFragment: BaseFragment() {
     private var ivEmailCircle: ImageView? = null
     private var recyclerView: RecyclerView? = null
     private var noFlashcards: TextView? = null
+    private var adapter: FlashCardAdapter? = null
 
     override fun getLayoutId(): Int {
         return R.layout.profile_fragment
@@ -69,65 +68,66 @@ class ProfileFragment: BaseFragment() {
     }
 
     override fun prepareComponents() {
-        viewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
-        viewModel?.list?.observe(this, Observer { list ->
-            list.let {
-                Utils.print("Accounts Update size = {${it[0].userName}}")
+        viewModel?.account?.observe(this, Observer { account ->
+            Utils.print("Accounts Update size = {${account.userName}}")
 
-                tvUserName?.text = it[0].userName
-                tvUserEmail?.text = it[0].userEmail
+            tvUserName?.text = account.userName
+            tvUserEmail?.text = account.userEmail
 
-                var urlPhoto: String = it[0].image
+            var urlPhoto: String = account.image
 
-                when (it[0].provider) {
-                    PROVIDER_FACEBOOK -> {
-                        urlPhoto = "$urlPhoto?type=large"
+            when (account.provider) {
+                PROVIDER_FACEBOOK -> {
+                    urlPhoto = "$urlPhoto?type=large"
 
-                        ivFacebookCircle?.visibility = View.VISIBLE
-                        ivGoogleCircle?.visibility = View.GONE
-                        ivEmailCircle?.visibility = View.GONE
-                    }
-                    PROVIDER_GOOGLE -> {
-                        ivFacebookCircle?.visibility = View.GONE
-                        ivGoogleCircle?.visibility = View.VISIBLE
-                        ivEmailCircle?.visibility = View.GONE
-                    }
-                    else -> {
-                        ivFacebookCircle?.visibility = View.GONE
-                        ivGoogleCircle?.visibility = View.GONE
-                        ivEmailCircle?.visibility = View.GONE
-                        //TODO Email Alpha
-                    }
+                    ivFacebookCircle?.visibility = View.VISIBLE
+                    ivGoogleCircle?.visibility = View.GONE
+                    ivEmailCircle?.visibility = View.GONE
                 }
+                PROVIDER_GOOGLE -> {
+                    ivFacebookCircle?.visibility = View.GONE
+                    ivGoogleCircle?.visibility = View.VISIBLE
+                    ivEmailCircle?.visibility = View.GONE
+                }
+                else -> {
+                    ivFacebookCircle?.visibility = View.GONE
+                    ivGoogleCircle?.visibility = View.GONE
+                    ivEmailCircle?.visibility = View.GONE
+                    //TODO Email Alpha
+                }
+            }
 
-                ImageManager.getInstance().setImage(urlPhoto, ivPhoto)
+            ImageManager.instance.setImage(urlPhoto, ivPhoto)
+        })
+
+        viewModel?.flashCards?.observe(this, Observer { list ->
+            Utils.print("userFlashCardsList size: " + list.size)
+
+            list.let {
+                adapter?.setList(it)
+
+                if(list.isEmpty()) {
+                    noFlashcards?.visibility = View.VISIBLE
+                } else {
+                    if(list.size > 3) {
+                        list.add(FlashCard("0", "LoadModel"))
+                    }
+
+                    noFlashcards?.visibility = View.GONE
+                }
             }
         })
 
-        val userFlashCards = ServiceManager.getInstance().userFlashCards
-
-        if (userFlashCards.isNotEmpty()) {
-            val list: ArrayList<FlashCard> = ArrayList()
-            list.addAll(userFlashCards)
-            if (userFlashCards.size > 3) {
-                list.add(FlashCard("0", "LoadModel"))
+        adapter = FlashCardAdapter(context!!, viewModel?.flashCards?.value, object : ItemListener<FlashCard> {
+            override fun onItemSelected(model: FlashCard) {
+                Utils.print("ItemId: ${model.id}")
             }
+        })
 
-            val adapter = FlashCardAdapter(context!!, list, object : ItemListener<FlashCard> {
-                override fun onItemSelected(model: FlashCard) {
-                    Utils.print("ItemId: ${model.id}")
-                }
-            })
-
-            recyclerView?.setHasFixedSize(true)
-            recyclerView?.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            recyclerView?.adapter = adapter
-            noFlashcards?.visibility = View.GONE
-
-        } else {
-            noFlashcards?.visibility = View.VISIBLE
-        }
+        recyclerView?.setHasFixedSize(true)
+        recyclerView?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView?.adapter = adapter
     }
 }

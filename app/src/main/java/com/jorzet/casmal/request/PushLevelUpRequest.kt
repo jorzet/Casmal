@@ -1,7 +1,7 @@
 package com.jorzet.casmal.request
 
 import com.google.firebase.auth.FirebaseAuth
-import com.jorzet.casmal.managers.ServiceManager
+import com.jorzet.casmal.repositories.UserRepository
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -29,7 +29,7 @@ class PushLevelUpRequest: AbstractUpdateDatabase<String, Boolean>() {
     override fun getParams(): HashMap<String, Any>? {
         val userLevelParams = HashMap<String, Any>()
 
-        val user = ServiceManager.getInstance().user
+        val user = UserRepository.instance.getUser().value
         if (user != null) {
             userLevelParams[LEVEL_PARAM] = user.level
             userLevelParams[POINTS_PARAM] = user.points
