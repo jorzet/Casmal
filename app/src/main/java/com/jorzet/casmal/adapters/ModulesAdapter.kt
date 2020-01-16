@@ -73,7 +73,7 @@ class ModulesAdapter(modules: List<Module>): BaseAdapter() {
 
         val module = getItem(position)
 
-        view.iv_module_image.background = ContextCompat.getDrawable(parent?.context!!, moduleImage[position])
+        view.iv_module_image.background = ContextCompat.getDrawable(parent?.context!!, R.drawable.ic_exam)
 
         when(module.difficulty) {
             DifficultyType.EASY ->
