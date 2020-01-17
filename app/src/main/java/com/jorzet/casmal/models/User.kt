@@ -21,7 +21,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.jorzet.casmal.utils.Utils
 import kotlinx.android.parcel.Parcelize
-import okhttp3.internal.Util
 
 /**
  * @author Bani Azarael Mejia Flores

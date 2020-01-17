@@ -23,7 +23,6 @@ import com.android.billingclient.api.*
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.managers.BillingManager
-import java.util.*
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -59,7 +58,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
-            supportActionBar!!.setDisplayShowTitleEnabled(false);
+            supportActionBar!!.setDisplayShowTitleEnabled(false)
         }
 
         mGooglePayView = findViewById(R.id.rl_google_pay_container)
@@ -68,7 +67,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home)
-            finish();
+            finish()
 
         return super.onOptionsItemSelected(item)
     }
@@ -79,6 +78,11 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
 
         mBillingManager = BillingManager(this)
         createBillingClient()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mBillingManager.destroy()
     }
 
     private val mGooglePayClickListener = View.OnClickListener {
@@ -133,13 +137,11 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
                 if (billingResponse == BillingClient.BillingResponse.OK) {
                     Log.i(TAG, "onBillingSetupFinished() response: $billingResponse")
 
-                    val skuList = Arrays.asList("casmal")
-                    mBillingManager.querySkuDetailsAsync(BillingClient.SkuType.INAPP, skuList, object: SkuDetailsResponseListener {
-                        override fun onSkuDetailsResponse(responseCode: Int, skuDetailsList: MutableList<SkuDetails>?) {
-                            Log.i(TAG, "response code: $responseCode ${skuDetailsList?.size}")
-                        }
-
-                    })
+                    val skuList = listOf("casmal")
+                    mBillingManager.querySkuDetailsAsync(BillingClient.SkuType.INAPP, skuList,
+                        SkuDetailsResponseListener {
+                                responseCode, skuDetailsList ->
+                            Log.i(TAG, "response code: $responseCode ${skuDetailsList?.size}") })
                 } else {
                     Log.w(TAG, "onBillingSetupFinished() error code: $billingResponse")
                 }

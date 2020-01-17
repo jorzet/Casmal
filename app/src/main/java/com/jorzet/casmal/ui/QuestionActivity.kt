@@ -165,7 +165,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     /**
      *
      */
-    public fun onChangeQuestion(question: String?, position: Int) {
+    fun onChangeQuestion(question: String?, position: Int) {
         if (::currentFragment.isInitialized) {
             currentFragment.onPushAverage(mAverage, mIsExam)
         }

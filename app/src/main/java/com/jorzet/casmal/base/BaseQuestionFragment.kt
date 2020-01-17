@@ -22,6 +22,8 @@ import com.jorzet.casmal.models.Average
 import com.jorzet.casmal.models.Level
 import com.jorzet.casmal.models.Question
 import com.jorzet.casmal.ui.QuestionActivity
+import com.jorzet.casmal.models.User
+import com.jorzet.casmal.models.FlashCard
 
 /**
  * @author Jorge Zepeda Tinoco

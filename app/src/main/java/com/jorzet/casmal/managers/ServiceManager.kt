@@ -19,7 +19,6 @@ package com.jorzet.casmal.managers
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.models.Level
 import com.jorzet.casmal.models.User
-import com.jorzet.casmal.ui.SplashActivity
 import com.jorzet.casmal.utils.Utils
 
 /**
@@ -58,12 +57,5 @@ class ServiceManager {
         init {
             Utils.print("Instance", "Instance ImageManager = " + instance.hashCode())
         }
-    }
-
-    /**
-     * Destroy [ServiceManager] instance
-     */
-    fun destroy() {
-        instance = null
     }
 }
