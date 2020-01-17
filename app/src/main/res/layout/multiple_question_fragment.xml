@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/question_container"
-	android:layout_width="match_parent"
+    android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
 	<LinearLayout
-		android:id="@+id/ll_question_container"
-		android:layout_height="match_parent"
+        android:layout_height="match_parent"
 		android:layout_width="match_parent"
 		android:layout_weight="1"
 		android:background="@color/question_background_color">
@@ -22,25 +20,21 @@
 	</LinearLayout>
 
 	<LinearLayout
-		android:id="@+id/ll_options_container"
-		android:layout_height="wrap_content"
+        android:layout_height="wrap_content"
 		android:layout_width="match_parent"
 		android:background="@color/answer_background_color">
 
 		<ScrollView
-			android:id="@+id/questions_scroll"
-			android:layout_width="match_parent"
+            android:layout_width="match_parent"
 			android:layout_height="match_parent">
 
 			<LinearLayout
-				android:id="@+id/rl_answer_container"
-				android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:orientation="vertical">
 
 				<RelativeLayout
-					android:id="@+id/padding_top"
-					android:layout_width="match_parent"
+                    android:layout_width="match_parent"
 					android:layout_height="@dimen/margin_anwer_buttons_top" />
 
 				<RelativeLayout
@@ -54,8 +48,7 @@
 						android:layout_height="@dimen/min_height_option">
 
 						<TextView
-							android:id="@+id/tv_option_a_"
-							android:layout_width="wrap_content"
+                            android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerHorizontal="true"
 							android:text="@string/option_a_text"
@@ -91,8 +84,7 @@
 							android:visibility="visible"/>
 
 						<ImageView
-							android:id="@+id/iv_answer_a"
-							android:layout_width="150dp"
+                            android:layout_width="150dp"
 							android:layout_height="150dp"
 							android:layout_centerVertical="true"
 							android:layout_centerHorizontal="true"
@@ -114,8 +106,7 @@
 						android:layout_height="@dimen/min_height_option">
 
 						<TextView
-							android:id="@+id/tv_option_b_"
-							android:layout_width="wrap_content"
+                            android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerHorizontal="true"
 							android:layout_centerVertical="true"
@@ -152,8 +143,7 @@
 							android:visibility="visible"/>
 
 						<ImageView
-							android:id="@+id/iv_answer_b"
-							android:layout_width="150dp"
+                            android:layout_width="150dp"
 							android:layout_height="150dp"
 							android:layout_centerVertical="true"
 							android:layout_centerHorizontal="true"
@@ -175,8 +165,7 @@
 						android:layout_height="@dimen/min_height_option">
 
 						<TextView
-							android:id="@+id/tv_option_c_"
-							android:layout_width="wrap_content"
+                            android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerVertical="true"
 							android:layout_centerHorizontal="true"
@@ -213,8 +202,7 @@
 							android:visibility="visible"/>
 
 						<ImageView
-							android:id="@+id/iv_answer_c"
-							android:layout_width="150dp"
+                            android:layout_width="150dp"
 							android:layout_height="150dp"
 							android:layout_centerVertical="true"
 							android:layout_centerHorizontal="true"
@@ -236,8 +224,7 @@
 						android:layout_height="@dimen/min_height_option">
 
 						<TextView
-							android:id="@+id/tv_option_d_"
-							android:layout_width="wrap_content"
+                            android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_centerVertical="true"
 							android:layout_centerHorizontal="true"
@@ -274,8 +261,7 @@
 							android:visibility="visible"/>
 
 						<ImageView
-							android:id="@+id/iv_answer_d"
-							android:layout_width="150dp"
+                            android:layout_width="150dp"
 							android:layout_height="150dp"
 							android:layout_centerVertical="true"
 							android:layout_centerHorizontal="true"

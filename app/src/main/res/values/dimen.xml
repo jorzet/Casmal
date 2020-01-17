@@ -9,12 +9,6 @@
     <dimen name="width_option">60dp</dimen>
     <dimen name="min_height_option">50dp</dimen>
     <!--question module fragment-->
-    <dimen name="width_square">70dp</dimen>
-    <dimen name="height_square">70dp</dimen>
-    <dimen name="width_empty_square">50dp</dimen>
-    <dimen name="height_empty_square">50dp</dimen>
-    <dimen name="width_square_padding">50dp</dimen>
-    <dimen name="height_square_padding">50dp</dimen>
     <dimen name="margin_anwer_buttons_top">20dp</dimen>
     <dimen name="margin_anwer_button_top">10dp</dimen>
     <dimen name="question_bottom_bar_height">60dp</dimen>

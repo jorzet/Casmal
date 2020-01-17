@@ -59,8 +59,7 @@
 			android:layout_toLeftOf="@+id/iv_close_question">
 
 			<TextView
-				android:id="@+id/tv_show_questions"
-				android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_centerVertical="true"
 				android:text="   P R E G U N T A S   "
@@ -121,8 +120,7 @@
 			android:layout_marginLeft="20dp">
 
 			<TextView
-				android:id="@+id/btn_show_answer_text"
-				android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_centerHorizontal="true"
 				android:layout_centerVertical="true"
@@ -145,8 +143,7 @@
 			android:layout_marginEnd="20dp">
 
 			<TextView
-				android:id="@+id/btn_next_question_text"
-				android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_centerHorizontal="true"
 				android:layout_centerVertical="true"

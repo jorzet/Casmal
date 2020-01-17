@@ -14,7 +14,6 @@
     <string name="text_see_more">Ver más</string>
 
     <!--question fragments-->
-    <string name="show_answer">VER SOLUCIÓN</string>
     <string name="option_a_text">A)</string>
     <string name="option_b_text">B)</string>
     <string name="option_c_text">C)</string>
@@ -25,34 +24,11 @@
     <string name="facebook_app_id">739055019862951</string>
     <string name="fb_login_protocol_scheme">fb739055019862951</string>
 
-    <string name="viewGithub">View on GitHub</string>
-
-    <string name="animateX">Animate X</string>
-    <string name="animateY">Animate Y</string>
-    <string name="animateXY">Animate XY</string>
-
-    <string name="actionToggleValues">Toggle Values</string>
-
-    <string name="actionToggleIcons">Toggle Icons</string>
-    <string name="actionToggleHighlight">Toggle Highlight</string>
-    <string name="actionTogglePinch">Toggle PinchZoom</string>
-    <string name="actionToggleAutoScale">Toggle Auto Scale</string>
-
-    <string name="actionToggleFilled">Toggle Filled</string>
-    <string name="actionToggleCircles">Toggle Circles</string>
-
-    <string name="actionToggleCubic">Toggle Cubic</string>
-    <string name="actionToggleStepped">Toggle Stepped</string>
-    <string name="actionToggleHorizontalCubic">Toggle Horizontal Cubic</string>
-
-    <string name="dash">-</string>
-
     <!-- profile -->
     <string name="no_flashcards_text">Por el momento no tienes FlashCards</string>
 
     <!-- level up -->
     <string name="level_up_text">Subiste de nivel</string>
-    <string name="level_text">Nivel: </string>
     <string name="win_flashcard">Ganaste una flashcard</string>
     <string name="ok_text">O K</string>
 

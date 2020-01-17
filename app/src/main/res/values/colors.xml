@@ -10,34 +10,25 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="blue">#1A83B8</color>
-    <color name="blue_casmal">#5fafde</color>
-    <color name="blue_hard">#101E45</color>
     <color name="black">#000000</color>
     <color name="blue_soft">#868E9F</color>
 
-    <color name="eastern_blue">#1A83B8</color>
-    <color name="william_green">#3D696A</color>
-
     <color name="progress_color">#B0DC3A</color>
     <color name="bottom_bar_background_color">#E6E6E6</color>
-    <color name="next_question_button_background_color">#B0DC3A</color>
     <color name="show_answer_button_background_color_enable">#F4A01C</color>
     <color name="show_answer_button_background_color_disable">#EFC68C</color>
 
     <color name="question_background_color">#101E45</color>
-    <color name="option_text_color">#B2D8FF</color>
     <color name="answer_background_color">#F2F2F2</color>
     <color name="option_answer_text_color">#CCCCCC</color>
     <color name="option_unselected_answer_background_color">#059CAE</color>
     <color name="option_correct_answer_background_color">#B0DC3A</color>
     <color name="option_wrong_answer_background_color">#FF0000</color>
-    <color name="show_answer_background_color">#F4A01C</color>
 
     <!--questions-->
     <color name="not_selected_question_color">#D7D7D7</color>
     <color name="selected_question_color">#A0A0A0</color>
     <color name="wrong_question_answered_color">#FD0007</color>
     <color name="ok_question_answered_color">#BDE645</color>
-    <color name="question_to_answer_text_color">#56585D</color>
 
 </resources>
