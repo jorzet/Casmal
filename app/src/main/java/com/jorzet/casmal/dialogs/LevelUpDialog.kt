@@ -111,7 +111,7 @@ class LevelUpDialog: BaseDialog() {
         super.onAttach(context)
         try {
             if (arguments!!.getBoolean(ARG_IS_LISTENER_ACTIVITY)) {
-                onOkButtonListener = activity as OnOkButtonListener;
+                onOkButtonListener = activity as OnOkButtonListener
             } else {
                 onOkButtonListener = targetFragment as OnOkButtonListener
             }

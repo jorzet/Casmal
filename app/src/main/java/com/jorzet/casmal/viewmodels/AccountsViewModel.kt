@@ -49,7 +49,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
 
     fun update(account: Account) = repository.update(account)
 
-    fun delete(account: Account) = repository.delete(account)
+    //fun delete(account: Account) = repository.delete(account)
 
     fun loginWithFacebook() {
         repository.loginWithFacebook()

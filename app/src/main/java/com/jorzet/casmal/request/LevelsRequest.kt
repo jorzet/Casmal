@@ -28,7 +28,7 @@ import org.json.JSONObject
  * @date 07/01/20.
  */
 
-class LevelsRequest(): AbstractRequestDatabase<String, List<Level>>() {
+class LevelsRequest: AbstractRequestDatabase<String, List<Level>>() {
 
     companion object {
         const val LEVELS_REFERENCE: String = "levels"

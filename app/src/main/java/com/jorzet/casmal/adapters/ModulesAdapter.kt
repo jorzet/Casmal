@@ -44,22 +44,9 @@ class ModulesAdapter(modules: List<Module>): BaseAdapter() {
      */
     lateinit var mModuleClickListener: OnModuleClickListener
 
-    val moduleImage = intArrayOf(
-        R.drawable.ic_module_1,
-        R.drawable.ic_module_2,
-        R.drawable.ic_module_3,
-        R.drawable.ic_module_4,
-        R.drawable.ic_module_5,
-        R.drawable.ic_module_6,
-        R.drawable.ic_module_7,
-        R.drawable.ic_module_8,
-        R.drawable.ic_module_9)
-
     interface OnModuleClickListener {
         fun onModuleClick(module: Module)
     }
-
-
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View

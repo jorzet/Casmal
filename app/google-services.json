@@ -15,19 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "714469115491-8cg5ruudni0ti1pj3tspi3a5ba9vdouu.apps.googleusercontent.com",
+          "client_id": "714469115491-4tbjbk6upgjlniqot0rbml713llg5sjc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.jorzet.casmal",
-            "certificate_hash": "8ab2528470d3615c105c24034381cf0d52cb6a2c"
-          }
-        },
-        {
-          "client_id": "714469115491-b5d4299d2kmbqbn7572hf4aa3u2b7odi.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.jorzet.casmal",
-            "certificate_hash": "a0ba4d835b9b45f54f4376dc888b82366dbc6a8a"
+            "certificate_hash": "7b93847e45e5ba54167e8403dcb0a55452e47e76"
           }
         },
         {

@@ -17,16 +17,10 @@ package com.jorzet.casmal.managers
 
 import android.util.Log
 import android.widget.Toast
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClient.BillingResponse
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
-import com.android.billingclient.api.SkuDetailsResponseListener
+import com.android.billingclient.api.*
 import com.jorzet.casmal.ui.PaywayActivity
+import java.util.*
+
 
 /**
  * BillingManager that handles all the interactions with Play Store
@@ -36,7 +30,7 @@ import com.jorzet.casmal.ui.PaywayActivity
 class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
 
     private val mBillingClient: BillingClient =
-        BillingClient.newBuilder(activity).setListener(this).build()
+        BillingClient.newBuilder(activity).enablePendingPurchases().setListener(this).build()
     private val mActivity: PaywayActivity = activity
 
     companion object {
@@ -68,9 +62,9 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
         fun onBillingResponseItemNotOwned()
     }
 
-    override fun onPurchasesUpdated(responseCode: Int, purchases: List<Purchase?>?) {
-        Log.i(TAG, "onPurchasesUpdated() response: $responseCode")
-        when (responseCode) {
+    override fun onPurchasesUpdated(billingResult: BillingResult?, purchases: MutableList<Purchase>?) {
+        Log.i(TAG, "onPurchasesUpdated() response: ${billingResult?.responseCode}")
+        when (billingResult?.responseCode) {
             BILLING_RESPONSE_RESULT_OK -> {
                 mActivity.onBillingResponseOk()
             }
@@ -109,18 +103,18 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
      * service is restored.
      */
     private fun startServiceConnectionIfNeeded(executeOnSuccess: Runnable?) {
-        if (mBillingClient.isReady()) {
+        if (mBillingClient.isReady) {
             executeOnSuccess?.run()
         } else {
             mBillingClient.startConnection(object : BillingClientStateListener {
-                override fun onBillingSetupFinished(@BillingResponse billingResponse: Int) {
-                    if (billingResponse == BillingResponse.OK) {
-                        Log.i(TAG, "onBillingSetupFinished() response: $billingResponse")
+                override fun onBillingSetupFinished(billingResult: BillingResult?) {
+                    if (billingResult?.responseCode == BillingClient.BillingResponseCode.OK) {
+                        Log.i(TAG, "onBillingSetupFinished() response: ${billingResult.responseCode}")
                         executeOnSuccess?.run()
                     } else {
                         Toast.makeText(mActivity,
                             "Failed to connect GooglePlay", Toast.LENGTH_SHORT).show()
-                        Log.w(TAG, "onBillingSetupFinished() error code: $billingResponse")
+                        Log.w(TAG, "onBillingSetupFinished() error code: ${billingResult?.responseCode}")
                     }
                 }
 
@@ -138,13 +132,10 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
         val executeOnConnectedService = Runnable {
             val skuDetailsParams: SkuDetailsParams = SkuDetailsParams.newBuilder()
                 .setSkusList(skuList).setType(itemType).build()
-            mBillingClient.querySkuDetailsAsync(skuDetailsParams,
-                object : SkuDetailsResponseListener {
-                    override fun onSkuDetailsResponse(responseCode: Int,
-                                                      skuDetailsList: List<SkuDetails?>?) {
-                        listener.onSkuDetailsResponse(responseCode, skuDetailsList)
-                    }
-                })
+            mBillingClient.querySkuDetailsAsync(skuDetailsParams) {
+                    billingResult, skuDetailsList ->
+                listener.onSkuDetailsResponse(billingResult, skuDetailsList)
+            }
         }
         // If Billing client was disconnected, we retry 1 time and if success, execute the query
         startServiceConnectionIfNeeded(executeOnConnectedService)
@@ -152,15 +143,31 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
 
     fun startPurchaseFlow(skuId: String?, billingType: String?) {
         // Specify a runnable to start when connection to Billing client is established
-        val executeOnConnectedService = Runnable {
-            val billingFlowParams: BillingFlowParams = BillingFlowParams.newBuilder()
-                .setType(billingType)
-                .setSku(skuId)
-                .build()
-            mBillingClient.launchBillingFlow(mActivity, billingFlowParams)
+
+        val queryRequest = Runnable {
+            // Query the purchase async
+            val params = SkuDetailsParams.newBuilder()
+            val skuList = Arrays.asList(skuId)
+            params.setSkusList(skuList).setType(billingType)
+            mBillingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailList ->
+                if (skuDetailList != null) {
+                    for (skuDetail in skuDetailList) {
+                        if (skuDetail.sku == skuId) {
+                            val executeOnConnectedService = Runnable {
+                                val billingFlowParams: BillingFlowParams = BillingFlowParams.newBuilder()
+                                    .setSkuDetails(skuDetail)
+                                    .build()
+                                mBillingClient.launchBillingFlow(mActivity, billingFlowParams)
+                            }
+                            // If Billing client was disconnected, we retry 1 time and if success, execute the query
+                            startServiceConnectionIfNeeded(executeOnConnectedService)
+                        }
+                    }
+                }
+            }
         }
-        // If Billing client was disconnected, we retry 1 time and if success, execute the query
-        startServiceConnectionIfNeeded(executeOnConnectedService)
+        startServiceConnectionIfNeeded(queryRequest)
+
     }
 
     fun destroy() {

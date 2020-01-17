@@ -59,7 +59,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
-            supportActionBar!!.setDisplayShowTitleEnabled(false);
+            supportActionBar!!.setDisplayShowTitleEnabled(false)
         }
 
         mGooglePayView = findViewById(R.id.rl_google_pay_container)
@@ -68,7 +68,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home)
-            finish();
+            finish()
 
         return super.onOptionsItemSelected(item)
     }
@@ -82,7 +82,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
     }
 
     private val mGooglePayClickListener = View.OnClickListener {
-        mBillingManager.startPurchaseFlow(PRODUCT_ID, BillingClient.SkuType.INAPP)
+        mBillingManager.startPurchaseFlow(PRODUCT_ID, BillingClient.SkuType.SUBS)
     }
 
     private val mCashClickListener = View.OnClickListener {
@@ -126,20 +126,18 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
     }
 
     private fun createBillingClient() {
-        val mBillingClient = BillingClient.newBuilder(this).setListener(this).build()
+        val mBillingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener(this).build()
 
         mBillingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResponse: Int) {
-                if (billingResponse == BillingClient.BillingResponse.OK) {
+            override fun onBillingSetupFinished(billingResponse: BillingResult?) {
+                if (billingResponse?.responseCode == BillingClient.BillingResponseCode.OK) {
                     Log.i(TAG, "onBillingSetupFinished() response: $billingResponse")
 
-                    val skuList = Arrays.asList("casmal")
-                    mBillingManager.querySkuDetailsAsync(BillingClient.SkuType.INAPP, skuList, object: SkuDetailsResponseListener {
-                        override fun onSkuDetailsResponse(responseCode: Int, skuDetailsList: MutableList<SkuDetails>?) {
-                            Log.i(TAG, "response code: $responseCode ${skuDetailsList?.size}")
-                        }
-
-                    })
+                    val skuList = Arrays.asList("casmal_monthly")
+                    mBillingManager.querySkuDetailsAsync(BillingClient.SkuType.SUBS, skuList,
+                        SkuDetailsResponseListener {
+                                responseCode, skuDetailsList ->
+                            Log.i(TAG, "response code: ${responseCode?.responseCode} ${skuDetailsList?.size}") })
                 } else {
                     Log.w(TAG, "onBillingSetupFinished() error code: $billingResponse")
                 }
@@ -151,7 +149,8 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
         })
     }
 
-    override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
-        Log.d(TAG, "responseCode: $responseCode")
+
+    override fun onPurchasesUpdated(billingResult: BillingResult?, p1: MutableList<Purchase>?) {
+        Log.d(TAG, "responseCode: ${billingResult?.responseCode}")
     }
 }

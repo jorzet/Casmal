@@ -27,7 +27,6 @@ import com.jorzet.casmal.models.*
 
 abstract class FirebaseRequestManager(context: Context) {
     protected val TAG : String = "FirebaseRequestManager"
-    protected val mContext: Context = context
 
     companion object {
         /**
@@ -97,7 +96,7 @@ abstract class FirebaseRequestManager(context: Context) {
         fun onErrorUserInserted(throwable: Throwable)
     }
 
-    interface OnPushQuestionListener {
+    /*interface OnPushQuestionListener {
         /**
          *
          */
@@ -107,7 +106,7 @@ abstract class FirebaseRequestManager(context: Context) {
          *
          */
         fun onPushQuestionFail(throwable: Throwable)
-    }
+    }*/
 
     interface OnPushAverageListener {
         /**

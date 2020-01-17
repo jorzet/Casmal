@@ -320,7 +320,7 @@ class SplashActivity: BaseActivity() {
         startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
     }
 
-    private fun signOut() {
+    /*private fun signOut() {
         // Firebase sign out
         auth.signOut()
 
@@ -333,7 +333,7 @@ class SplashActivity: BaseActivity() {
         LoginManager.getInstance().logOut()
 
         Utils.print("signOut()")
-    }
+    }*/
 
     private fun updateUI(currentUser: FirebaseUser?) {
         if(currentUser != null) {
