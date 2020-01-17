@@ -23,7 +23,6 @@ import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.SkuDetailsResponseListener
 import com.jorzet.casmal.ui.PaywayActivity
@@ -109,7 +108,7 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
      * service is restored.
      */
     private fun startServiceConnectionIfNeeded(executeOnSuccess: Runnable?) {
-        if (mBillingClient.isReady()) {
+        if (mBillingClient.isReady) {
             executeOnSuccess?.run()
         } else {
             mBillingClient.startConnection(object : BillingClientStateListener {
@@ -138,13 +137,9 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
         val executeOnConnectedService = Runnable {
             val skuDetailsParams: SkuDetailsParams = SkuDetailsParams.newBuilder()
                 .setSkusList(skuList).setType(itemType).build()
-            mBillingClient.querySkuDetailsAsync(skuDetailsParams,
-                object : SkuDetailsResponseListener {
-                    override fun onSkuDetailsResponse(responseCode: Int,
-                                                      skuDetailsList: List<SkuDetails?>?) {
-                        listener.onSkuDetailsResponse(responseCode, skuDetailsList)
-                    }
-                })
+            mBillingClient.querySkuDetailsAsync(skuDetailsParams) {
+                    responseCode, skuDetailsList ->
+                listener.onSkuDetailsResponse(responseCode, skuDetailsList) }
         }
         // If Billing client was disconnected, we retry 1 time and if success, execute the query
         startServiceConnectionIfNeeded(executeOnConnectedService)

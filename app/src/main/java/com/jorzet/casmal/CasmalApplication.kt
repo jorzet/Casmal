@@ -29,7 +29,10 @@ import com.jorzet.casmal.managers.ImageManager
  */
 
 class CasmalApplication: MultiDexApplication() {
-    private val TAG: String = "CasmalApplication"
+
+    companion object {
+        const val TAG: String = "CasmalApplication"
+    }
 
     override fun onCreate() {
         super.onCreate()

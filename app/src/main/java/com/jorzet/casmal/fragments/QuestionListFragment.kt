@@ -39,8 +39,6 @@ class QuestionListFragment: BaseFragment() {
     private lateinit var mQuestionsList: RecyclerView
     private lateinit var mCloseQuestions: View
 
-    private lateinit var questionsAdapter: QuestionsAdapter
-
     private var mSelectedQuestion: Int = 0
     private var mQuestionList: List<Question> = emptyList()
 

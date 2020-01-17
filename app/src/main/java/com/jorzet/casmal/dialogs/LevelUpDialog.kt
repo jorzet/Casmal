@@ -110,11 +110,12 @@ class LevelUpDialog: BaseDialog() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
-            if (arguments!!.getBoolean(ARG_IS_LISTENER_ACTIVITY)) {
-                onOkButtonListener = activity as OnOkButtonListener;
-            } else {
-                onOkButtonListener = targetFragment as OnOkButtonListener
-            }
+            onOkButtonListener =
+                if (arguments!!.getBoolean(ARG_IS_LISTENER_ACTIVITY)) {
+                    activity as OnOkButtonListener
+                } else {
+                    targetFragment as OnOkButtonListener
+                }
         } catch (e: Exception) {
             e.printStackTrace()
         }
