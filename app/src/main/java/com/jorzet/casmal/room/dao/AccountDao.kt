@@ -28,8 +28,8 @@ import com.jorzet.casmal.models.Account
 
 @Dao
 interface AccountDao {
-    @Query("SELECT * FROM tbl_accounts")
-    fun getAccounts(): LiveData<List<Account>>
+    @Query("SELECT * FROM tbl_accounts LIMIT 1")
+    fun getAccount(): LiveData<Account>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(account: Account)

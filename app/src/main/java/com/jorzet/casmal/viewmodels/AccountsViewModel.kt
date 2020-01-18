@@ -33,14 +33,14 @@ import com.jorzet.casmal.room.dao.AccountDao
 
 class AccountsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: AccountsRepository
-    private val accounts: LiveData<List<Account>>
+    private val mAccount: LiveData<Account>
     private val loginWithFacebook: LiveData<Boolean>
     private val loginWithGoogle: LiveData<Boolean>
 
     init {
         val accountDao: AccountDao = DatabaseCasmal.getDatabase(application).accountDao()
         repository = AccountsRepository(accountDao)
-        accounts = repository.getAccounts()
+        mAccount = repository.getAccount()
         loginWithFacebook = repository.getLoginWithFacebook()
         loginWithGoogle = repository.getLoginWithGoogle()
     }
@@ -60,7 +60,9 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
     }
 
     @NonNull
-    val list: LiveData<List<Account>> = accounts
+    fun getAccount(): LiveData<Account> {
+        return mAccount
+    }
 
     @NonNull
     val loginFacebook: LiveData<Boolean> = loginWithFacebook

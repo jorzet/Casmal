@@ -32,7 +32,7 @@ import com.jorzet.casmal.utils.Utils
 class AccountsRepository(private val accountDao: AccountDao) {
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    private val accounts: LiveData<List<Account>> = accountDao.getAccounts()
+    private val account: LiveData<Account> = accountDao.getAccount()
     private val loginFacebook: MutableLiveData<Boolean> = MutableLiveData()
     private val loginGoogle: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -67,7 +67,7 @@ class AccountsRepository(private val accountDao: AccountDao) {
         loginGoogle.postValue(false)
     }
 
-    fun getAccounts(): LiveData<List<Account>> = accounts
+    fun getAccount(): LiveData<Account> = account
 
     fun getLoginWithFacebook(): MutableLiveData<Boolean> = loginFacebook
 

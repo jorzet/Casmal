@@ -76,16 +76,16 @@ class ProfileFragment: BaseFragment() {
     override fun prepareComponents() {
         viewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
 
-        viewModel?.list?.observe(this, Observer { list ->
-            list.let {
-                Utils.print("Accounts Update size = {${it[0].userName}}")
+        viewModel?.getAccount()?.observe(this, Observer { account ->
+            if(account != null) {
+                Utils.print("Accounts Update size = {${account.userName}}")
 
-                tvUserName?.text = it[0].userName
-                tvUserEmail?.text = it[0].userEmail
+                tvUserName?.text = account.userName
+                tvUserEmail?.text = account.userEmail
 
-                var urlPhoto: String = it[0].image
+                var urlPhoto: String = account.image
 
-                when (it[0].provider) {
+                when (account.provider) {
                     PROVIDER_FACEBOOK -> {
                         urlPhoto = "$urlPhoto?type=large"
 
@@ -102,7 +102,6 @@ class ProfileFragment: BaseFragment() {
                         ivFacebookCircle?.visibility = View.GONE
                         ivGoogleCircle?.visibility = View.GONE
                         ivEmailCircle?.visibility = View.GONE
-                        //TODO Email Alpha
                     }
                 }
 
