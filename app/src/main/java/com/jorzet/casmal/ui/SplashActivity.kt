@@ -42,16 +42,14 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.managers.FirebaseRequestManager
-import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.Account
-import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
-import com.jorzet.casmal.viewmodels.AccountsViewModel
 import com.jorzet.casmal.viewmodels.FlashCardsViewModel
 import com.jorzet.casmal.viewmodels.LevelsViewModel
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -74,7 +72,8 @@ class SplashActivity: BaseActivity() {
     /**
      * ViewModels
      */
-    private var accountsViewModel: AccountsViewModel? = null
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var flashCardsViewModel: FlashCardsViewModel
 
     /**
      * Constants
@@ -96,7 +95,8 @@ class SplashActivity: BaseActivity() {
     }
 
     override fun prepareComponents() {
-        val flashCardsViewModel = ViewModelProviders.of(this).get(FlashCardsViewModel::class.java)
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        flashCardsViewModel = ViewModelProviders.of(this).get(FlashCardsViewModel::class.java)
         val levelsViewModel = ViewModelProviders.of(this).get(LevelsViewModel::class.java)
 
         flashCardsViewModel.load()
@@ -108,15 +108,13 @@ class SplashActivity: BaseActivity() {
             }
         })
 
-        accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
-
-        accountsViewModel?.loginFacebook?.observe(this, Observer {
+        userViewModel.loginFacebook.observe(this, Observer {
             if(it) {
                 LoginManager.getInstance().logInWithReadPermissions(this, permissions)
             }
         })
 
-        accountsViewModel?.loginGoogle?.observe(this, Observer {
+        userViewModel.loginGoogle.observe(this, Observer {
             if(it) {
                 startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
             }
@@ -125,11 +123,11 @@ class SplashActivity: BaseActivity() {
         prepareLogin()
 
         ivFacebookLogin.setOnClickListener {
-            accountsViewModel?.loginWithFacebook()
+            userViewModel.loginWithFacebook()
         }
 
         ivGoogleLogin.setOnClickListener {
-            accountsViewModel?.loginWithGoogle()
+            userViewModel.loginWithGoogle()
         }
     }
 
@@ -176,34 +174,11 @@ class SplashActivity: BaseActivity() {
         FirebaseRequestManager.getInstance().requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
             override fun onGetUserLoaded(user: User?) {
                 if(user != null) {
-                    FirebaseRequestManager.getInstance().requestFlashCards(object: FirebaseRequestManager.OnGetFlashCardListener {
-                        override fun onGetFlashCardsSuccess(flashCards: MutableList<FlashCard>) {
-                            val userFlashcards: ArrayList<FlashCard> = arrayListOf()
+                    userViewModel.setUser(user)
 
-                            for (userFlashCard in user.flashCards) {
-                                for (flashCard in flashCards) {
-                                    if (flashCard.id == userFlashCard) {
-                                        userFlashcards.add(flashCard)
-                                    }
-                                }
-                            }
-
-                            ServiceManager.getInstance().user = user
-                            ServiceManager.getInstance().userFlashCards = userFlashcards
-
-                            startActivity(intent)
-                            finish()
-                        }
-
-                        override fun onFlashCardFail(throwable: Throwable) {
-                            ServiceManager.getInstance().user = user
-                            startActivity(intent)
-                            finish()
-                        }
-                    })
-
+                    startActivity(intent)
+                    finish()
                 } else {
-                    //TODO InsertNewEmptyModel
                     pushUser(currentUser)
                 }
             }
@@ -228,7 +203,7 @@ class SplashActivity: BaseActivity() {
 
             override fun onErrorUserInserted(throwable: Throwable) {
                 Utils.print("Error 2: " + throwable.message)
-                //TODO Protocol to exception
+                //TODO Exception
                 finish()
             }
         })
@@ -301,7 +276,7 @@ class SplashActivity: BaseActivity() {
             user?.displayName.toString(),
             user?.email.toString(),
             user?.photoUrl.toString(), provider)
-        accountsViewModel?.insert(account)
+        userViewModel.insert(account)
 
         updateUI(user)
     }
@@ -317,6 +292,7 @@ class SplashActivity: BaseActivity() {
         }, TIME_DELAY)
     }
 
+    @Suppress("unused")
     private fun signOut() {
         // Firebase sign out
         auth.signOut()

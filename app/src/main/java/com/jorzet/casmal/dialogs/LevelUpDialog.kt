@@ -99,7 +99,7 @@ class LevelUpDialog: BaseDialog() {
         val flashcard = arguments!!.getString(ARG_FLASH_CARD, null)
         if (flashcard != null && flashcard.isNotEmpty()) {
             val storageReference = FirebaseStorageManager.getImage(flashcard)
-            ImageManager.getInstance().setImage(storageReference, mFlashCard)
+            ImageManager.instance.setImage(storageReference, mFlashCard)
         }
         mOkButton.setOnClickListener {
             dismiss()

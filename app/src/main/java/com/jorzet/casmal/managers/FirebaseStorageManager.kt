@@ -28,14 +28,14 @@ import com.google.firebase.storage.StorageReference
 class FirebaseStorageManager {
     companion object {
         /**
-         * Manager static instance
+         * Manager static INSTANCE
          */
         private var instance: FirebaseStorage? = null
 
         /**
-         * Creates a [FirebaseStorageManager] implementation instance
+         * Creates a [FirebaseStorageManager] implementation INSTANCE
          *
-         * @return A [FirebaseStorageManager] instance
+         * @return A [FirebaseStorageManager] INSTANCE
          */
         fun getInstance(): FirebaseStorage {
             if (instance == null) {

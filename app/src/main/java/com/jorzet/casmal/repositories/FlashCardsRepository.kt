@@ -24,6 +24,9 @@ class FlashCardsRepository : ViewModelRepository() {
         this.flashCards.value = flashCards
     }
 
+    @NonNull
+    fun getFlashCards() : LiveData<MutableList<FlashCard>> = flashCards
+
     fun setFlashCards(list: MutableList<FlashCard>) {
         val items: MutableList<FlashCard> = flashCards.value ?: return
 
@@ -37,9 +40,6 @@ class FlashCardsRepository : ViewModelRepository() {
 
         this.flashCards.value = items
     }
-
-    @NonNull
-    fun getFlashCards() : LiveData<MutableList<FlashCard>> = flashCards
 
     fun load() {
         FirebaseRequestManager.getInstance().requestFlashCards(object: FirebaseRequestManager.OnGetFlashCardListener {

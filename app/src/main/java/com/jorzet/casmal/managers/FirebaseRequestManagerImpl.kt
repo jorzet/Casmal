@@ -28,14 +28,14 @@ import com.jorzet.casmal.request.*
 class FirebaseRequestManagerImpl: FirebaseRequestManager() {
     companion object {
         /**
-         * Manager static instance
+         * Manager static INSTANCE
          */
         private var sInstance: FirebaseRequestManagerImpl? = null
 
         /**
-         * Creates a [FirebaseRequestManager] implementation instance
+         * Creates a [FirebaseRequestManager] implementation INSTANCE
          *
-         * @return A [FirebaseRequestManager] instance
+         * @return A [FirebaseRequestManager] INSTANCE
          */
         fun getInstance(): FirebaseRequestManager {
             if (sInstance == null) {
@@ -143,18 +143,18 @@ class FirebaseRequestManagerImpl: FirebaseRequestManager() {
         levelsRequest.request()
     }
 
-    override fun updateUserLevel(onUpdateUserLevelListener: OnUpdateUserLevelListener) {
-        val pushLevelUpRequest = PushLevelUpRequest()
+    override fun updateUserLevel(user: User, listener: OnUpdateUserLevelListener) {
+        val pushLevelUpRequest = PushLevelUpRequest(user)
 
         pushLevelUpRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Boolean> {
             override fun onSuccess(result: Boolean) {
-                onUpdateUserLevelListener.onUpdateUserLevelSuccess()
+                listener.onUpdateUserLevelSuccess()
             }
         })
 
         pushLevelUpRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
-                onUpdateUserLevelListener.onUpdateUserLevelFail(throwable)
+                listener.onUpdateUserLevelFail(throwable)
             }
         })
 

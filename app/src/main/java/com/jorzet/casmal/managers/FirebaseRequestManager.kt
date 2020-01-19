@@ -194,10 +194,10 @@ abstract class FirebaseRequestManager {
     /**
      *
      */
-    abstract fun updateUserLevel(onUpdateUserLevelListener: OnUpdateUserLevelListener)
+    abstract fun updateUserLevel(user: User, listener: OnUpdateUserLevelListener)
 
     /**
-     * Destroy [FirebaseRequestManager] instance
+     * Destroy [FirebaseRequestManager] INSTANCE
      */
     abstract fun destroy()
 }

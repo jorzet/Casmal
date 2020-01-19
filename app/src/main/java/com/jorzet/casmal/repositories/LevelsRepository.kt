@@ -25,6 +25,9 @@ class LevelsRepository : ViewModelRepository() {
         this.levels.value = levels
     }
 
+    @NonNull
+    fun getLevels() : LiveData<MutableList<Level>> = levels
+
     fun setLevels(list: MutableList<Level>) {
         val items: MutableList<Level> = levels.value ?: return
 
@@ -38,9 +41,6 @@ class LevelsRepository : ViewModelRepository() {
 
         this.levels.value = items
     }
-
-    @NonNull
-    fun getLevels() : LiveData<MutableList<Level>> = levels
 
     fun load() {
         FirebaseRequestManager.getInstance().requestLevels(object: FirebaseRequestManager.OnGetLevelsListener {

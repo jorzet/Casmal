@@ -66,7 +66,7 @@ class FullScreeImageDialog: BaseDialog() {
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT
             )
-            ImageManager.getInstance().setImage(storageReference, mFlashCard)
+            ImageManager.instance.setImage(storageReference, mFlashCard)
         }
     }
 }

@@ -79,9 +79,9 @@ abstract class AbstractDatabase<A, B> {
     abstract fun getReference(): String?
 
     /**
-     * Create a Firebase Database instance according reference
+     * Create a Firebase Database INSTANCE according reference
      *
-     * @return An instance of [DatabaseReference]
+     * @return An INSTANCE of [DatabaseReference]
      */
     protected open fun getDatabaseInstance(): DatabaseReference {
         val reference = getReference()
