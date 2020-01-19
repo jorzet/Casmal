@@ -41,7 +41,7 @@ class CasmalApplication: MultiDexApplication() {
             Stetho.initializeWithDefaults(this)
         }
 
-        ImageManager.getInstance().initialize(this)
+        ImageManager.instance.initialize(this)
 
         try {
             FirebaseDatabase
