@@ -293,9 +293,23 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
             Utils.print("Total Levels in repository: ${levels.size}")
             Utils.print("Total FlashCards in repository: ${flashCards.size}")
 
+            if(levels.isEmpty()) {
+                levelsViewModel.load()
+            }
+
+            if(flashCards.isEmpty()) {
+                flashCardsViewModel.load()
+            }
+
+            if(levels.isEmpty() || flashCards.isEmpty()) {
+                return
+            }
+
             val userLevel: Level = if(user.level - 1 < 0) {
                 levels[0]
             } else {
+                if(user.level - 1 >= levels.size) return
+
                 levels[user.level - 1]
             }
 
@@ -308,7 +322,10 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                 user.level += 1
                 Utils.print("NewLevel: ${user.level}")
                 userViewModel.setUser(user)
-                onLevelUp(levels[user.level -1])
+
+                if(user.level -1 >= levels.size) return
+
+                onLevelUp(levels[user.level - 1])
             }
         }
     }
