@@ -7,9 +7,8 @@ import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.utils.Utils
 
-class FlashCardsRepository {
-    private var flashCards: MutableLiveData<MutableList<FlashCard>> = MutableLiveData()
-    private var exception: MutableLiveData<Exception> = MutableLiveData()
+class FlashCardsRepository : ViewModelRepository() {
+    private val flashCards: MutableLiveData<MutableList<FlashCard>> = MutableLiveData()
 
     companion object {
         val instance: FlashCardsRepository = FlashCardsRepository()
@@ -28,7 +27,10 @@ class FlashCardsRepository {
     fun setFlashCards(list: MutableList<FlashCard>) {
         val items: MutableList<FlashCard> = flashCards.value ?: return
 
-        Utils.print("Set ${items.size} items")
+        Utils.print("Set ${items.size} flashCards")
+        items.forEach {
+            Utils.print(it.toString())
+        }
 
         items.clear()
         items.addAll(list)
@@ -36,10 +38,8 @@ class FlashCardsRepository {
         this.flashCards.value = items
     }
 
-    fun setException(ex: Exception) {
-        exception.value = ex
-        exception.postValue(null)
-    }
+    @NonNull
+    fun getFlashCards() : LiveData<MutableList<FlashCard>> = flashCards
 
     fun load() {
         FirebaseRequestManager.getInstance().requestFlashCards(object: FirebaseRequestManager.OnGetFlashCardListener {
@@ -52,12 +52,6 @@ class FlashCardsRepository {
             }
         })
     }
-
-    @NonNull
-    fun getFlashCards() : LiveData<MutableList<FlashCard>> = flashCards
-
-    @NonNull
-    fun getException() : LiveData<java.lang.Exception> = exception
 
     fun destroy() {
         flashCards.value = null

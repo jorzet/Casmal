@@ -36,6 +36,7 @@ import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.*
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.viewmodels.FlashCardsViewModel
+import com.jorzet.casmal.viewmodels.LevelsViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -90,6 +91,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
      * ViewModels
      */
     private var flashCardsViewModel: FlashCardsViewModel? = null
+    private var levelsViewModel: LevelsViewModel? = null
 
     override fun getLayoutId(): Int {
         return R.layout.activity_question
@@ -107,6 +109,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
 
     override fun prepareComponents() {
         flashCardsViewModel = ViewModelProviders.of(this).get(FlashCardsViewModel::class.java)
+        levelsViewModel = ViewModelProviders.of(this).get(LevelsViewModel::class.java)
 
         mShowQuestions.setOnClickListener(mShowQuestionsClickListener)
         mCloseQuestions.setOnClickListener(mCloseQuestionsClickListener)
@@ -257,6 +260,8 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     override fun onOptionSelected(question: Question) {
+        val levels = levelsViewModel?.levels?.value ?: return
+
         if (::mShowAnswer.isInitialized) {
             mShowAnswer.isEnabled = !question.wasOK
         }
@@ -279,8 +284,6 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
             user.points += question.points.toInt()
 
             Utils.print("PointsAdded: ${question.points}")
-
-            val levels = ServiceManager.getInstance().levels
 
             Utils.print("Total Levels in repository: ${levels.size}")
 

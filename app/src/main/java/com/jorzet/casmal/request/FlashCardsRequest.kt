@@ -66,22 +66,26 @@ class FlashCardsRequest(): AbstractRequestDatabase<String, MutableList<FlashCard
             }
         } else {
             val post = successResponse.value
-            if (post != null) {
-                val flashCardsMap = (post as HashMap<*, *>)
-                val mFlashCards: MutableList<FlashCard> = ArrayList()
-                for (key in flashCardsMap.keys) {
-                    val flashCardMap = flashCardsMap[key] as HashMap<*, *>
-                    try {
-                        val flashCard = Gson().fromJson(JSONObject(flashCardMap).toString(), FlashCard::class.java)
-                        // just save enabled subject
-                        mFlashCards.add(flashCard)
-                    } catch (ex: Exception) {
-                        ex.printStackTrace()
+            try {
+                if (post != null) {
+                    val flashCardsMap = (post as HashMap<*, *>)
+                    val mFlashCards: MutableList<FlashCard> = ArrayList()
+                    for (key in flashCardsMap.keys) {
+                        val flashCardMap = flashCardsMap[key] as HashMap<*, *>
+                        try {
+                            val flashCard = Gson().fromJson(JSONObject(flashCardMap).toString(), FlashCard::class.java)
+                            // just save enabled subject
+                            mFlashCards.add(flashCard)
+                        } catch (ex: Exception) {
+                            ex.printStackTrace()
+                        }
                     }
+                    onRequestListenerSuccess.onSuccess(mFlashCards)
+                } else {
+                    onRequestListenerFailed.onFailed(Throwable())
                 }
-                onRequestListenerSuccess.onSuccess(mFlashCards)
-            } else {
-                onRequestListenerFailed.onFailed(Throwable())
+            } catch (ex: Exception) {
+                onRequestListenerFailed.onFailed(ex)
             }
         }
     }

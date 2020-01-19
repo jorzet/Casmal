@@ -45,13 +45,13 @@ import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.Account
 import com.jorzet.casmal.models.FlashCard
-import com.jorzet.casmal.models.Level
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
 import com.jorzet.casmal.viewmodels.AccountsViewModel
 import com.jorzet.casmal.viewmodels.FlashCardsViewModel
+import com.jorzet.casmal.viewmodels.LevelsViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -97,8 +97,10 @@ class SplashActivity: BaseActivity() {
 
     override fun prepareComponents() {
         val flashCardsViewModel = ViewModelProviders.of(this).get(FlashCardsViewModel::class.java)
+        val levelsViewModel = ViewModelProviders.of(this).get(LevelsViewModel::class.java)
 
         flashCardsViewModel.load()
+        levelsViewModel.load()
 
         flashCardsViewModel.exception.observe(this, Observer {
             if(it != null) {
@@ -170,16 +172,6 @@ class SplashActivity: BaseActivity() {
      */
     private fun goMainActivity(currentUser: FirebaseUser?) {
         val intent = Intent(this, MainActivity::class.java)
-
-        FirebaseRequestManager.getInstance().requestLevels(object: FirebaseRequestManager.OnGetLevelsListener {
-            override fun onGetLevelsSuccess(levels: List<Level>) {
-                ServiceManager.getInstance().levels = levels
-            }
-
-            override fun onGetLevelsFail(throwable: Throwable) {
-
-            }
-        })
 
         FirebaseRequestManager.getInstance().requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
             override fun onGetUserLoaded(user: User?) {

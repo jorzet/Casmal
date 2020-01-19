@@ -17,10 +17,8 @@
 package com.jorzet.casmal.managers
 
 import com.jorzet.casmal.models.FlashCard
-import com.jorzet.casmal.models.Level
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.utils.Utils
-
 /**
  * @author Jorge Zepeda Tinoco
  * @email jorzet.94@gmail.com
@@ -33,7 +31,6 @@ class ServiceManager {
      */
     var user: User? = null
     var userFlashCards: List<FlashCard> = emptyList()
-    var levels: List<Level> = emptyList()
 
     companion object {
         @Volatile

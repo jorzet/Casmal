@@ -126,7 +126,7 @@ abstract class FirebaseRequestManager {
         /**
          *
          */
-        fun onGetLevelsSuccess(levels: List<Level>)
+        fun onGetLevelsSuccess(levels: MutableList<Level>)
 
         /**
          *

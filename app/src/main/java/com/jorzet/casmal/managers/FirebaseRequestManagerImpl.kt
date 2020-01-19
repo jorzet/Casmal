@@ -128,8 +128,8 @@ class FirebaseRequestManagerImpl: FirebaseRequestManager() {
     override fun requestLevels(onGetLevelsListener: OnGetLevelsListener) {
         val levelsRequest = LevelsRequest()
 
-        levelsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<Level>> {
-            override fun onSuccess(result: List<Level>) {
+        levelsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<MutableList<Level>> {
+            override fun onSuccess(result: MutableList<Level>) {
                 onGetLevelsListener.onGetLevelsSuccess(result)
             }
         })
