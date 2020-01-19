@@ -54,8 +54,6 @@ class SubjectsFragment: BaseFragment() {
     override fun prepareComponents() {
         FirebaseRequestManager.getInstance().requestSubjects(object: FirebaseRequestManager.OnGetSubjectsListener {
             override fun onGetSubjectsSuccess(subjects: List<Subject>) {
-                Log.d("","")
-
                 mSubjectsRecyclerView.layoutManager = GridLayoutManager(context, 3)
                 mSubjectsAdapter = SubjectsAdapter(context!!, subjects)
                 mSubjectsAdapter.mSubjectClickListener = object: SubjectsAdapter.OnSubjectClickListener {
@@ -63,6 +61,7 @@ class SubjectsFragment: BaseFragment() {
                         goQuestionActivity(subject.questions, false, null)
                     }
                 }
+
                 mSubjectsRecyclerView.adapter = mSubjectsAdapter
             }
 
@@ -71,5 +70,4 @@ class SubjectsFragment: BaseFragment() {
             }
         })
     }
-
 }
