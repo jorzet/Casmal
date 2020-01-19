@@ -304,12 +304,11 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
             Utils.print("NextLevel: ${userLevel.id} with ${userLevel.points} points and id = $userLevel")
 
             if(user.points >= userLevel.points) {
-                val newLevel = userLevel.id + 1
-                Utils.print("NewLevel: $newLevel")
-
-                user.level = newLevel
+                Utils.print("OldLevel: ${user.level}")
+                user.level += 1
+                Utils.print("NewLevel: ${user.level}")
                 userViewModel.setUser(user)
-                onLevelUp(levels[newLevel])
+                onLevelUp(levels[user.level -1])
             }
         }
     }
@@ -349,6 +348,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
 
         flashCards.forEach {
             if(it.id == level.flashcard) {
+                Utils.print("Returning ${it.storageName}")
                 return it.storageName
             }
         }

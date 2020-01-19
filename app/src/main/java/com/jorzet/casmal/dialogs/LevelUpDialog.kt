@@ -34,7 +34,6 @@ import java.lang.Exception
  */
 
 class LevelUpDialog: BaseDialog() {
-
     /**
      * UI accessors
      */
@@ -55,6 +54,7 @@ class LevelUpDialog: BaseDialog() {
 
         fun newInstance(level: Int, flashCard: String, onOkButtonListener: OnOkButtonListener) : LevelUpDialog {
             val levelUpDialog = LevelUpDialog()
+            levelUpDialog.isCancelable = false
 
             val args = Bundle()
 
@@ -93,7 +93,6 @@ class LevelUpDialog: BaseDialog() {
     }
 
     override fun prepareComponents() {
-
         mLevel.text = arguments!!.getInt(ARG_LEVEL).toString()
 
         val flashcard = arguments!!.getString(ARG_FLASH_CARD, null)
@@ -101,6 +100,7 @@ class LevelUpDialog: BaseDialog() {
             val storageReference = FirebaseStorageManager.getImage(flashcard)
             ImageManager.instance.setImage(storageReference, mFlashCard)
         }
+
         mOkButton.setOnClickListener {
             dismiss()
             onOkButtonListener?.onOkButtonClick()
@@ -116,8 +116,8 @@ class LevelUpDialog: BaseDialog() {
                 } else {
                     targetFragment as OnOkButtonListener
                 }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
         }
     }
 
@@ -125,6 +125,4 @@ class LevelUpDialog: BaseDialog() {
         super.onDetach()
         onOkButtonListener = null
     }
-
-
 }
