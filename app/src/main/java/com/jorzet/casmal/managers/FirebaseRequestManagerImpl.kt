@@ -72,7 +72,7 @@ class FirebaseRequestManagerImpl: FirebaseRequestManager() {
     }
 
     override fun pushAverage(isExam: Boolean, average: Average, onPushAverageListener: OnPushAverageListener) {
-        val pushAverageRequest =  PushAverageRequets(isExam, average)
+        val pushAverageRequest =  PushAverageRequest(isExam, average)
 
         pushAverageRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Boolean> {
             override fun onSuccess(result: Boolean) {
