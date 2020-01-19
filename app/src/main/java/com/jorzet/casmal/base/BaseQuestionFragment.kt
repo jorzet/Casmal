@@ -79,7 +79,7 @@ abstract class BaseQuestionFragment: BaseFragment() {
 
     open fun onPushAverage(average: Average, isExam: Boolean) {
         val mFirebaseRequestManager: FirebaseRequestManager =
-            FirebaseRequestManager.getInstance(mActivity)
+            FirebaseRequestManager.getInstance()
 
         mFirebaseRequestManager.pushAverage(isExam, average, object: FirebaseRequestManager.OnPushAverageListener {
             override fun onPushAverageSuccess() {

@@ -51,7 +51,7 @@ class ModulesFragment: BaseFragment() {
     }
 
     override fun prepareComponents() {
-        FirebaseRequestManager.getInstance(context!!).requestModules(object: FirebaseRequestManager.OnGetModulesListener {
+        FirebaseRequestManager.getInstance().requestModules(object: FirebaseRequestManager.OnGetModulesListener {
             override fun onGetModulesSuccess(modules: List<Module>) {
                 Log.d("","")
 

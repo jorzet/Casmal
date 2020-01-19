@@ -16,7 +16,6 @@
 
 package com.jorzet.casmal.managers
 
-import android.content.Context
 import com.jorzet.casmal.models.*
 
 /**
@@ -25,16 +24,14 @@ import com.jorzet.casmal.models.*
  * @date 087/08/19.
  */
 
-abstract class FirebaseRequestManager(context: Context) {
-
+abstract class FirebaseRequestManager {
     companion object {
         const val TAG : String = "FirebaseRequestManager"
         /**
          * Manager constructor
-         * @param context Base Activity or Fragment [Context]
          */
-        fun getInstance(context: Context): FirebaseRequestManager {
-            return FirebaseRequestManagerImp.getInstance(context)
+        fun getInstance(): FirebaseRequestManager {
+            return FirebaseRequestManagerImpl.getInstance()
         }
     }
 
@@ -112,12 +109,12 @@ abstract class FirebaseRequestManager(context: Context) {
         /**
          *
          */
-        fun onGetFlashCardSuccess(flashCard: FlashCard)
+        fun onGetFlashCardSuccess(flashCard: FlashCard) {}
 
         /**
          *
          */
-        fun onGetFlashCardsSuccess(flashCards: List<FlashCard>)
+        fun onGetFlashCardsSuccess(flashCards: MutableList<FlashCard>) {}
 
         /**
          *

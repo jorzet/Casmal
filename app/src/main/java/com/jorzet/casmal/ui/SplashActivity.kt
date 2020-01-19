@@ -51,6 +51,7 @@ import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
 import com.jorzet.casmal.viewmodels.AccountsViewModel
+import com.jorzet.casmal.viewmodels.FlashCardsViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -70,7 +71,10 @@ class SplashActivity: BaseActivity() {
 
     private val permissions: ArrayList<String> = ArrayList()
 
-    private var viewModel: AccountsViewModel? = null
+    /**
+     * ViewModels
+     */
+    private var accountsViewModel: AccountsViewModel? = null
 
     /**
      * Constants
@@ -92,20 +96,42 @@ class SplashActivity: BaseActivity() {
     }
 
     override fun prepareComponents() {
-        viewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        val flashCardsViewModel = ViewModelProviders.of(this).get(FlashCardsViewModel::class.java)
 
-        viewModel?.loginFacebook?.observe(this, Observer {
-            if(it) {
-                facebookSignIn()
+        flashCardsViewModel.load()
+
+        flashCardsViewModel.exception.observe(this, Observer {
+            if(it != null) {
+                Utils.print("Error getting flashCards: $it")
             }
         })
 
-        viewModel?.loginGoogle?.observe(this, Observer {
+        accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+
+        accountsViewModel?.loginFacebook?.observe(this, Observer {
             if(it) {
-                googleSignIn()
+                LoginManager.getInstance().logInWithReadPermissions(this, permissions)
             }
         })
 
+        accountsViewModel?.loginGoogle?.observe(this, Observer {
+            if(it) {
+                startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
+            }
+        })
+
+        prepareLogin()
+
+        ivFacebookLogin.setOnClickListener {
+            accountsViewModel?.loginWithFacebook()
+        }
+
+        ivGoogleLogin.setOnClickListener {
+            accountsViewModel?.loginWithGoogle()
+        }
+    }
+
+    private fun prepareLogin() {
         //Facebook Permissions
         permissions.add("email")
         permissions.add("public_profile")
@@ -137,14 +163,6 @@ class SplashActivity: BaseActivity() {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
-
-        ivFacebookLogin.setOnClickListener {
-            viewModel?.loginWithFacebook()
-        }
-
-        ivGoogleLogin.setOnClickListener {
-            viewModel?.loginWithGoogle()
-        }
     }
 
     /**
@@ -153,25 +171,21 @@ class SplashActivity: BaseActivity() {
     private fun goMainActivity(currentUser: FirebaseUser?) {
         val intent = Intent(this, MainActivity::class.java)
 
-        FirebaseRequestManager.getInstance(this).requestLevels(object: FirebaseRequestManager.OnGetLevelsListener {
+        FirebaseRequestManager.getInstance().requestLevels(object: FirebaseRequestManager.OnGetLevelsListener {
             override fun onGetLevelsSuccess(levels: List<Level>) {
                 ServiceManager.getInstance().levels = levels
             }
 
             override fun onGetLevelsFail(throwable: Throwable) {
+
             }
         })
 
-        FirebaseRequestManager.getInstance(this).requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
+        FirebaseRequestManager.getInstance().requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
             override fun onGetUserLoaded(user: User?) {
                 if(user != null) {
-                    FirebaseRequestManager.getInstance(this@SplashActivity).requestFlashCards(object: FirebaseRequestManager.OnGetFlashCardListener {
-                        override fun onGetFlashCardSuccess(flashCard: FlashCard) {
-
-                        }
-
-                        override fun onGetFlashCardsSuccess(flashCards: List<FlashCard>) {
-
+                    FirebaseRequestManager.getInstance().requestFlashCards(object: FirebaseRequestManager.OnGetFlashCardListener {
+                        override fun onGetFlashCardsSuccess(flashCards: MutableList<FlashCard>) {
                             val userFlashcards: ArrayList<FlashCard> = arrayListOf()
 
                             for (userFlashCard in user.flashCards) {
@@ -184,7 +198,7 @@ class SplashActivity: BaseActivity() {
 
                             ServiceManager.getInstance().user = user
                             ServiceManager.getInstance().userFlashCards = userFlashcards
-                            ServiceManager.getInstance().flashCards = flashCards
+
                             startActivity(intent)
                             finish()
                         }
@@ -194,7 +208,6 @@ class SplashActivity: BaseActivity() {
                             startActivity(intent)
                             finish()
                         }
-
                     })
 
                 } else {
@@ -215,7 +228,7 @@ class SplashActivity: BaseActivity() {
         Utils.print("start PushUser: " + firebaseUser.uid)
         val intent = Intent(this, MainActivity::class.java)
 
-        FirebaseRequestManager.getInstance(this).insertUser(firebaseUser.uid, object : FirebaseRequestManager.OnInsertUserListener {
+        FirebaseRequestManager.getInstance().insertUser(firebaseUser.uid, object : FirebaseRequestManager.OnInsertUserListener {
             override fun onSuccessUserInserted() {
                 startActivity(intent)
                 finish()
@@ -296,7 +309,7 @@ class SplashActivity: BaseActivity() {
             user?.displayName.toString(),
             user?.email.toString(),
             user?.photoUrl.toString(), provider)
-        viewModel?.insert(account)
+        accountsViewModel?.insert(account)
 
         updateUI(user)
     }
@@ -310,14 +323,6 @@ class SplashActivity: BaseActivity() {
         Handler().postDelayed({
             updateUI(currentUser)
         }, TIME_DELAY)
-    }
-
-    private fun facebookSignIn() {
-        LoginManager.getInstance().logInWithReadPermissions(this, permissions)
-    }
-
-    private fun googleSignIn() {
-        startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
     }
 
     private fun signOut() {

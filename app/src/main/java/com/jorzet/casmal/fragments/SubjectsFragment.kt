@@ -52,7 +52,7 @@ class SubjectsFragment: BaseFragment() {
     }
 
     override fun prepareComponents() {
-        FirebaseRequestManager.getInstance(context!!).requestSubjects(object: FirebaseRequestManager.OnGetSubjectsListener {
+        FirebaseRequestManager.getInstance().requestSubjects(object: FirebaseRequestManager.OnGetSubjectsListener {
             override fun onGetSubjectsSuccess(subjects: List<Subject>) {
                 Log.d("","")
 

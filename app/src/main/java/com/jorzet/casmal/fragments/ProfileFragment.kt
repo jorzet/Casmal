@@ -130,11 +130,9 @@ class ProfileFragment: BaseFragment() {
             })
 
             recyclerView?.setHasFixedSize(true)
-            recyclerView?.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             recyclerView?.adapter = adapter
             noFlashcards?.visibility = View.GONE
-
         } else {
             noFlashcards?.visibility = View.VISIBLE
         }

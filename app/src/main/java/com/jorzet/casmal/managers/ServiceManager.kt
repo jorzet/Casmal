@@ -28,13 +28,11 @@ import com.jorzet.casmal.utils.Utils
  */
 
 class ServiceManager {
-
     /**
      * Models
      */
     var user: User? = null
     var userFlashCards: List<FlashCard> = emptyList()
-    var flashCards: List<FlashCard> = emptyList()
     var levels: List<Level> = emptyList()
 
     companion object {

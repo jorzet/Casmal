@@ -29,7 +29,7 @@ import org.json.JSONObject
  * @date 24/12/19.
  */
 
-class FlashCardsRequest(): AbstractRequestDatabase<String, List<FlashCard>>() {
+class FlashCardsRequest(): AbstractRequestDatabase<String, MutableList<FlashCard>>() {
     companion object {
         const val TAG: String = "FlashCardsRequest"
         const val FLASHCARD_REFERENCE: String = "flashcards"
@@ -58,7 +58,7 @@ class FlashCardsRequest(): AbstractRequestDatabase<String, List<FlashCard>>() {
         if (::mFlashCardId.isInitialized) {
             val flashCard: FlashCard? = successResponse.getValue(FlashCard::class.java)
             if (flashCard != null) {
-                val list: ArrayList<FlashCard> = ArrayList()
+                val list: MutableList<FlashCard> = ArrayList()
                 list.add(flashCard)
                 onRequestListenerSuccess.onSuccess(list)
             } else {
@@ -68,7 +68,7 @@ class FlashCardsRequest(): AbstractRequestDatabase<String, List<FlashCard>>() {
             val post = successResponse.value
             if (post != null) {
                 val flashCardsMap = (post as HashMap<*, *>)
-                val mFlashCards = ArrayList<FlashCard>()
+                val mFlashCards: MutableList<FlashCard> = ArrayList()
                 for (key in flashCardsMap.keys) {
                     val flashCardMap = flashCardsMap[key] as HashMap<*, *>
                     try {

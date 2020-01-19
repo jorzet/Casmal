@@ -16,7 +16,6 @@
 
 package com.jorzet.casmal.managers
 
-import android.content.Context
 import com.jorzet.casmal.models.*
 import com.jorzet.casmal.request.*
 
@@ -26,24 +25,23 @@ import com.jorzet.casmal.request.*
  * @date 087/08/19.
  */
 
-class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(context) {
+class FirebaseRequestManagerImpl: FirebaseRequestManager() {
     companion object {
         /**
          * Manager static instance
          */
-        private var sInstance: FirebaseRequestManagerImp? = null
+        private var sInstance: FirebaseRequestManagerImpl? = null
 
         /**
          * Creates a [FirebaseRequestManager] implementation instance
          *
-         * @param context Base Activity or Fragment [Context]
          * @return A [FirebaseRequestManager] instance
          */
-        fun getInstance(context: Context): FirebaseRequestManager {
+        fun getInstance(): FirebaseRequestManager {
             if (sInstance == null) {
                 synchronized(FirebaseRequestManager::class.java) {
                     if (sInstance == null) {
-                        sInstance = FirebaseRequestManagerImp(context)
+                        sInstance = FirebaseRequestManagerImpl()
                     }
                 }
             }
@@ -94,8 +92,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestFlashCard(flashCardId: String, onGetFlashCardListener: OnGetFlashCardListener) {
         val flashCardRequest = FlashCardsRequest(flashCardId)
 
-        flashCardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
-            override fun onSuccess(result: List<FlashCard>) {
+        flashCardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<MutableList<FlashCard>> {
+            override fun onSuccess(result: MutableList<FlashCard>) {
                 onGetFlashCardListener.onGetFlashCardSuccess(result[0])
             }
         })
@@ -112,8 +110,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestFlashCards(onGetFlashCardListener: OnGetFlashCardListener) {
         val flashCardsRequest = FlashCardsRequest()
 
-        flashCardsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
-            override fun onSuccess(result: List<FlashCard>) {
+        flashCardsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<MutableList<FlashCard>> {
+            override fun onSuccess(result: MutableList<FlashCard>) {
                 onGetFlashCardListener.onGetFlashCardsSuccess(result)
             }
         })
