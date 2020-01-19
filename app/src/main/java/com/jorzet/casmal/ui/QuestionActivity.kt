@@ -61,7 +61,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     private lateinit var mQuestionTitle: TextView
     private lateinit var mShowQuestions: View
     private lateinit var mCloseQuestions: View
-    private lateinit var mProgresBarQuestions: ProgressBar
+    private lateinit var mProgressBarQuestions: ProgressBar
     private lateinit var mShowAnswer: View
     private lateinit var mNextQuestion: View
     private lateinit var mLoadingQuestionProgressBar: FrameLayout
@@ -76,7 +76,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     /**
      * Attributes
      */
-    private var mCurrectQuestionIndex = 0
+    private var mCorrectQuestionIndex = 0
     private var mCurrentQuestionProgress = 0
     private var mIsExam: Boolean = false
     private var mModuleId: String = ""
@@ -99,7 +99,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         mQuestionTitle = findViewById(R.id.tv_question_type_text)
         mShowQuestions = findViewById(R.id.rl_show_questions)
         mCloseQuestions = findViewById(R.id.iv_close_question)
-        mProgresBarQuestions = findViewById(R.id.pb_questions_progress)
+        mProgressBarQuestions = findViewById(R.id.pb_questions_progress)
         mNextQuestion = findViewById(R.id.btn_next_question)
         mShowAnswer = findViewById(R.id.btn_show_answer)
         mLoadingQuestionProgressBar = findViewById(R.id.progressBarHolder)
@@ -129,9 +129,9 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         mAverage.totalQuestions = mQuestionsList.size
 
         mLoadingQuestionProgressBar.visibility = View.VISIBLE
-        if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
-            val question = mQuestions?.get(mCurrectQuestionIndex)
-            onChangeQuestion(question, mCurrectQuestionIndex)
+        if (mQuestions != null && mCorrectQuestionIndex < mQuestions?.size!!) {
+            val question = mQuestions?.get(mCorrectQuestionIndex)
+            onChangeQuestion(question, mCorrectQuestionIndex)
         }
     }
 
@@ -145,7 +145,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     private val mShowQuestionsClickListener = View.OnClickListener {
-        val questionListFragment = QuestionListFragment.getInstance(mQuestionsList, mCurrectQuestionIndex)
+        val questionListFragment = QuestionListFragment.getInstance(mQuestionsList, mCorrectQuestionIndex)
 
         // add to fragment manager
         supportFragmentManager
@@ -159,9 +159,9 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     private val mNextQuestionClickListener = View.OnClickListener {
-        if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
-            val question = mQuestions?.get(mCurrectQuestionIndex)
-            onChangeQuestion(question, mCurrectQuestionIndex)
+        if (mQuestions != null && mCorrectQuestionIndex < mQuestions?.size!!) {
+            val question = mQuestions?.get(mCorrectQuestionIndex)
+            onChangeQuestion(question, mCorrectQuestionIndex)
         }
     }
 
@@ -232,12 +232,12 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                 })
 
             // increase questionIndex
-            mCurrectQuestionIndex = position + 1
+            mCorrectQuestionIndex = position + 1
 
             // update progress
             if (mQuestions != null) {
-                mCurrentQuestionProgress = (mCurrectQuestionIndex * 100) / mQuestions?.size!!
-                mProgresBarQuestions.progress = mCurrentQuestionProgress
+                mCurrentQuestionProgress = (mCorrectQuestionIndex * 100) / mQuestions?.size!!
+                mProgressBarQuestions.progress = mCurrentQuestionProgress
             }
         }
 
@@ -262,7 +262,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         }
 
         if (mQuestionsList.isNotEmpty()) {
-            mQuestionsList[mCurrectQuestionIndex - 1] = question
+            mQuestionsList[mCorrectQuestionIndex - 1] = question
         }
 
         if (::mAverage.isInitialized) {
