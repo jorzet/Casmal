@@ -6,48 +6,40 @@
 	android:background="@color/background"
 	android:orientation="vertical">
 
-	<ImageView
-		android:id="@+id/ivLogo"
+	<RelativeLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-		android:scaleType="centerCrop"
-		android:layout_marginTop="150dp"
-		android:background="@drawable/ic_casmal"
-		android:contentDescription="@string/app_name"/>
+		android:layout_centerInParent="true">
 
-	<TextView
-		android:id="@+id/ivCasmal"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/ivLogo"
-		android:layout_marginTop="10dp"
-		android:layout_centerHorizontal="true"
-		android:text="@string/app_name"
-		android:textStyle="bold"
-		android:textSize="40sp"
-		android:textColor="@color/blue"/>
+		<ImageView
+			android:id="@+id/ivLogo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:scaleType="centerCrop"
+			android:background="@drawable/ic_casmal"
+			android:contentDescription="@string/app_name"/>
 
-	<ImageView
-		android:id="@+id/ivGoogleLogin"
-		android:layout_width="200dp"
-		android:layout_height="50dp"
-		android:src="@drawable/google_login"
-		android:layout_below="@id/ivCasmal"
-		android:layout_centerHorizontal="true"
-		android:layout_marginTop="50dp"
-		android:visibility="gone"
-		android:contentDescription="@string/app_name"/>
+		<ImageView
+			android:id="@+id/ivGoogleLogin"
+			android:layout_width="200dp"
+			android:layout_height="50dp"
+			android:src="@drawable/google_login"
+			android:layout_below="@id/ivLogo"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="50dp"
+			android:visibility="gone"
+			android:contentDescription="@string/app_name"/>
 
-	<ImageView
-		android:id="@+id/ivFacebookLogin"
-		android:layout_width="200dp"
-		android:layout_height="50dp"
-		android:src="@drawable/facebook_login"
-		android:layout_marginTop="20dp"
-		android:layout_below="@id/ivGoogleLogin"
-		android:layout_centerHorizontal="true"
-		android:visibility="gone"
-		android:contentDescription="@string/app_name"/>
+		<ImageView
+			android:id="@+id/ivFacebookLogin"
+			android:layout_width="200dp"
+			android:layout_height="50dp"
+			android:src="@drawable/facebook_login"
+			android:layout_marginTop="20dp"
+			android:layout_below="@id/ivGoogleLogin"
+			android:layout_centerHorizontal="true"
+			android:visibility="gone"
+			android:contentDescription="@string/app_name"/>
 
+	</RelativeLayout>
 </RelativeLayout>
