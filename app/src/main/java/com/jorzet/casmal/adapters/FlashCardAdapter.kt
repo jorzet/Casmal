@@ -16,24 +16,23 @@
 
 package com.jorzet.casmal.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
-import com.jorzet.casmal.base.BaseAdapter
 import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.FirebaseStorageManager
 import com.jorzet.casmal.managers.ImageManager
 import com.jorzet.casmal.models.FlashCard
+import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.viewholders.FlashCardHolder
 import com.jorzet.casmal.viewholders.LoadMoreHolder
 import com.jorzet.casmal.viewholders.ViewHolder
 
 class FlashCardAdapter(
-    context: Context,
-    list: ArrayList<FlashCard>,
-    listener: ItemListener<FlashCard>
-) : BaseAdapter<FlashCard>(context, list, listener) {
+    private val listener: ItemListener<FlashCard>
+) : RecyclerView.Adapter<ViewHolder>() {
+    private var list: MutableList<FlashCard> = ArrayList()
 
     companion object {
         const val ITEM_CARD = 0
@@ -73,7 +72,7 @@ class FlashCardAdapter(
 
             val storageReference = FirebaseStorageManager.getImage(item.storageName)
 
-            ImageManager.getInstance().setImage(storageReference, holder.ivFlashCard)
+            ImageManager.instance.setImage(storageReference, holder.ivFlashCard)
         } else if(viewHolder is LoadMoreHolder) {
             val holder: LoadMoreHolder = viewHolder
 
@@ -81,5 +80,15 @@ class FlashCardAdapter(
                 listener.onItemSelected(item)
             }
         }
+    }
+
+    override fun getItemCount(): Int {
+        return list.size
+    }
+
+    fun setList(list: MutableList<FlashCard>) {
+        Utils.print("Set new FlashCardAdapter list: ${list.size}")
+        this.list = list
+        notifyDataSetChanged()
     }
 }

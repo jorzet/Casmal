@@ -19,6 +19,7 @@ package com.jorzet.casmal.models
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.jorzet.casmal.utils.Utils
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -37,4 +38,11 @@ data class FlashCard(
     var storageName: String
 ): Parcelable {
     constructor(): this("", "")
+
+    override fun toString(): String {
+        Utils.print("id: $id")
+        Utils.print("storageName: $storageName")
+
+        return "FlashCard content"
+    }
 }

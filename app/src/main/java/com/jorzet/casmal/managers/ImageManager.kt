@@ -39,21 +39,7 @@ class ImageManager {
     private val icError: Int = R.drawable.ic_casmal
 
     companion object {
-        @Volatile
-        private var instance: ImageManager? = null
-
-        fun getInstance(): ImageManager {
-            if (instance != null) {
-                return instance as ImageManager
-            }
-
-            synchronized(this) {
-                val instance = ImageManager()
-                this.instance = instance
-
-                return instance
-            }
-        }
+        val instance: ImageManager = ImageManager()
 
         init {
             Utils.print("Instance", "Instance ImageManager = " + instance.hashCode())

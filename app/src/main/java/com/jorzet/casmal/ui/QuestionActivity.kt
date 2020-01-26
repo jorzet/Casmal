@@ -22,6 +22,7 @@ import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseQuestionFragment
@@ -31,9 +32,11 @@ import com.jorzet.casmal.fragments.question.MatchQuestionFragment
 import com.jorzet.casmal.fragments.question.MultipleQuestionFragment
 import com.jorzet.casmal.fragments.question.TrueFalseQuestionFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
-import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.*
 import com.jorzet.casmal.utils.Utils
+import com.jorzet.casmal.viewmodels.FlashCardsViewModel
+import com.jorzet.casmal.viewmodels.LevelsViewModel
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -59,7 +62,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     private lateinit var mQuestionTitle: TextView
     private lateinit var mShowQuestions: View
     private lateinit var mCloseQuestions: View
-    private lateinit var mProgresBarQuestions: ProgressBar
+    private lateinit var mProgressBarQuestions: ProgressBar
     private lateinit var mShowAnswer: View
     private lateinit var mNextQuestion: View
     private lateinit var mLoadingQuestionProgressBar: FrameLayout
@@ -74,7 +77,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     /**
      * Attributes
      */
-    private var mCurrectQuestionIndex = 0
+    private var mCorrectQuestionIndex = 0
     private var mCurrentQuestionProgress = 0
     private var mIsExam: Boolean = false
     private var mModuleId: String = ""
@@ -84,6 +87,13 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
      */
     private lateinit var currentFragment: BaseQuestionFragment
 
+    /**
+     * ViewModels
+     */
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var flashCardsViewModel: FlashCardsViewModel
+    private lateinit var levelsViewModel: LevelsViewModel
+
     override fun getLayoutId(): Int {
         return R.layout.activity_question
     }
@@ -92,13 +102,17 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         mQuestionTitle = findViewById(R.id.tv_question_type_text)
         mShowQuestions = findViewById(R.id.rl_show_questions)
         mCloseQuestions = findViewById(R.id.iv_close_question)
-        mProgresBarQuestions = findViewById(R.id.pb_questions_progress)
+        mProgressBarQuestions = findViewById(R.id.pb_questions_progress)
         mNextQuestion = findViewById(R.id.btn_next_question)
         mShowAnswer = findViewById(R.id.btn_show_answer)
         mLoadingQuestionProgressBar = findViewById(R.id.progressBarHolder)
     }
 
     override fun prepareComponents() {
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        flashCardsViewModel = ViewModelProviders.of(this).get(FlashCardsViewModel::class.java)
+        levelsViewModel = ViewModelProviders.of(this).get(LevelsViewModel::class.java)
+
         mShowQuestions.setOnClickListener(mShowQuestionsClickListener)
         mCloseQuestions.setOnClickListener(mCloseQuestionsClickListener)
         mNextQuestion.setOnClickListener(mNextQuestionClickListener)
@@ -120,9 +134,9 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         mAverage.totalQuestions = mQuestionsList.size
 
         mLoadingQuestionProgressBar.visibility = View.VISIBLE
-        if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
-            val question = mQuestions?.get(mCurrectQuestionIndex)
-            onChangeQuestion(question, mCurrectQuestionIndex)
+        if (mQuestions != null && mCorrectQuestionIndex < mQuestions?.size!!) {
+            val question = mQuestions?.get(mCorrectQuestionIndex)
+            onChangeQuestion(question, mCorrectQuestionIndex)
         }
     }
 
@@ -136,7 +150,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     private val mShowQuestionsClickListener = View.OnClickListener {
-        val questionListFragment = QuestionListFragment.getInstance(mQuestionsList, mCurrectQuestionIndex)
+        val questionListFragment = QuestionListFragment.getInstance(mQuestionsList, mCorrectQuestionIndex)
 
         // add to fragment manager
         supportFragmentManager
@@ -150,9 +164,9 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     private val mNextQuestionClickListener = View.OnClickListener {
-        if (mQuestions != null && mCurrectQuestionIndex < mQuestions?.size!!) {
-            val question = mQuestions?.get(mCurrectQuestionIndex)
-            onChangeQuestion(question, mCurrectQuestionIndex)
+        if (mQuestions != null && mCorrectQuestionIndex < mQuestions?.size!!) {
+            val question = mQuestions?.get(mCorrectQuestionIndex)
+            onChangeQuestion(question, mCorrectQuestionIndex)
         }
     }
 
@@ -171,7 +185,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         }
 
         if (question != null) {
-            FirebaseRequestManager.getInstance(this).requestQuestion(
+            FirebaseRequestManager.getInstance().requestQuestion(
                 question,
                 object : FirebaseRequestManager.OnGetQuestionListener {
                     override fun onGetQuestionLoaded(question: Question) {
@@ -180,7 +194,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                         mLoadingQuestionProgressBar.visibility = View.GONE
                         mQuestionTitle.text = question.subject.value
 
-                        // instance question fragment
+                        // INSTANCE question fragment
                         when (question.questionType) {
                             QuestionType.MULTIPLE -> {
                                 currentFragment =
@@ -223,15 +237,14 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                 })
 
             // increase questionIndex
-            mCurrectQuestionIndex = position + 1
+            mCorrectQuestionIndex = position + 1
 
             // update progress
             if (mQuestions != null) {
-                mCurrentQuestionProgress = (mCurrectQuestionIndex * 100) / mQuestions?.size!!
-                mProgresBarQuestions.progress = mCurrentQuestionProgress
+                mCurrentQuestionProgress = (mCorrectQuestionIndex * 100) / mQuestions?.size!!
+                mProgressBarQuestions.progress = mCurrentQuestionProgress
             }
         }
-
     }
 
     override fun onButtonsEnable() {
@@ -248,12 +261,19 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     override fun onOptionSelected(question: Question) {
+        val user: User = userViewModel.getUser().value ?: return
+        Utils.print("Valid User")
+        val levels = levelsViewModel.levels.value ?: return
+        Utils.print("Valid Levels")
+        val flashCards = flashCardsViewModel.flashCards.value ?: return
+        Utils.print("Valid FlashCards")
+
         if (::mShowAnswer.isInitialized) {
             mShowAnswer.isEnabled = !question.wasOK
         }
 
         if (mQuestionsList.isNotEmpty()) {
-            mQuestionsList[mCurrectQuestionIndex - 1] = question
+            mQuestionsList[mCorrectQuestionIndex - 1] = question
         }
 
         if (::mAverage.isInitialized) {
@@ -263,70 +283,93 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
             else mAverage.incorrect++
         }
 
-        val user = ServiceManager.getInstance().user
-        if (user != null && question.wasOK) {
+        if (question.wasOK) {
+            Utils.print("UserPoints: ${user.points}")
+
             user.points += question.points.toInt()
 
-            val levels = ServiceManager.getInstance().levels
-            for (level in levels) {
-                if (user.points >= level.points) {
-                    // on level up just when change level
-                    if (level.id != user.level) {
-                        user.level = level.id
-                        onLevelUp(level)
-                    }
-                }
+            Utils.print("PointsAdded: ${question.points}")
+
+            Utils.print("Total Levels in repository: ${levels.size}")
+            Utils.print("Total FlashCards in repository: ${flashCards.size}")
+
+            if(levels.isEmpty()) {
+                levelsViewModel.load()
+            }
+
+            if(flashCards.isEmpty()) {
+                flashCardsViewModel.load()
+            }
+
+            if(levels.isEmpty() || flashCards.isEmpty()) {
+                return
+            }
+
+            val userLevel: Level = if(user.level - 1 < 0) {
+                levels[0]
+            } else {
+                if(user.level - 1 >= levels.size) return
+
+                levels[user.level - 1]
+            }
+
+            Utils.print("CurrentLevel: ${user.level}")
+            Utils.print("CurrentPoints: ${user.points}")
+            Utils.print("NextLevel: ${userLevel.id} with ${userLevel.points} points and id = $userLevel")
+
+            if(user.points >= userLevel.points) {
+                Utils.print("OldLevel: ${user.level}")
+                user.level += 1
+                Utils.print("NewLevel: ${user.level}")
+                userViewModel.setUser(user)
+
+                if(user.level -1 >= levels.size) return
+
+                onLevelUp(levels[user.level - 1])
             }
         }
     }
 
     override fun onLevelUp(level: Level) {
-        val user = ServiceManager.getInstance().user
-        val flashCardGotIt = getFlashCard(level)
-        if (user != null && flashCardGotIt != null) {
+        Utils.print("OnLevelUp!: ${level.id}")
 
-            // show level up dialog
-            LevelUpDialog.newInstance(
-                user.level,
-                flashCardGotIt,
-                this).show(supportFragmentManager, "level_up_dialog")
+        val user: User = userViewModel.getUser().value ?: return
+        val flashCardGotIt = getFlashCard(level) ?: return
 
-            // update flashcards
-            val flashCards: ArrayList<String> = arrayListOf()
-            flashCards.addAll(user.flashCards)
-            flashCards.add(level.flashcard)
-            user.flashCards = flashCards
+        // show level up dialog
+        LevelUpDialog.newInstance(
+            user.level,
+            flashCardGotIt,
+            this).show(supportFragmentManager, "level_up_dialog")
 
-            // update user flash cards
-            val userFlashCards: ArrayList<FlashCard> = arrayListOf()
-            userFlashCards.addAll(ServiceManager.getInstance().userFlashCards)
-            userFlashCards.add(FlashCard(level.flashcard, flashCardGotIt))
-            ServiceManager.getInstance().userFlashCards = userFlashCards
+        // update user flash cards
+        userViewModel.setUser(user)
+        userViewModel.updateFlashCards()
 
-            // update user level
-            FirebaseRequestManager.getInstance(this).updateUserLevel(object: FirebaseRequestManager.OnUpdateUserLevelListener {
-                override fun onUpdateUserLevelSuccess() {
-                    Utils.print("QuestionActivity update level success")
-                }
+        // update user level
+        FirebaseRequestManager.getInstance().updateUserLevel(user, object: FirebaseRequestManager.OnUpdateUserLevelListener {
+            override fun onUpdateUserLevelSuccess() {
+                Utils.print("QuestionActivity update level success")
+            }
 
-                override fun onUpdateUserLevelFail(throwable: Throwable) {
-                    Utils.print("QuestionActivity update level fail")
-                }
-            })
-        }
+            override fun onUpdateUserLevelFail(throwable: Throwable) {
+                Utils.print("QuestionActivity update level fail")
+            }
+        })
     }
 
     override fun getFlashCard(level: Level): String? {
-        val flashCards = ServiceManager.getInstance().flashCards
-        val user = ServiceManager.getInstance().user
+        Utils.print("getFlashCard Level: ${level.id}")
 
-        if (user != null) {
-            for (flashcard in flashCards) {
-                if (flashcard.id == level.flashcard) {
-                    return flashcard.storageName
-                }
+        val flashCards = flashCardsViewModel.flashCards.value ?: return null
+
+        flashCards.forEach {
+            if(it.id == level.flashcard) {
+                Utils.print("Returning ${it.storageName}")
+                return it.storageName
             }
         }
+
         return null
     }
 

@@ -16,10 +16,13 @@
 
 package com.jorzet.casmal.repositories
 
+import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jorzet.casmal.AppExecutors
 import com.jorzet.casmal.models.Account
+import com.jorzet.casmal.models.FlashCard
+import com.jorzet.casmal.models.User
 import com.jorzet.casmal.room.dao.AccountDao
 import com.jorzet.casmal.utils.Utils
 
@@ -29,28 +32,51 @@ import com.jorzet.casmal.utils.Utils
  * @date 26/12/19
  */
 
-class AccountsRepository(private val accountDao: AccountDao) {
+class UserRepository {
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    private val accounts: LiveData<List<Account>> = accountDao.getAccounts()
+    private val user: MutableLiveData<User> = MutableLiveData()
+    private val flashCards: MutableLiveData<MutableList<FlashCard>> = MutableLiveData()
     private val loginFacebook: MutableLiveData<Boolean> = MutableLiveData()
     private val loginGoogle: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun insert(account: Account) {
+    companion object {
+        val instance: UserRepository = UserRepository()
+
+        init {
+            Utils.print("Instance", "Instance UserRepository = " + instance.hashCode())
+        }
+    }
+
+    init {
+        user.value = User()
+        flashCards.value = ArrayList()
+    }
+
+    @NonNull
+    fun getAccount(accountDao: AccountDao): LiveData<Account> = accountDao.getAccount()
+
+    @NonNull
+    fun getFlashCards() : LiveData<MutableList<FlashCard>> = flashCards
+
+    @NonNull
+    fun getUser() : LiveData<User> = user
+
+    fun insert(accountDao: AccountDao, account: Account) {
         AppExecutors.get().diskIO().execute {
             accountDao.insert(account)
             Utils.print("Insert Account: ${account.userName}")
         }
     }
 
-    fun update(account: Account) {
+    fun update(accountDao: AccountDao, account: Account) {
         AppExecutors.get().diskIO().execute {
             accountDao.update(account)
             Utils.print("Update Account: ${account.userName}")
         }
     }
 
-    fun delete(account: Account) {
+    fun delete(accountDao: AccountDao, account: Account) {
         AppExecutors.get().diskIO().execute {
             accountDao.delete(account)
             Utils.print("Delete Account: ${account.userName}")
@@ -67,7 +93,31 @@ class AccountsRepository(private val accountDao: AccountDao) {
         loginGoogle.postValue(false)
     }
 
-    fun getAccounts(): LiveData<List<Account>> = accounts
+    fun setUser(user: User) {
+        this.user.value = user
+    }
+
+    fun updateFlashCards() {
+        val user: User = user.value ?: return
+        val flashCards = FlashCardsRepository.instance.getFlashCards().value ?: return
+
+        val items = this.flashCards.value ?: return
+        items.clear()
+
+        for(i in 0..user.level) {
+            val entry = "f$i"
+
+            for (flashCard in flashCards) {
+                if (flashCard.id == entry) {
+                    Utils.print("Adding flashCard: ${flashCard.id}")
+                    items.add(flashCard)
+                }
+            }
+        }
+
+        Utils.print("Set ${items.size} user flashCards")
+        this.flashCards.value = items
+    }
 
     fun getLoginWithFacebook(): MutableLiveData<Boolean> = loginFacebook
 

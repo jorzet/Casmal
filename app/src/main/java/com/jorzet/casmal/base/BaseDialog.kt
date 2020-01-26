@@ -32,7 +32,6 @@ import com.jorzet.casmal.R
  */
 
 abstract class BaseDialog: DialogFragment() {
-
     /**
      * UI accessors
      */

@@ -31,13 +31,12 @@ import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.dialogs.FullScreeImageDialog
 import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.ImageManager
-import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.ui.PaywayActivity
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
-import com.jorzet.casmal.viewmodels.AccountsViewModel
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Bani Azarael Mejia Flores
@@ -46,16 +45,18 @@ import com.jorzet.casmal.viewmodels.AccountsViewModel
  */
 
 class ProfileFragment: BaseFragment() {
-    private var viewModel: AccountsViewModel? = null
-    private var tvUserName: TextView? = null
-    private var tvUserEmail: TextView? = null
-    private var ivPhoto: ImageView? = null
-    private var ivFacebookCircle: ImageView? = null
-    private var ivGoogleCircle: ImageView? = null
-    private var ivEmailCircle: ImageView? = null
-    private var recyclerView: RecyclerView? = null
-    private var noFlashcards: TextView? = null
-    private var paywayButton: Button? = null
+    private lateinit var viewModel: UserViewModel
+    private lateinit var tvUserName: TextView
+    private lateinit var tvUserEmail: TextView
+    private lateinit var ivPhoto: ImageView
+    private lateinit var ivFacebookCircle: ImageView
+    private lateinit var ivGoogleCircle: ImageView
+    private lateinit var ivEmailCircle: ImageView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var noFlashcards: TextView
+    private lateinit var paywayButton: Button
+
+    private lateinit var adapter: FlashCardAdapter
 
     override fun getLayoutId(): Int {
         return R.layout.profile_fragment
@@ -74,73 +75,75 @@ class ProfileFragment: BaseFragment() {
     }
 
     override fun prepareComponents() {
-        viewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
-        viewModel?.list?.observe(this, Observer { list ->
-            list.let {
-                Utils.print("Accounts Update size = {${it[0].userName}}")
+        adapter = FlashCardAdapter(object : ItemListener<FlashCard> {
+            override fun onItemSelected(model: FlashCard) {
+                Utils.print("ItemId: ${model.id}")
 
-                tvUserName?.text = it[0].userName
-                tvUserEmail?.text = it[0].userEmail
-
-                var urlPhoto: String = it[0].image
-
-                when (it[0].provider) {
-                    PROVIDER_FACEBOOK -> {
-                        urlPhoto = "$urlPhoto?type=large"
-
-                        ivFacebookCircle?.visibility = View.VISIBLE
-                        ivGoogleCircle?.visibility = View.GONE
-                        ivEmailCircle?.visibility = View.GONE
-                    }
-                    PROVIDER_GOOGLE -> {
-                        ivFacebookCircle?.visibility = View.GONE
-                        ivGoogleCircle?.visibility = View.VISIBLE
-                        ivEmailCircle?.visibility = View.GONE
-                    }
-                    else -> {
-                        ivFacebookCircle?.visibility = View.GONE
-                        ivGoogleCircle?.visibility = View.GONE
-                        ivEmailCircle?.visibility = View.GONE
-                        //TODO Email Alpha
-                    }
-                }
-
-                ImageManager.getInstance().setImage(urlPhoto, ivPhoto)
+                // show full screen image
+                FullScreeImageDialog
+                    .newInstance(model.storageName)
+                    .show(fragmentManager!!,"full_screen_image")
             }
         })
 
-        val userFlashCards = ServiceManager.getInstance().userFlashCards
+        viewModel.getAccount().observe(this, Observer {
+            if(it != null) {
+                Utils.print("Accounts Update size = {${it.userName}}")
 
-        if (userFlashCards.isNotEmpty()) {
-            val list: ArrayList<FlashCard> = ArrayList()
-            list.addAll(userFlashCards)
-            if (userFlashCards.size > 3) {
-                list.add(FlashCard("0", "LoadModel"))
+                tvUserName.text = it.userName
+                tvUserEmail.text = it.userEmail
+
+                var urlPhoto: String = it.image
+
+                when (it.provider) {
+                    PROVIDER_FACEBOOK -> {
+                        urlPhoto = "$urlPhoto?type=large"
+
+                        ivFacebookCircle.visibility = View.VISIBLE
+                        ivGoogleCircle.visibility = View.GONE
+                        ivEmailCircle.visibility = View.GONE
+                    }
+                    PROVIDER_GOOGLE -> {
+                        ivFacebookCircle.visibility = View.GONE
+                        ivGoogleCircle.visibility = View.VISIBLE
+                        ivEmailCircle.visibility = View.GONE
+                    }
+                    else -> {
+                        ivFacebookCircle.visibility = View.GONE
+                        ivGoogleCircle.visibility = View.GONE
+                        ivEmailCircle.visibility = View.GONE
+                    }
+                }
+
+                ImageManager.instance.setImage(urlPhoto, ivPhoto)
+            }
+        })
+
+        viewModel.getFlashCards().observe(this, Observer {
+            if(it.isEmpty()) {
+                recyclerView.visibility = View.GONE
+                noFlashcards.visibility = View.VISIBLE
+            } else {
+                recyclerView.visibility = View.VISIBLE
+                noFlashcards.visibility = View.GONE
             }
 
-            val adapter = FlashCardAdapter(context!!, list, object : ItemListener<FlashCard> {
-                override fun onItemSelected(model: FlashCard) {
-                    Utils.print("ItemId: ${model.id}")
+            adapter.setList(it)
+        })
 
-                    // show full screen image
-                    FullScreeImageDialog
-                        .newInstance(model.storageName)
-                        .show(fragmentManager!!,"full_screen_image")
-                }
-            })
+        //if (userFlashCards.size > 3) {
+            //list.add(FlashCard("0", "LoadModel"))
+        //}
 
-            recyclerView?.setHasFixedSize(true)
-            recyclerView?.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            recyclerView?.adapter = adapter
-            noFlashcards?.visibility = View.GONE
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = adapter
 
-        } else {
-            noFlashcards?.visibility = View.VISIBLE
-        }
+        paywayButton.setOnClickListener(paywayButtonClickListener)
 
-        paywayButton?.setOnClickListener(paywayButtonClickListener)
+        viewModel.updateFlashCards()
     }
 
     private val paywayButtonClickListener = View.OnClickListener {

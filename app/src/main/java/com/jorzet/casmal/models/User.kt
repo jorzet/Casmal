@@ -63,6 +63,6 @@ data class User (
         Utils.print("payment.timeStamp ${payment.timeStamp}")
         Utils.print("flashcards $flashCards")
 
-        return "User"
+        return "User content"
     }
 }

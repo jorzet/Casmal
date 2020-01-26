@@ -28,13 +28,12 @@ import kotlin.collections.HashMap
  * @date 27/12/19.
  */
 
-class PushAverageRequets(isExam: Boolean, average: Average): AbstractUpdateDatabase<Average, Boolean>() {
-
+class PushAverageRequest(isExam: Boolean, average: Average): AbstractUpdateDatabase<Average, Boolean>() {
     /**
      * Constants
      */
     companion object {
-        private const val TAG: String = "PushAverageRequets"
+        private const val TAG: String = "PushAverageRequest"
         private const val USERS_REFERENCE: String = "users"
         private const val TOTAL_QUESTIONS: String = "total_questions"
         private const val ANSWERED_QUESTIONS: String = "answered_questions"

@@ -28,7 +28,7 @@ import org.json.JSONObject
  * @date 07/01/20.
  */
 
-class LevelsRequest: AbstractRequestDatabase<String, List<Level>>() {
+class LevelsRequest: AbstractRequestDatabase<String, MutableList<Level>>() {
 
     companion object {
         const val LEVELS_REFERENCE: String = "levels"
@@ -42,7 +42,7 @@ class LevelsRequest: AbstractRequestDatabase<String, List<Level>>() {
         val post = successResponse.value
         if (post != null) {
             val levelsList = (post as List<*>)
-            val mLevels = ArrayList<Level>()
+            val mLevels: MutableList<Level> = ArrayList()
             for (level in levelsList) {
                 try {
                     val levelMap = level as HashMap<*, *>

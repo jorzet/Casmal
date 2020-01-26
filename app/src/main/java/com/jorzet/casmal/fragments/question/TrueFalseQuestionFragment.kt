@@ -42,8 +42,6 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
     private lateinit var mOptionFalse: TextView
     private lateinit var mOptionTrueBackgroundView: View
     private lateinit var mOptionFalseBackgroundView: View
-    private lateinit var mOptionTrueView: View
-    private lateinit var mOptionFalseView: View
 
     override fun getLayoutId(): Int {
         return R.layout.true_false_question_fragment
@@ -55,8 +53,6 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
         mOptionFalse = rootView.findViewById(R.id.tv_option_false)
         mOptionTrueBackgroundView = rootView.findViewById(R.id.option_true)
         mOptionFalseBackgroundView = rootView.findViewById(R.id.option_false)
-        mOptionTrueView = rootView.findViewById(R.id.rl_option_false)
-        mOptionFalseView = rootView.findViewById(R.id.rl_option_false)
     }
 
     override fun prepareComponents() {

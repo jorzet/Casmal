@@ -42,15 +42,14 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.managers.FirebaseRequestManager
-import com.jorzet.casmal.managers.ServiceManager
 import com.jorzet.casmal.models.Account
-import com.jorzet.casmal.models.FlashCard
-import com.jorzet.casmal.models.Level
 import com.jorzet.casmal.models.User
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
-import com.jorzet.casmal.viewmodels.AccountsViewModel
+import com.jorzet.casmal.viewmodels.FlashCardsViewModel
+import com.jorzet.casmal.viewmodels.LevelsViewModel
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -70,7 +69,11 @@ class SplashActivity: BaseActivity() {
 
     private val permissions: ArrayList<String> = ArrayList()
 
-    private var viewModel: AccountsViewModel? = null
+    /**
+     * ViewModels
+     */
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var flashCardsViewModel: FlashCardsViewModel
 
     /**
      * Constants
@@ -92,20 +95,43 @@ class SplashActivity: BaseActivity() {
     }
 
     override fun prepareComponents() {
-        viewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        flashCardsViewModel = ViewModelProviders.of(this).get(FlashCardsViewModel::class.java)
+        val levelsViewModel = ViewModelProviders.of(this).get(LevelsViewModel::class.java)
 
-        viewModel?.loginFacebook?.observe(this, Observer {
-            if(it) {
-                facebookSignIn()
+        flashCardsViewModel.load()
+        levelsViewModel.load()
+
+        flashCardsViewModel.exception.observe(this, Observer {
+            if(it != null) {
+                Utils.print("Error getting flashCards: $it")
             }
         })
 
-        viewModel?.loginGoogle?.observe(this, Observer {
+        userViewModel.loginFacebook.observe(this, Observer {
             if(it) {
-                googleSignIn()
+                LoginManager.getInstance().logInWithReadPermissions(this, permissions)
             }
         })
 
+        userViewModel.loginGoogle.observe(this, Observer {
+            if(it) {
+                startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
+            }
+        })
+
+        prepareLogin()
+
+        ivFacebookLogin.setOnClickListener {
+            userViewModel.loginWithFacebook()
+        }
+
+        ivGoogleLogin.setOnClickListener {
+            userViewModel.loginWithGoogle()
+        }
+    }
+
+    private fun prepareLogin() {
         //Facebook Permissions
         permissions.add("email")
         permissions.add("public_profile")
@@ -137,14 +163,6 @@ class SplashActivity: BaseActivity() {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
-
-        ivFacebookLogin.setOnClickListener {
-            viewModel?.loginWithFacebook()
-        }
-
-        ivGoogleLogin.setOnClickListener {
-            viewModel?.loginWithGoogle()
-        }
     }
 
     /**
@@ -153,52 +171,14 @@ class SplashActivity: BaseActivity() {
     private fun goMainActivity(currentUser: FirebaseUser?) {
         val intent = Intent(this, MainActivity::class.java)
 
-        FirebaseRequestManager.getInstance(this).requestLevels(object: FirebaseRequestManager.OnGetLevelsListener {
-            override fun onGetLevelsSuccess(levels: List<Level>) {
-                ServiceManager.getInstance().levels = levels
-            }
-
-            override fun onGetLevelsFail(throwable: Throwable) {
-            }
-        })
-
-        FirebaseRequestManager.getInstance(this).requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
+        FirebaseRequestManager.getInstance().requestUser(currentUser!!.uid, object : FirebaseRequestManager.OnGetUserListener {
             override fun onGetUserLoaded(user: User?) {
                 if(user != null) {
-                    FirebaseRequestManager.getInstance(this@SplashActivity).requestFlashCards(object: FirebaseRequestManager.OnGetFlashCardListener {
-                        override fun onGetFlashCardSuccess(flashCard: FlashCard) {
+                    userViewModel.setUser(user)
 
-                        }
-
-                        override fun onGetFlashCardsSuccess(flashCards: List<FlashCard>) {
-
-                            val userFlashcards: ArrayList<FlashCard> = arrayListOf()
-
-                            for (userFlashCard in user.flashCards) {
-                                for (flashCard in flashCards) {
-                                    if (flashCard.id == userFlashCard) {
-                                        userFlashcards.add(flashCard)
-                                    }
-                                }
-                            }
-
-                            ServiceManager.getInstance().user = user
-                            ServiceManager.getInstance().userFlashCards = userFlashcards
-                            ServiceManager.getInstance().flashCards = flashCards
-                            startActivity(intent)
-                            finish()
-                        }
-
-                        override fun onFlashCardFail(throwable: Throwable) {
-                            ServiceManager.getInstance().user = user
-                            startActivity(intent)
-                            finish()
-                        }
-
-                    })
-
+                    startActivity(intent)
+                    finish()
                 } else {
-                    //TODO InsertNewEmptyModel
                     pushUser(currentUser)
                 }
             }
@@ -215,7 +195,7 @@ class SplashActivity: BaseActivity() {
         Utils.print("start PushUser: " + firebaseUser.uid)
         val intent = Intent(this, MainActivity::class.java)
 
-        FirebaseRequestManager.getInstance(this).insertUser(firebaseUser.uid, object : FirebaseRequestManager.OnInsertUserListener {
+        FirebaseRequestManager.getInstance().insertUser(firebaseUser.uid, object : FirebaseRequestManager.OnInsertUserListener {
             override fun onSuccessUserInserted() {
                 startActivity(intent)
                 finish()
@@ -223,7 +203,7 @@ class SplashActivity: BaseActivity() {
 
             override fun onErrorUserInserted(throwable: Throwable) {
                 Utils.print("Error 2: " + throwable.message)
-                //TODO Protocol to exception
+                //TODO Exception
                 finish()
             }
         })
@@ -296,7 +276,7 @@ class SplashActivity: BaseActivity() {
             user?.displayName.toString(),
             user?.email.toString(),
             user?.photoUrl.toString(), provider)
-        viewModel?.insert(account)
+        userViewModel.insert(account)
 
         updateUI(user)
     }
@@ -312,14 +292,7 @@ class SplashActivity: BaseActivity() {
         }, TIME_DELAY)
     }
 
-    private fun facebookSignIn() {
-        LoginManager.getInstance().logInWithReadPermissions(this, permissions)
-    }
-
-    private fun googleSignIn() {
-        startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
-    }
-
+    @Suppress("unused")
     private fun signOut() {
         // Firebase sign out
         auth.signOut()

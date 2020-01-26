@@ -19,6 +19,7 @@ package com.jorzet.casmal.models
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.jorzet.casmal.utils.Utils
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -38,4 +39,12 @@ data class Level(
     @SerializedName("points")
     @Expose
     var points: Int = 0
-): Parcelable
+): Parcelable {
+    override fun toString(): String {
+        Utils.print("flashcard: $flashcard")
+        Utils.print("id: $id")
+        Utils.print("points: $points")
+
+        return "Level content"
+    }
+}

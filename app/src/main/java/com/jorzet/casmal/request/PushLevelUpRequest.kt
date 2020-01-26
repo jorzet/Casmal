@@ -17,7 +17,7 @@
 package com.jorzet.casmal.request
 
 import com.google.firebase.auth.FirebaseAuth
-import com.jorzet.casmal.managers.ServiceManager
+import com.jorzet.casmal.models.User
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -25,8 +25,7 @@ import com.jorzet.casmal.managers.ServiceManager
  * @date 10/01/20.
  */
 
-class PushLevelUpRequest: AbstractUpdateDatabase<String, Boolean>() {
-
+class PushLevelUpRequest(private val user: User): AbstractUpdateDatabase<String, Boolean>() {
     companion object {
         const val USERS_REFERENCE = "users"
         const val FLASHCARDS_PARAM = "flashcards"
@@ -45,12 +44,9 @@ class PushLevelUpRequest: AbstractUpdateDatabase<String, Boolean>() {
     override fun getParams(): HashMap<String, Any>? {
         val userLevelParams = HashMap<String, Any>()
 
-        val user = ServiceManager.getInstance().user
-        if (user != null) {
-            userLevelParams[LEVEL_PARAM] = user.level
-            userLevelParams[POINTS_PARAM] = user.points
-            userLevelParams[FLASHCARDS_PARAM] = user.flashCards
-        }
+        userLevelParams[LEVEL_PARAM] = user.level
+        userLevelParams[POINTS_PARAM] = user.points
+        userLevelParams[FLASHCARDS_PARAM] = user.flashCards
 
         return userLevelParams
     }

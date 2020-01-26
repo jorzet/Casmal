@@ -13,7 +13,6 @@
 		android:columnWidth="80dp"
 		android:clipToPadding="false"
 		android:layout_margin="30dp"
-		android:numColumns="3">
-	</androidx.recyclerview.widget.RecyclerView>
+		android:numColumns="3" />
 
 </RelativeLayout>

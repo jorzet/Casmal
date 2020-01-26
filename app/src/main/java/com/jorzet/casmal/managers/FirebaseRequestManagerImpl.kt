@@ -16,7 +16,6 @@
 
 package com.jorzet.casmal.managers
 
-import android.content.Context
 import com.jorzet.casmal.models.*
 import com.jorzet.casmal.request.*
 
@@ -26,24 +25,23 @@ import com.jorzet.casmal.request.*
  * @date 087/08/19.
  */
 
-class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(context) {
+class FirebaseRequestManagerImpl: FirebaseRequestManager() {
     companion object {
         /**
-         * Manager static instance
+         * Manager static INSTANCE
          */
-        private var sInstance: FirebaseRequestManagerImp? = null
+        private var sInstance: FirebaseRequestManagerImpl? = null
 
         /**
-         * Creates a [FirebaseRequestManager] implementation instance
+         * Creates a [FirebaseRequestManager] implementation INSTANCE
          *
-         * @param context Base Activity or Fragment [Context]
-         * @return A [FirebaseRequestManager] instance
+         * @return A [FirebaseRequestManager] INSTANCE
          */
-        fun getInstance(context: Context): FirebaseRequestManager {
+        fun getInstance(): FirebaseRequestManager {
             if (sInstance == null) {
                 synchronized(FirebaseRequestManager::class.java) {
                     if (sInstance == null) {
-                        sInstance = FirebaseRequestManagerImp(context)
+                        sInstance = FirebaseRequestManagerImpl()
                     }
                 }
             }
@@ -74,7 +72,7 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     }
 
     override fun pushAverage(isExam: Boolean, average: Average, onPushAverageListener: OnPushAverageListener) {
-        val pushAverageRequest =  PushAverageRequets(isExam, average)
+        val pushAverageRequest =  PushAverageRequest(isExam, average)
 
         pushAverageRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Boolean> {
             override fun onSuccess(result: Boolean) {
@@ -94,8 +92,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestFlashCard(flashCardId: String, onGetFlashCardListener: OnGetFlashCardListener) {
         val flashCardRequest = FlashCardsRequest(flashCardId)
 
-        flashCardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
-            override fun onSuccess(result: List<FlashCard>) {
+        flashCardRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<MutableList<FlashCard>> {
+            override fun onSuccess(result: MutableList<FlashCard>) {
                 onGetFlashCardListener.onGetFlashCardSuccess(result[0])
             }
         })
@@ -112,8 +110,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestFlashCards(onGetFlashCardListener: OnGetFlashCardListener) {
         val flashCardsRequest = FlashCardsRequest()
 
-        flashCardsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<FlashCard>> {
-            override fun onSuccess(result: List<FlashCard>) {
+        flashCardsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<MutableList<FlashCard>> {
+            override fun onSuccess(result: MutableList<FlashCard>) {
                 onGetFlashCardListener.onGetFlashCardsSuccess(result)
             }
         })
@@ -130,8 +128,8 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
     override fun requestLevels(onGetLevelsListener: OnGetLevelsListener) {
         val levelsRequest = LevelsRequest()
 
-        levelsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<Level>> {
-            override fun onSuccess(result: List<Level>) {
+        levelsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<MutableList<Level>> {
+            override fun onSuccess(result: MutableList<Level>) {
                 onGetLevelsListener.onGetLevelsSuccess(result)
             }
         })
@@ -145,18 +143,18 @@ class FirebaseRequestManagerImp(context: Context): FirebaseRequestManager(contex
         levelsRequest.request()
     }
 
-    override fun updateUserLevel(onUpdateUserLevelListener: OnUpdateUserLevelListener) {
-        val pushLevelUpRequest = PushLevelUpRequest()
+    override fun updateUserLevel(user: User, listener: OnUpdateUserLevelListener) {
+        val pushLevelUpRequest = PushLevelUpRequest(user)
 
         pushLevelUpRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Boolean> {
             override fun onSuccess(result: Boolean) {
-                onUpdateUserLevelListener.onUpdateUserLevelSuccess()
+                listener.onUpdateUserLevelSuccess()
             }
         })
 
         pushLevelUpRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
-                onUpdateUserLevelListener.onUpdateUserLevelFail(throwable)
+                listener.onUpdateUserLevelFail(throwable)
             }
         })
 

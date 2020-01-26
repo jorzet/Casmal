@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.custom_module_item.view.*
  */
 
 class ModulesAdapter(modules: List<Module>): BaseAdapter() {
-
     /**
      * Model
      */
