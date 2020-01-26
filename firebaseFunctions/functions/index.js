@@ -19,15 +19,20 @@ exports.getFlashCards = functions.https.onRequest((req, res) => {
 
 exports.getUsers = functions.https.onRequest((req, res) => {
 	return admin.database().ref('users').once('value', (snapshot) => {
-		console.log(snapshot.val());
+
 		snapshot.forEach((userSnapshot) => {
+			var user = userSnapshot.val();
+			var answeredExams = user.answeredExams;
+
+			console.log("AnsweredExams: " + answeredExams);
+
 			// key will be "ada" the first time and "alan" the second time
-			var key = userSnapshot.key;
+			//var key = userSnapshot.key;
 			// childData will be the actual contents of the child
 			var childData = userSnapshot.val();
 			console.log(childData);
-
-			res.json(userSnapshot.val())
 		});
+
+		res.json(snapshot.val());
 	});
 });
