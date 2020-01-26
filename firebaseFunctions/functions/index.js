@@ -18,15 +18,16 @@ exports.getFlashCards = functions.https.onRequest((req, res) => {
 });
 
 exports.getUsers = functions.https.onRequest((req, res) => {
-	return admin.database().ref('users/').once('value', (users) => {
-		//res.json(users.val())
-		users.forEach(function(userSnapshot) {
-			var user = userSnapshot.val();
+	return admin.database().ref('users').once('value', (snapshot) => {
+		console.log(snapshot.val());
+		snapshot.forEach((userSnapshot) => {
+			// key will be "ada" the first time and "alan" the second time
+			var key = userSnapshot.key;
+			// childData will be the actual contents of the child
+			var childData = userSnapshot.val();
+			console.log(childData);
 
-			console.log('User: ' + user);
-
-			//var answeredExams = user.answeredExams.val();
-			//res.json(user.val())
+			res.json(userSnapshot.val())
 		});
 	});
 });
