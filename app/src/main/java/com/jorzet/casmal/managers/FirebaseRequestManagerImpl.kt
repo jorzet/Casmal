@@ -161,22 +161,22 @@ class FirebaseRequestManagerImpl: FirebaseRequestManager() {
         pushLevelUpRequest.update()
     }
 
-    override fun requestModules(onGetModulesListener: OnGetModulesListener) {
-        val modulesRequest = ModulesRequest()
+    override fun requestExams(onGetExamsListener: OnGetExamsListener) {
+        val examsRequest = ExamsRequest()
 
-        modulesRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<Module>> {
-            override fun onSuccess(result: List<Module>) {
-                onGetModulesListener.onGetModulesSuccess(result)
+        examsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<List<Exam>> {
+            override fun onSuccess(result: List<Exam>) {
+                onGetExamsListener.onGetExamsSuccess(result)
             }
         })
 
-        modulesRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+        examsRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
             override fun onFailed(throwable: Throwable) {
-                onGetModulesListener.onGetModulesFail(throwable)
+                onGetExamsListener.onGetExamsFail(throwable)
             }
         })
 
-        modulesRequest.request()
+        examsRequest.request()
     }
 
     override fun requestSubjects(onGetSubjectsListener: OnGetSubjectsListener) {

@@ -54,7 +54,7 @@ class PushAverageRequest(isExam: Boolean, average: Average): AbstractUpdateDatab
         if (user != null) {
             return USERS_REFERENCE + "/" + user.uid + "/" +
                     if (mIsExam) {
-                        ANSWERED_EXAMS_PARAM + "/"  + mAverage.moduleId.toLowerCase(Locale.getDefault())
+                        ANSWERED_EXAMS_PARAM + "/"  + mAverage.examId.toLowerCase(Locale.getDefault())
                     } else {
                         ANSWERED_QUESTIONS_PARAM + "/"  + mAverage.subjectType.name.toLowerCase(Locale.getDefault())
                     }

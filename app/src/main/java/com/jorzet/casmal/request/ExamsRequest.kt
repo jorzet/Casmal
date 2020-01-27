@@ -20,18 +20,18 @@ import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.gson.Gson
-import com.jorzet.casmal.models.Module
+import com.jorzet.casmal.models.Exam
 import org.json.JSONObject
 import java.util.*
 
-class ModulesRequest: AbstractRequestDatabase<String, List<Module>>() {
+class ExamsRequest: AbstractRequestDatabase<String, List<Exam>>() {
 
     companion object {
         /**
          * Constants
          */
-        private const val TAG: String = "ModulesRequest"
-        private const val MODULES_REFERENCE: String = "modules"
+        private const val TAG: String = "ExamsRequest"
+        private const val MODULES_REFERENCE: String = "exams"
     }
 
     override fun getReference(): String? {
@@ -39,26 +39,26 @@ class ModulesRequest: AbstractRequestDatabase<String, List<Module>>() {
     }
 
     override fun onGettingResponse(successResponse: DataSnapshot) {
-        Log.d(TAG,"modules request success")
+        Log.d(TAG,"exams request success")
         val post = successResponse.value
         if (post != null) {
-            val modulesMap = (post as HashMap<*, *>)
-            val mModules = ArrayList<Module>()
-            for (key in modulesMap.keys) {
-                val moduleMap = modulesMap[key] as HashMap<*, *>
+            val examsMap = (post as HashMap<*, *>)
+            val mExams = ArrayList<Exam>()
+            for (key in examsMap.keys) {
+                val examMap = examsMap[key] as HashMap<*, *>
                 try {
-                    val module = Gson().fromJson(JSONObject(moduleMap).toString(), Module::class.java)
+                    val exam = Gson().fromJson(JSONObject(examMap).toString(), Exam::class.java)
 
-                    // just save enabled module
-                    if (module.enabled) {
-                        mModules.add(module)
+                    // just save enabled exam
+                    if (exam.enabled) {
+                        mExams.add(exam)
                     }
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                 }
             }
 
-            onRequestListenerSuccess.onSuccess(mModules)
+            onRequestListenerSuccess.onSuccess(mExams)
         } else {
             onRequestListenerFailed.onFailed(Throwable())
         }

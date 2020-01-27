@@ -17,14 +17,7 @@ package com.jorzet.casmal.managers
 
 import android.util.Log
 import android.widget.Toast
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClient.BillingResponse
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetailsParams
-import com.android.billingclient.api.SkuDetailsResponseListener
+import com.android.billingclient.api.*
 import com.jorzet.casmal.ui.PaywayActivity
 
 /**
@@ -67,9 +60,9 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
         fun onBillingResponseItemNotOwned()
     }
 
-    override fun onPurchasesUpdated(responseCode: Int, purchases: List<Purchase?>?) {
-        Log.i(TAG, "onPurchasesUpdated() response: $responseCode")
-        when (responseCode) {
+    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase?>?) {
+        Log.i(TAG, "onPurchasesUpdated() response: ${billingResult.responseCode}")
+        when (billingResult.responseCode) {
             BILLING_RESPONSE_RESULT_OK -> {
                 mActivity.onBillingResponseOk()
             }
@@ -112,14 +105,14 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
             executeOnSuccess?.run()
         } else {
             mBillingClient.startConnection(object : BillingClientStateListener {
-                override fun onBillingSetupFinished(@BillingResponse billingResponse: Int) {
-                    if (billingResponse == BillingResponse.OK) {
-                        Log.i(TAG, "onBillingSetupFinished() response: $billingResponse")
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                        Log.i(TAG, "onBillingSetupFinished() response: ${billingResult.responseCode}")
                         executeOnSuccess?.run()
                     } else {
                         Toast.makeText(mActivity,
                             "Failed to connect GooglePlay", Toast.LENGTH_SHORT).show()
-                        Log.w(TAG, "onBillingSetupFinished() error code: $billingResponse")
+                        Log.w(TAG, "onBillingSetupFinished() error code: ${billingResult.responseCode}")
                     }
                 }
 
@@ -145,12 +138,11 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
         startServiceConnectionIfNeeded(executeOnConnectedService)
     }
 
-    fun startPurchaseFlow(skuId: String?, billingType: String?) {
+    fun startPurchaseFlow(skuDetails: SkuDetails) {
         // Specify a runnable to start when connection to Billing client is established
         val executeOnConnectedService = Runnable {
             val billingFlowParams: BillingFlowParams = BillingFlowParams.newBuilder()
-                .setType(billingType)
-                .setSku(skuId)
+                .setSkuDetails(skuDetails)
                 .build()
             mBillingClient.launchBillingFlow(mActivity, billingFlowParams)
         }

@@ -61,11 +61,11 @@ abstract class BaseFragment: Fragment() {
     /**
      * This method creates an intent to start [QuestionActivity]
      */
-    fun goQuestionActivity(questions: List<String>, isExam: Boolean, moduleId: String?) {
+    fun goQuestionActivity(questions: List<String>, isExam: Boolean, examId: String?) {
         val intent = Intent(activity, QuestionActivity::class.java)
         intent.putStringArrayListExtra(QuestionActivity.QUESTION_LIST, questions as ArrayList<String>)
         intent.putExtra(QuestionActivity.IS_EXAM, isExam)
-        if (moduleId != null) intent.putExtra(QuestionActivity.MODULE_ID, moduleId)
+        if (examId != null) intent.putExtra(QuestionActivity.EXAM_ID, examId)
         startActivity(intent)
     }
 }

@@ -23,8 +23,9 @@ import android.widget.BaseAdapter
 import androidx.core.content.ContextCompat
 import com.jorzet.casmal.R
 import com.jorzet.casmal.models.DifficultyType
-import com.jorzet.casmal.models.Module
-import kotlinx.android.synthetic.main.custom_module_item.view.*
+import com.jorzet.casmal.models.Exam
+
+import kotlinx.android.synthetic.main.custom_exam_item.view.*
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -32,19 +33,19 @@ import kotlinx.android.synthetic.main.custom_module_item.view.*
  * @date 20/08/19.
  */
 
-class ModulesAdapter(modules: List<Module>): BaseAdapter() {
+class ExamsAdapter(exams: List<Exam>): BaseAdapter() {
     /**
      * Model
      */
-    private val mModules = modules
+    private val mExams = exams
 
     /**
      * Attributes
      */
-    lateinit var mModuleClickListener: OnModuleClickListener
+    lateinit var mExamClickListener: OnExamClickListener
 
-    interface OnModuleClickListener {
-        fun onModuleClick(module: Module)
+    interface OnExamClickListener {
+        fun onExamClick(exam: Exam)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -52,14 +53,14 @@ class ModulesAdapter(modules: List<Module>): BaseAdapter() {
 
         view = if (convertView == null) {
             val layoutInflater = LayoutInflater.from(parent?.context)
-            layoutInflater.inflate(R.layout.custom_module_item, parent, false)
+            layoutInflater.inflate(R.layout.custom_exam_item, parent, false)
         } else {
             convertView
         }
 
         val module = getItem(position)
 
-        view.iv_module_image.background = ContextCompat.getDrawable(parent?.context!!, R.drawable.ic_exam)
+        view.iv_exam_image.background = ContextCompat.getDrawable(parent?.context!!, R.drawable.ic_exam)
 
         when(module.difficulty) {
             DifficultyType.EASY ->
@@ -70,19 +71,19 @@ class ModulesAdapter(modules: List<Module>): BaseAdapter() {
                 view.iv_difficulty.background = ContextCompat.getDrawable(parent.context!!, R.drawable.ic_hard)
         }
 
-        view.tv_module.text = module.moduleName
+        view.tv_exam.text = module.examName
 
         view.setOnClickListener {
-            if (::mModuleClickListener.isInitialized) {
-                mModuleClickListener.onModuleClick(module)
+            if (::mExamClickListener.isInitialized) {
+                mExamClickListener.onExamClick(module)
             }
         }
 
         return view
     }
 
-    override fun getItem(position: Int): Module {
-        return mModules[position]
+    override fun getItem(position: Int): Exam {
+        return mExams[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -90,6 +91,6 @@ class ModulesAdapter(modules: List<Module>): BaseAdapter() {
     }
 
     override fun getCount(): Int {
-        return mModules.size
+        return mExams.size
     }
 }
