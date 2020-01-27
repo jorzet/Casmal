@@ -61,6 +61,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme2"/>
 
+        <activity
+            android:name=".ui.PaymentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2"/>
+
     </application>
 
 </manifest>
