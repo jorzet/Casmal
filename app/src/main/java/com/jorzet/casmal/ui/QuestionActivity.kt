@@ -52,7 +52,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     companion object {
         const val QUESTION_LIST: String = "question_list"
         const val IS_EXAM: String = "is_exam"
-        const val MODULE_ID: String = "module_id"
+        const val EXAM_ID: String = "exam_id"
         const val TAG_FRAGMENT_QUESTIONS: String = "questions_list_fragment"
     }
 
@@ -80,7 +80,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     private var mCorrectQuestionIndex = 0
     private var mCurrentQuestionProgress = 0
     private var mIsExam: Boolean = false
-    private var mModuleId: String = ""
+    private var mExamId: String = ""
 
     /**
      * Fragment
@@ -120,7 +120,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
 
         mQuestions = intent.extras!!.getStringArrayList(QUESTION_LIST)
         mIsExam = intent.extras!!.getBoolean(IS_EXAM)
-        mModuleId = intent.extras!!.getString(MODULE_ID, "")
+        mExamId = intent.extras!!.getString(EXAM_ID, "")
 
         if (mQuestions != null) {
             for (question in mQuestions!!) {
@@ -217,7 +217,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                         onButtonsEnable()
 
                         if (mIsExam) {
-                            mAverage.moduleId = mModuleId
+                            mAverage.examId = mExamId
                         } else {
                             mAverage.subjectType = question.subject
                         }

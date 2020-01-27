@@ -39,5 +39,5 @@ data class Average(
     @Expose
     var incorrect: Int = 0,
     var subjectType: SubjectType = SubjectType.NONE,
-    var moduleId: String = ""
+    var examId: String = ""
 )

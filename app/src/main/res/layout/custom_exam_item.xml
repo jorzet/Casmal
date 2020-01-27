@@ -7,7 +7,7 @@
 	style="@style/RippleEffect">
 
 	<androidx.appcompat.widget.AppCompatImageView
-		android:id="@+id/iv_module_image"
+		android:id="@+id/iv_exam_image"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_vertical"/>
@@ -19,7 +19,7 @@
 		android:visibility="gone"/>
 
 	<androidx.appcompat.widget.AppCompatTextView
-		android:id="@+id/tv_module"
+		android:id="@+id/tv_exam"
 		android:layout_width="0dp"
 		android:layout_height="match_parent"
 		android:layout_weight="1"

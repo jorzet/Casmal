@@ -19,10 +19,10 @@ package com.jorzet.casmal.fragments
 import android.util.Log
 import android.widget.ListView
 import com.jorzet.casmal.R
-import com.jorzet.casmal.adapters.ModulesAdapter
+import com.jorzet.casmal.adapters.ExamsAdapter
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
-import com.jorzet.casmal.models.Module
+import com.jorzet.casmal.models.Exam
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -40,7 +40,7 @@ class ModulesFragment: BaseFragment() {
     /**
      * Adapter
      */
-    private lateinit var mModulesAdapter: ModulesAdapter
+    private lateinit var mExamsAdapter: ExamsAdapter
 
     override fun getLayoutId(): Int {
         return R.layout.modules_fragment
@@ -51,21 +51,21 @@ class ModulesFragment: BaseFragment() {
     }
 
     override fun prepareComponents() {
-        FirebaseRequestManager.getInstance().requestModules(object: FirebaseRequestManager.OnGetModulesListener {
-            override fun onGetModulesSuccess(modules: List<Module>) {
+        FirebaseRequestManager.getInstance().requestExams(object: FirebaseRequestManager.OnGetExamsListener {
+            override fun onGetExamsSuccess(exams: List<Exam>) {
                 Log.d("","")
 
-                mModulesAdapter = ModulesAdapter(modules)
-                mModulesAdapter.mModuleClickListener = object: ModulesAdapter.OnModuleClickListener {
-                    override fun onModuleClick(module: Module) {
-                        goQuestionActivity(module.questions, true, module.moduleId)
+                mExamsAdapter = ExamsAdapter(exams)
+                mExamsAdapter.mExamClickListener = object: ExamsAdapter.OnExamClickListener {
+                    override fun onExamClick(exam: Exam) {
+                        goQuestionActivity(exam.questions, true, exam.examId)
                     }
                 }
 
-                mModulesListView.adapter = mModulesAdapter
+                mModulesListView.adapter = mExamsAdapter
             }
 
-            override fun onGetModulesFail(throwable: Throwable) {
+            override fun onGetExamsFail(throwable: Throwable) {
                 Log.d("","")
             }
         })

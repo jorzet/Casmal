@@ -36,6 +36,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
     companion object {
         const val TAG = "PaywayActivity"
         const val PRODUCT_ID = "casmal_monthly"
+        const val SKU_TYPE =  BillingClient.SkuType.SUBS
     }
 
     /**
@@ -48,6 +49,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
      * Payment
      */
     private lateinit var mBillingManager: BillingManager
+    private lateinit var mSkuDetails: SkuDetails
 
     override fun getLayoutId(): Int {
         return R.layout.activity_payway
@@ -86,7 +88,9 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
     }
 
     private val mGooglePayClickListener = View.OnClickListener {
-        mBillingManager.startPurchaseFlow(PRODUCT_ID, BillingClient.SkuType.INAPP)
+        if (::mSkuDetails.isInitialized) {
+            mBillingManager.startPurchaseFlow(mSkuDetails)
+        }
     }
 
     private val mCashClickListener = View.OnClickListener {
@@ -133,17 +137,24 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
         val mBillingClient = BillingClient.newBuilder(this).setListener(this).build()
 
         mBillingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResponse: Int) {
-                if (billingResponse == BillingClient.BillingResponse.OK) {
-                    Log.i(TAG, "onBillingSetupFinished() response: $billingResponse")
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    Log.i(TAG, "onBillingSetupFinished() response: ${billingResult.debugMessage}")
 
-                    val skuList = listOf("casmal")
-                    mBillingManager.querySkuDetailsAsync(BillingClient.SkuType.INAPP, skuList,
+                    val skuList = listOf(PRODUCT_ID)
+                    mBillingManager.querySkuDetailsAsync(SKU_TYPE, skuList,
                         SkuDetailsResponseListener {
                                 responseCode, skuDetailsList ->
-                            Log.i(TAG, "response code: $responseCode ${skuDetailsList?.size}") })
+                            Log.i(TAG, "response code: $responseCode ${skuDetailsList?.size}")
+
+                            for (skuDetail in skuDetailsList) {
+                                if (skuDetail.sku == PRODUCT_ID) {
+                                    mSkuDetails = skuDetail
+                                }
+                            }
+                        })
                 } else {
-                    Log.w(TAG, "onBillingSetupFinished() error code: $billingResponse")
+                    Log.w(TAG, "onBillingSetupFinished() error code: ${billingResult.responseCode}")
                 }
             }
 
@@ -153,7 +164,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
         })
     }
 
-    override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
-        Log.d(TAG, "responseCode: $responseCode")
+    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
+        Log.d(TAG, "responseCode: ${billingResult.responseCode}")
     }
 }

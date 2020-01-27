@@ -35,16 +35,16 @@ abstract class FirebaseRequestManager {
         }
     }
 
-    interface OnGetModulesListener {
+    interface OnGetExamsListener {
         /**
          *
          */
-        fun onGetModulesSuccess(modules: List<Module>)
+        fun onGetExamsSuccess(exams: List<Exam>)
 
         /**
          *
          */
-        fun onGetModulesFail(throwable: Throwable)
+        fun onGetExamsFail(throwable: Throwable)
     }
 
     interface OnGetSubjectsListener {
@@ -149,7 +149,7 @@ abstract class FirebaseRequestManager {
     /**
      *
      */
-    abstract fun requestModules(onGetModulesListener: OnGetModulesListener)
+    abstract fun requestExams(onGetExamsListener: OnGetExamsListener)
 
     /**
      *
