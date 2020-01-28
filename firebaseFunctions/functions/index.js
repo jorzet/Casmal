@@ -323,13 +323,21 @@ app.get('/userId/:userId', (req, res) => {
 			'average' : average2
 		}
 
-		let exams = {
-			'e1' : result1,
+		var exams1 = {
+			'e1' : result1
+		};
+
+		var exams2 = {
 			'e2' : result2
-		}
+		};
+
+		var array = [];
+
+		array.push(exams1);
+		array.push(exams2);
 
 		let score = {
-			'score' : exams,
+			'score' : array,
 		}
 
 		res.json(score);

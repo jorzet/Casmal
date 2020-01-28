@@ -22,7 +22,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
@@ -45,7 +45,6 @@ import com.jorzet.casmal.viewmodels.UserViewModel
  */
 
 class ProfileFragment: BaseFragment() {
-    private lateinit var viewModel: UserViewModel
     private lateinit var tvUserName: TextView
     private lateinit var tvUserEmail: TextView
     private lateinit var ivPhoto: ImageView
@@ -58,11 +57,15 @@ class ProfileFragment: BaseFragment() {
 
     private lateinit var adapter: FlashCardAdapter
 
+    private lateinit var viewModel: UserViewModel
+
     override fun getLayoutId(): Int {
         return R.layout.profile_fragment
     }
 
     override fun initView() {
+        viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
         tvUserName = rootView.findViewById(R.id.tvUserName)
         tvUserEmail = rootView.findViewById(R.id.tvUserEmail)
         ivPhoto = rootView.findViewById(R.id.ivPhoto)
@@ -75,8 +78,6 @@ class ProfileFragment: BaseFragment() {
     }
 
     override fun prepareComponents() {
-        viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-
         adapter = FlashCardAdapter(object : ItemListener<FlashCard> {
             override fun onItemSelected(model: FlashCard) {
                 Utils.print("ItemId: ${model.id}")
