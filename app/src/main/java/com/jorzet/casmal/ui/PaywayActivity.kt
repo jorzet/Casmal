@@ -19,10 +19,18 @@ package com.jorzet.casmal.ui
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.ViewModelProviders
 import com.android.billingclient.api.*
+import com.bumptech.glide.RequestManager
+import com.google.firebase.auth.FirebaseAuth
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.managers.BillingManager
+import com.jorzet.casmal.managers.BillingManager.OnBillingPurchasesListener
+import com.jorzet.casmal.managers.FirebaseRequestManager
+import com.jorzet.casmal.models.Payment
+import com.jorzet.casmal.models.User
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -50,6 +58,12 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
      */
     private lateinit var mBillingManager: BillingManager
     private lateinit var mSkuDetails: SkuDetails
+
+    /**
+     * View Model
+     */
+    private lateinit var userViewModel: UserViewModel
+
 
     override fun getLayoutId(): Int {
         return R.layout.activity_payway
@@ -79,7 +93,8 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
         mCashView.setOnClickListener(mCashClickListener)
 
         mBillingManager = BillingManager(this)
-        createBillingClient()
+
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
     }
 
     override fun onDestroy() {
@@ -97,74 +112,120 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
 
     }
 
-    override fun onBillingResponseOk() {
+    override fun onBillingServiceReady() {
+        val skuList = listOf(PRODUCT_ID)
+        mBillingManager.querySkuDetailsAsync(SKU_TYPE, skuList,
+            SkuDetailsResponseListener {
+                    responseCode, skuDetailsList ->
+                Log.i(TAG, "response code: $responseCode ${skuDetailsList?.size}")
 
+                for (skuDetail in skuDetailsList) {
+                    if (skuDetail.sku == PRODUCT_ID) {
+                        mSkuDetails = skuDetail
+                    }
+                }
+            })
+
+        /*mBillingManager.queryPurchases(SKU_TYPE, object: OnBillingPurchasesListener  {
+
+            override fun onBillingResponseItemAlreadyOwned(purchase: Purchase) {
+                Log.d("","")
+            }
+
+            override fun onBillingResponseItemNotOwned() {
+                Log.d("","")
+            }
+
+        })*/
     }
 
-    override fun onBillingResponseUserCanceled() {
-
+    override fun onBillingServiceError() {
+        Log.d(TAG, "onBillingServiceError()")
     }
 
-    override fun onBillingResponseServiceUnavailable() {
-
+    override fun onBillingServiceDisconnected() {
+        Log.d(TAG, "onBillingServiceDisconnected()")
     }
 
-    override fun onBillingResponseBillingUnavailable() {
+    override fun onBillingResponseOk(purchases: List<Purchase?>?) {
+        if (purchases != null) {
+            Log.d(TAG, "onBillingResponseOk: purchases ${purchases.size}")
 
-    }
+            var purchase: Purchase? = null
 
-    override fun onBillingResponseItemUnavailable() {
-
-    }
-
-    override fun onBillingResponseDeveloperError() {
-
-    }
-
-    override fun onBillingResponseError() {
-
-    }
-
-    override fun onBillingResponseItemAlreadyOwned() {
-
-    }
-
-    override fun onBillingResponseItemNotOwned() {
-
-    }
-
-    private fun createBillingClient() {
-        val mBillingClient = BillingClient.newBuilder(this).setListener(this).build()
-
-        mBillingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    Log.i(TAG, "onBillingSetupFinished() response: ${billingResult.debugMessage}")
-
-                    val skuList = listOf(PRODUCT_ID)
-                    mBillingManager.querySkuDetailsAsync(SKU_TYPE, skuList,
-                        SkuDetailsResponseListener {
-                                responseCode, skuDetailsList ->
-                            Log.i(TAG, "response code: $responseCode ${skuDetailsList?.size}")
-
-                            for (skuDetail in skuDetailsList) {
-                                if (skuDetail.sku == PRODUCT_ID) {
-                                    mSkuDetails = skuDetail
-                                }
-                            }
-                        })
-                } else {
-                    Log.w(TAG, "onBillingSetupFinished() error code: ${billingResult.responseCode}")
+            for (purch in purchases) {
+                if (purch?.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                    purchase = purch
+                    break;
                 }
             }
 
-            override fun onBillingServiceDisconnected() {
-                Log.w(TAG, "onBillingServiceDisconnected()")
+            if (purchase != null) {
+                val user: User = userViewModel.getUser().value ?: return
+                val payment: Payment = user.payment
+                payment.isPremium = true
+                payment.timeStamp = purchase.purchaseTime
+                payment.subscription = purchase.sku
+                user.payment = payment
+                userViewModel.setUser(user)
+
+                val uid = FirebaseAuth.getInstance().currentUser?.uid
+                if (uid != null) {
+                    FirebaseRequestManager.getInstance()
+                        .insertUser(uid, object : FirebaseRequestManager.OnInsertUserListener {
+                            override fun onSuccessUserInserted() {
+                                Log.d(TAG, "user push success after subscription")
+                            }
+
+                            override fun onErrorUserInserted(throwable: Throwable) {
+                                Log.d(TAG, "user push fail after subscription")
+                            }
+
+                        })
+                }
+
+                goBackActivity()
             }
-        })
+        }
+    }
+
+    override fun onBillingResponseUserCanceled() {
+        Log.d(TAG, "onBillingResponseUserCanceled()")
+    }
+
+    override fun onBillingResponseServiceUnavailable() {
+        Log.d(TAG, "onBillingResponseServiceUnavailable()")
+    }
+
+    override fun onBillingResponseBillingUnavailable() {
+        Log.d(TAG, "onBillingResponseBillingUnavailable()")
+    }
+
+    override fun onBillingResponseItemUnavailable() {
+        Log.d(TAG, "onBillingResponseItemUnavailable()")
+    }
+
+    override fun onBillingResponseDeveloperError() {
+        Log.d(TAG, "onBillingResponseDeveloperError()")
+    }
+
+    override fun onBillingResponseError() {
+        Log.d(TAG, "onBillingResponseError()")
+    }
+
+    override fun onBillingResponseItemAlreadyOwned() {
+        Log.d(TAG, "onBillingResponseItemAlreadyOwned()")
+    }
+
+    override fun onBillingResponseItemNotOwned() {
+        Log.d(TAG, "onBillingResponseItemNotOwned()")
     }
 
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
         Log.d(TAG, "responseCode: ${billingResult.responseCode}")
+    }
+
+    fun goBackActivity() {
+        onBackPressed()
     }
 }

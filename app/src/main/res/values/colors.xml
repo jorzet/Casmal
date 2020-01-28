@@ -12,6 +12,7 @@
     <color name="blue">#1A83B8</color>
     <color name="black">#000000</color>
     <color name="blue_soft">#868E9F</color>
+    <color name="gray_soft">#696969</color>
 
     <color name="progress_color">#B0DC3A</color>
     <color name="bottom_bar_background_color">#E6E6E6</color>

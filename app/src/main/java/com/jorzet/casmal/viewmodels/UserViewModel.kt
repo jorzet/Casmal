@@ -20,6 +20,7 @@ import android.app.Application
 import androidx.annotation.NonNull
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.android.billingclient.api.Purchase
 import com.jorzet.casmal.models.Account
 import com.jorzet.casmal.models.FlashCard
 import com.jorzet.casmal.models.User
@@ -38,6 +39,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: UserRepository = UserRepository.instance
     private val mAccount: LiveData<Account>
     private val mUser: LiveData<User>
+    private val mPurchase: LiveData<Purchase>
     private val mFlashCards: LiveData<MutableList<FlashCard>>
     private val loginWithFacebook: LiveData<Boolean>
     private val loginWithGoogle: LiveData<Boolean>
@@ -45,6 +47,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     init {
         mAccount = repository.getAccount(accountDao)
         mUser = repository.getUser()
+        mPurchase = repository.getPurchase()
         mFlashCards = repository.getFlashCards()
         loginWithFacebook = repository.getLoginWithFacebook()
         loginWithGoogle = repository.getLoginWithGoogle()

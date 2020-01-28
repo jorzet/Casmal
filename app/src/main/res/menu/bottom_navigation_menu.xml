@@ -4,7 +4,7 @@
         android:id="@+id/action_modules"
         android:enabled="true"
         android:icon="@drawable/ic_modules"
-        android:title="@string/bottom_navigation_menu_modules_text"/>
+        android:title="@string/bottom_navigation_menu_exams_text"/>
 
     <item
         android:id="@+id/action_subjects"

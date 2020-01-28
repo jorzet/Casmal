@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Casmal</string>
 
-    <string name="bottom_navigation_menu_modules_text">Módulos</string>
+    <string name="bottom_navigation_menu_exams_text">Examenes</string>
     <string name="bottom_navigation_menu_subject_text">Materias</string>
     <string name="bottom_navigation_menu_scores_text">Scores</string>
     <string name="bottom_navigation_menu_profile_text">Perfil</string>
