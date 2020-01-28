@@ -31,43 +31,58 @@ import com.jorzet.casmal.base.BaseFragment
  */
 
 class ScoresFragment: BaseFragment() {
-    private lateinit var barChart: BarChart
+    private lateinit var barChart1: BarChart
+    private lateinit var barChart2: BarChart
 
     override fun getLayoutId(): Int {
         return R.layout.scores_fragment
     }
 
     override fun initView() {
-        barChart = rootView.findViewById(R.id.barChart)
+        barChart1 = rootView.findViewById(R.id.barChart1)
+        barChart2 = rootView.findViewById(R.id.barChart2)
     }
 
     override fun prepareComponents() {
         val entries: MutableList<BarEntry> = ArrayList()
 
-        entries.add(BarEntry(0.0f, 2.0f))
-        entries.add(BarEntry(1.0f, 4.0f))
-        entries.add(BarEntry(2.0f, 6.0f))
-        entries.add(BarEntry(3.0f, 8.0f))
-        entries.add(BarEntry(4.0f, 3.0f))
-        entries.add(BarEntry(5.0f, 1.0f))
+        entries.add(BarEntry(0.0f, 2.0f)) //User
+        entries.add(BarEntry(1.0f, 4.0f)) //Average
+        entries.add(BarEntry(2.0f, 6.0f)) //Maxium
 
-        val barDataSet = BarDataSet(entries, "Grafica de barras")
-        val barData = BarData(barDataSet)
+        val barDataSet1 = BarDataSet(entries, "Examen 1")
+        val barData1 = BarData(barDataSet1)
 
-        barDataSet.setColors(
+        val barDataSet2 = BarDataSet(entries, "Examen 2")
+        val barData2 = BarData(barDataSet2)
+
+        barDataSet1.setColors(
             Color.rgb(193, 37, 82),
             Color.rgb(255, 102, 0),
-            Color.rgb(245, 199, 0),
-            Color.rgb(106, 150, 31),
-            Color.rgb(179, 100, 53)
+            Color.rgb(245, 199, 0)
         )
 
-        barData.barWidth = 0.9f
-        barChart.data = barData
-        barChart.setFitBars(false)
-        barChart.setDrawBarShadow(false)
-        barChart.setDrawValueAboveBar(false)
-        barChart.setScaleEnabled(false)
-        barChart.invalidate()
+        barDataSet2.setColors(
+            Color.rgb(193, 37, 82),
+            Color.rgb(255, 102, 0),
+            Color.rgb(245, 199, 0)
+        )
+
+        barData1.barWidth = 1.0f
+        barData2.barWidth = 1.0f
+
+        barChart1.data = barData1
+        barChart1.setFitBars(false)
+        barChart1.setDrawBarShadow(false)
+        barChart1.setDrawValueAboveBar(false)
+        barChart1.setScaleEnabled(false)
+        barChart1.invalidate()
+
+        barChart2.data = barData2
+        barChart2.setFitBars(false)
+        barChart2.setDrawBarShadow(false)
+        barChart2.setDrawValueAboveBar(false)
+        barChart2.setScaleEnabled(false)
+        barChart2.invalidate()
     }
 }
