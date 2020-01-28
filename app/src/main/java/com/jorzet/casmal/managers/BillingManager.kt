@@ -27,8 +27,9 @@ import com.jorzet.casmal.ui.PaywayActivity
  */
 class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
 
-    private val mBillingClient: BillingClient =
-        BillingClient.newBuilder(activity).setListener(this).build()
+    private var mBillingClient: BillingClient = BillingClient.newBuilder(activity)
+        .enablePendingPurchases().setListener(this).build()
+
     private val mActivity: PaywayActivity = activity
 
     companion object {
@@ -49,7 +50,10 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
     }
 
     interface OnBillingResponseListener {
-        fun onBillingResponseOk()
+        fun onBillingServiceReady()
+        fun onBillingServiceError()
+        fun onBillingServiceDisconnected()
+        fun onBillingResponseOk(purchases: List<Purchase?>?)
         fun onBillingResponseUserCanceled()
         fun onBillingResponseServiceUnavailable()
         fun onBillingResponseBillingUnavailable()
@@ -60,11 +64,16 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
         fun onBillingResponseItemNotOwned()
     }
 
+    interface OnBillingPurchasesListener {
+        fun onBillingResponseItemAlreadyOwned(purchase: Purchase)
+        fun onBillingResponseItemNotOwned()
+    }
+
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase?>?) {
         Log.i(TAG, "onPurchasesUpdated() response: ${billingResult.responseCode}")
         when (billingResult.responseCode) {
             BILLING_RESPONSE_RESULT_OK -> {
-                mActivity.onBillingResponseOk()
+                mActivity.onBillingResponseOk(purchases)
             }
             BILLING_RESPONSE_RESULT_USER_CANCELED -> {
                 mActivity.onBillingResponseUserCanceled()
@@ -109,30 +118,48 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
                     if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                         Log.i(TAG, "onBillingSetupFinished() response: ${billingResult.responseCode}")
                         executeOnSuccess?.run()
+                        mActivity.onBillingServiceReady()
                     } else {
                         Toast.makeText(mActivity,
                             "Failed to connect GooglePlay", Toast.LENGTH_SHORT).show()
                         Log.w(TAG, "onBillingSetupFinished() error code: ${billingResult.responseCode}")
+                        mActivity.onBillingServiceError()
                     }
                 }
 
                 override fun onBillingServiceDisconnected() {
                     Log.w(TAG, "onBillingServiceDisconnected()")
+                    mActivity.onBillingServiceDisconnected()
                 }
             })
         }
     }
 
-    fun querySkuDetailsAsync(
-        @BillingClient.SkuType itemType: String?,
-        skuList: List<String?>?, listener: SkuDetailsResponseListener
-    ) { // Specify a runnable to start when connection to Billing client is established
+    fun querySkuDetailsAsync(@BillingClient.SkuType itemType: String?, skuList: List<String?>?,
+                             listener: SkuDetailsResponseListener) {
+        // Specify a runnable to start when connection to Billing client is established
         val executeOnConnectedService = Runnable {
             val skuDetailsParams: SkuDetailsParams = SkuDetailsParams.newBuilder()
                 .setSkusList(skuList).setType(itemType).build()
             mBillingClient.querySkuDetailsAsync(skuDetailsParams) {
                     responseCode, skuDetailsList ->
                 listener.onSkuDetailsResponse(responseCode, skuDetailsList) }
+        }
+        // If Billing client was disconnected, we retry 1 time and if success, execute the query
+        startServiceConnectionIfNeeded(executeOnConnectedService)
+    }
+
+    fun queryPurchases(itemType: String?, onBillingPurchasesListener: OnBillingPurchasesListener) {
+        val executeOnConnectedService = Runnable {
+            val purchaseResult = mBillingClient.queryPurchases(itemType)
+            val purchaseList = purchaseResult.purchasesList
+            if (purchaseResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                for (purchase in purchaseList) {
+                    if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                        onBillingPurchasesListener.onBillingResponseItemAlreadyOwned(purchase)
+                    }
+                }
+            }
         }
         // If Billing client was disconnected, we retry 1 time and if success, execute the query
         startServiceConnectionIfNeeded(executeOnConnectedService)

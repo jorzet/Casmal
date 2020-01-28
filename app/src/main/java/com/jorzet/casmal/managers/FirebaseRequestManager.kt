@@ -174,6 +174,11 @@ abstract class FirebaseRequestManager {
     /**
      *
      */
+    abstract fun insertUser(uid: String, user: User, onGetUserListener: OnInsertUserListener)
+
+    /**
+     *
+     */
     abstract fun pushAverage(isExam: Boolean, average: Average, onPushAverageListener: OnPushAverageListener)
 
     /**

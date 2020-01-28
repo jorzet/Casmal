@@ -232,4 +232,22 @@ class FirebaseRequestManagerImpl: FirebaseRequestManager() {
 
         insertUserRequest.update()
     }
+
+    override fun insertUser(uid: String, user: User, onGetUserListener: OnInsertUserListener) {
+        val insertUserRequest = PushUserRequest(uid, user)
+
+        insertUserRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<Boolean> {
+            override fun onSuccess(result: Boolean) {
+                onGetUserListener.onSuccessUserInserted()
+            }
+        })
+
+        insertUserRequest.setOnRequestFailed(object : AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onGetUserListener.onErrorUserInserted(throwable)
+            }
+        })
+
+        insertUserRequest.update()
+    }
 }

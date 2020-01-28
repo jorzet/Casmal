@@ -19,6 +19,7 @@ package com.jorzet.casmal.repositories
 import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.android.billingclient.api.Purchase
 import com.jorzet.casmal.AppExecutors
 import com.jorzet.casmal.models.Account
 import com.jorzet.casmal.models.FlashCard
@@ -36,6 +37,7 @@ class UserRepository {
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
     private val user: MutableLiveData<User> = MutableLiveData()
+    private val purchase: MutableLiveData<Purchase> = MutableLiveData()
     private val flashCards: MutableLiveData<MutableList<FlashCard>> = MutableLiveData()
     private val loginFacebook: MutableLiveData<Boolean> = MutableLiveData()
     private val loginGoogle: MutableLiveData<Boolean> = MutableLiveData()
@@ -61,6 +63,9 @@ class UserRepository {
 
     @NonNull
     fun getUser() : LiveData<User> = user
+
+    @NonNull
+    fun getPurchase(): LiveData<Purchase> = purchase
 
     fun insert(accountDao: AccountDao, account: Account) {
         AppExecutors.get().diskIO().execute {
@@ -95,6 +100,10 @@ class UserRepository {
 
     fun setUser(user: User) {
         this.user.value = user
+    }
+
+    fun setPurchase(purchase: Purchase) {
+        this.purchase.value = purchase
     }
 
     fun updateFlashCards() {

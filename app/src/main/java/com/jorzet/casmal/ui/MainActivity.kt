@@ -20,11 +20,13 @@ import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import androidx.viewpager.widget.ViewPager
+import com.android.billingclient.api.Purchase
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.ViewPagerAdapter
 import com.jorzet.casmal.base.BaseActivity
+import com.jorzet.casmal.managers.BillingManager
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -32,7 +34,8 @@ import com.jorzet.casmal.base.BaseActivity
  * @date 12/08/19.
  */
 
-class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
+class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
+    ViewPager.OnPageChangeListener, BillingManager.OnBillingPurchasesListener {
 
     /**
      * UI accessors
@@ -118,6 +121,14 @@ class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelecte
     }
 
     override fun onPageSelected(position: Int) {
+
+    }
+
+    override fun onBillingResponseItemAlreadyOwned(purchase: Purchase) {
+
+    }
+
+    override fun onBillingResponseItemNotOwned() {
 
     }
 }

@@ -32,7 +32,6 @@ import com.jorzet.casmal.dialogs.FullScreeImageDialog
 import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.ImageManager
 import com.jorzet.casmal.models.FlashCard
-import com.jorzet.casmal.ui.PaymentActivity
 import com.jorzet.casmal.ui.PaywayActivity
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
@@ -148,7 +147,7 @@ class ProfileFragment: BaseFragment() {
     }
 
     private val paywayButtonClickListener = View.OnClickListener {
-        val intent = Intent(activity, PaymentActivity::class.java)
+        val intent = Intent(activity, PaywayActivity::class.java)
         startActivity(intent)
     }
 }

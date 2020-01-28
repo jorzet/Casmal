@@ -24,9 +24,16 @@ import com.jorzet.casmal.models.User
  * @date 26/12/19
  */
 
-class PushUserRequest(private val uid: String): AbstractUpdateDatabase<User, Boolean>() {
+class PushUserRequest(private var uid: String): AbstractUpdateDatabase<User, Boolean>() {
     companion object {
         const val USERS_REFERENCE: String = "users"
+    }
+
+    private var user: User? = null
+
+    constructor(uid: String, user: User): this(uid) {
+        this.uid = uid
+        this.user = user
     }
 
     override fun getReference(): String? {
@@ -34,15 +41,18 @@ class PushUserRequest(private val uid: String): AbstractUpdateDatabase<User, Boo
     }
 
     override fun getParams(): HashMap<String, Any>? {
-        val user = User()
+
+        if (user == null) {
+            user = User()
+        }
 
         val userMap = HashMap<String, Any>()
         val userParams = HashMap<String, Any>()
 
-        userParams["deviceOS"] = user.deviceOS
-        userParams["level"] = user.level
-        userParams["points"] = user.points
-        userParams["payment"] = user.payment
+        userParams["deviceOS"] = user!!.deviceOS
+        userParams["level"] = user!!.level
+        userParams["points"] = user!!.points
+        userParams["payment"] = user!!.payment
         userMap[uid] = userParams
 
         return userMap
