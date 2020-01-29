@@ -4,6 +4,7 @@ import com.jorzet.casmal.interfaces.RequestListener
 import com.jorzet.casmal.managers.RequestManager
 import com.jorzet.casmal.models.Score
 import com.jorzet.casmal.utils.Endpoints
+import com.jorzet.casmal.utils.Utils
 import org.json.JSONObject
 
 class ScoreRequest(userId: String, listener: RequestListener<String>) : RequestManager(Endpoints.scoreEndpoint.replace("{userId}", userId), listener) {
@@ -15,6 +16,8 @@ class ScoreRequest(userId: String, listener: RequestListener<String>) : RequestM
                 }
 
                 override fun onSuccess(response: String) {
+                    Utils.print("Response: $response")
+
                     val list: MutableList<Score> = ArrayList()
 
                     try {
@@ -22,14 +25,20 @@ class ScoreRequest(userId: String, listener: RequestListener<String>) : RequestM
                         val jsonArray = jsonObject.getJSONArray("score")
                         val size = jsonArray.length()
 
-                        for (i in 1..size) {
-                            val itemObject = jsonArray.getJSONObject(i)
+                        for (index in 0..size) {
+                            if(index >= size) {
+                                break
+                            }
 
+                            val itemObject = jsonArray.getJSONObject(index)
+
+                            val i = index + 1
                             val id = "e$i"
+
                             val examObject = itemObject.getJSONObject(id)
-                            val user: Int = examObject.getInt("")
-                            val best: Int = examObject.getInt("")
-                            val average: Int = examObject.getInt("")
+                            val user: Int = examObject.getInt("user")
+                            val best: Int = examObject.getInt("best")
+                            val average: Int = examObject.getInt("average")
 
                             val score = Score(id, user, best, average)
                             list.add(score)

@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.models.Score
+import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.viewmodels.ScoreViewModel
 
 /**
@@ -39,23 +40,35 @@ class ScoresFragment: BaseFragment() {
         viewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
 
         viewModel.getScores().observe(this, Observer {
+            Utils.print("Scores: ${it.size}")
+
             for (score: Score in it) {
+                Utils.print("ItemScore examId: ${score.examId}")
+
                 if(score.examId == "e1") {
                     entriesE1.clear()
-                    entriesE1.add(BarEntry(score.user.toFloat(), 2.0f)) //User
-                    entriesE1.add(BarEntry(score.average.toFloat(), 4.0f)) //Average
-                    entriesE1.add(BarEntry(score.best.toFloat(), 6.0f)) //Maxium
+                    entriesE1.add(BarEntry(0.0f, score.user.toFloat())) //User
+                    entriesE1.add(BarEntry(4.0f, score.best.toFloat())) //Best
+                    entriesE1.add(BarEntry(2.0f, score.average.toFloat())) //Average
                 } else if(score.examId == "e2") {
                     entriesE2.clear()
-                    entriesE2.add(BarEntry(score.user.toFloat(), 2.0f)) //User
-                    entriesE2.add(BarEntry(score.average.toFloat(), 4.0f)) //Average
-                    entriesE2.add(BarEntry(score.best.toFloat(), 6.0f)) //Maxium
+                    entriesE2.add(BarEntry(0.0f, score.user.toFloat())) //User
+                    entriesE2.add(BarEntry(4.0f, score.best.toFloat())) //Best
+                    entriesE2.add(BarEntry(2.0f, score.average.toFloat())) //Average
                 }
+
+                setGraph()
             }
         })
 
         viewModel.isUpdating().observe(this, Observer {
 
+        })
+
+        viewModel.getException().observe(this, Observer {
+            if(it != null) {
+                Utils.print("Exception: $it")
+            }
         })
 
         val auth = FirebaseAuth.getInstance()

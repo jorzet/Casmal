@@ -33,10 +33,12 @@ class ScoreViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: ScoreRepository = ScoreRepository.instance
     private val scores: LiveData<MutableList<Score>>
     private val updating: LiveData<Boolean>
+    private val exception: LiveData<Exception>
 
     init {
         scores = repository.getScores()
         updating = repository.getUpdating()
+        exception = repository.getException()
     }
 
     @NonNull
@@ -44,6 +46,9 @@ class ScoreViewModel(application: Application) : AndroidViewModel(application) {
 
     @NonNull
     fun isUpdating(): LiveData<Boolean> = updating
+
+    @NonNull
+    fun getException(): LiveData<Exception> = exception
 
     fun load(userId: String) {
         repository.load(userId)
