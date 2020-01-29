@@ -69,6 +69,7 @@ class GraphAdapter : RecyclerView.Adapter<ViewHolder>() {
         barChart.setFitBars(false)
         barChart.setDrawBarShadow(false)
         barChart.setDrawValueAboveBar(false)
+        barChart.description.isEnabled = false
         barChart.setScaleEnabled(false)
         barChart.invalidate()
 
