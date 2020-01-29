@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -13,6 +14,7 @@ import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.models.Score
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.viewmodels.ScoreViewModel
+
 
 /**
  * @author Bani Azarael Mejia Flores
@@ -41,6 +43,9 @@ class ScoresFragment: BaseFragment() {
 
         viewModel.getScores().observe(this, Observer {
             Utils.print("Scores: ${it.size}")
+            val max: Float
+            var max1 = 0.0f
+            var max2 = 0.0f
 
             for (score: Score in it) {
                 Utils.print("ItemScore examId: ${score.examId}")
@@ -50,15 +55,25 @@ class ScoresFragment: BaseFragment() {
                     entriesE1.add(BarEntry(0.0f, score.user.toFloat())) //User
                     entriesE1.add(BarEntry(4.0f, score.best.toFloat())) //Best
                     entriesE1.add(BarEntry(2.0f, score.average.toFloat())) //Average
+
+                    max1 = score.best.toFloat()
                 } else if(score.examId == "e2") {
                     entriesE2.clear()
                     entriesE2.add(BarEntry(0.0f, score.user.toFloat())) //User
                     entriesE2.add(BarEntry(4.0f, score.best.toFloat())) //Best
                     entriesE2.add(BarEntry(2.0f, score.average.toFloat())) //Average
-                }
 
-                setGraph()
+                    max2 = score.best.toFloat()
+                }
             }
+
+            max = if(max1 > max2) {
+                max1
+            } else {
+                max2
+            }
+
+            setGraph(max)
         })
 
         viewModel.isUpdating().observe(this, Observer {
@@ -79,7 +94,7 @@ class ScoresFragment: BaseFragment() {
         }
     }
 
-    fun setGraph() {
+    private fun setGraph(max: Float) {
         val barDataSet1 = BarDataSet(entriesE1, "Examen 1")
         val barData1 = BarData(barDataSet1)
 
@@ -114,5 +129,21 @@ class ScoresFragment: BaseFragment() {
         barChart2.setDrawValueAboveBar(false)
         barChart2.setScaleEnabled(false)
         barChart2.invalidate()
+
+        val yAxis1: YAxis = barChart1.axisLeft
+        yAxis1.textSize = 12f // set the text size
+        yAxis1.axisMinimum = 0f // start at zero
+        yAxis1.axisMaximum = max // the axis maximum is 100
+        yAxis1.textColor = Color.BLACK
+        yAxis1.granularity = 1f // interval 1
+        yAxis1.setLabelCount(6, true) // force 6 labels
+
+        val yAxis2: YAxis = barChart2.axisLeft
+        yAxis2.textSize = 12f // set the text size
+        yAxis2.axisMinimum = 0f // start at zero
+        yAxis2.axisMaximum = max // the axis maximum is 100
+        yAxis2.textColor = Color.BLACK
+        yAxis2.granularity = 1f // interval 1
+        yAxis2.setLabelCount(6, true) // force 6 labels
     }
 }

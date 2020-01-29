@@ -38,7 +38,7 @@ class ScoreRequest(userId: String, listener: RequestListener<String>) : RequestM
                             val examObject = itemObject.getJSONObject(id)
                             val user: Int = examObject.getInt("user")
                             val best: Int = examObject.getInt("best")
-                            val average: Int = examObject.getInt("average")
+                            val average: Int = examObject.optInt("average", 0)
 
                             val score = Score(id, user, best, average)
                             list.add(score)
