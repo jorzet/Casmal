@@ -13,6 +13,9 @@
     <color name="black">#000000</color>
     <color name="blue_soft">#868E9F</color>
     <color name="gray_soft">#696969</color>
+    <color name="gray">#9da5ab</color>
+    <color name="green">#B3CD7D</color>
+    <color name="gold">#cfa757</color>
 
     <color name="progress_color">#B0DC3A</color>
     <color name="bottom_bar_background_color">#E6E6E6</color>

@@ -41,6 +41,9 @@ data class Subject(
     @SerializedName("questions")
     @Expose
     var questions: List<String> = arrayListOf(),
+    @SerializedName("purchase_type")
+    @Expose
+    var purchaseType: PurchaseType = PurchaseType.NONE,
 
     // this is to identify course exmp. s1, s2, s3
     var subjectId: String = "",

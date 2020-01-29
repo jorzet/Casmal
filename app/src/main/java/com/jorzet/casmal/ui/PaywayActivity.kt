@@ -16,17 +16,17 @@
 
 package com.jorzet.casmal.ui
 
+import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.android.billingclient.api.*
-import com.bumptech.glide.RequestManager
 import com.google.firebase.auth.FirebaseAuth
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.managers.BillingManager
-import com.jorzet.casmal.managers.BillingManager.OnBillingPurchasesListener
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Payment
 import com.jorzet.casmal.models.User
@@ -172,7 +172,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
                 val uid = FirebaseAuth.getInstance().currentUser?.uid
                 if (uid != null) {
                     FirebaseRequestManager.getInstance()
-                        .insertUser(uid, object : FirebaseRequestManager.OnInsertUserListener {
+                        .insertUser(uid, user, object : FirebaseRequestManager.OnInsertUserListener {
                             override fun onSuccessUserInserted() {
                                 Log.d(TAG, "user push success after subscription")
                             }
@@ -184,7 +184,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
                         })
                 }
 
-                goBackActivity()
+                goBackActivity(true)
             }
         }
     }
@@ -225,7 +225,14 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
         Log.d(TAG, "responseCode: ${billingResult.responseCode}")
     }
 
-    fun goBackActivity() {
+    private fun goBackActivity(isPremium: Boolean) {
+        val intent = Intent()
+        intent.putExtra(MainActivity.IS_PREMIUM_EXTRA, true)
+        setResult(Activity.RESULT_CANCELED, intent)
         onBackPressed()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }

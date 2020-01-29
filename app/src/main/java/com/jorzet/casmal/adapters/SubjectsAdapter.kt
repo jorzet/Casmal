@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
+import com.jorzet.casmal.models.PurchaseType
 import com.jorzet.casmal.models.Subject
 import com.jorzet.casmal.models.SubjectType
 import kotlinx.android.synthetic.main.custom_subject_item.view.*
@@ -34,7 +35,8 @@ import kotlinx.android.synthetic.main.custom_subject_item.view.*
  * @date 16/08/19.
  */
 
-class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.Adapter<SubjectsAdapter.SubjectViewHolder>() {
+class SubjectsAdapter(context: Context, userIsPremium: Boolean, subjects: List<Subject>):
+    RecyclerView.Adapter<SubjectsAdapter.SubjectViewHolder>() {
 
     companion object {
         /**
@@ -48,6 +50,7 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.A
      */
     private val mContext: Context = context
     lateinit var mSubjectClickListener: OnSubjectClickListener
+    private val userIsPremium = userIsPremium
 
     /**
      * Model
@@ -60,6 +63,7 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.A
          * This method is called when item view is clicked
          */
         fun onSubjectClick(subject: Subject)
+        fun onBecomePremium()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectViewHolder {
@@ -73,7 +77,15 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.A
             val subject = getItem(position / 2)
 
             holder.view.background =
-                ContextCompat.getDrawable(mContext, R.drawable.subject_background)
+                if (subject.purchaseType == PurchaseType.FREE) {
+                    ContextCompat.getDrawable(mContext, R.drawable.subject_background)
+                } else {
+                    if (userIsPremium) {
+                        ContextCompat.getDrawable(mContext, R.drawable.subject_background)
+                    } else {
+                        ContextCompat.getDrawable(mContext, R.drawable.subject_background_premium)
+                    }
+                }
 
             when (subject.internalName) {
                 SubjectType.NEUROLOGY ->
@@ -181,7 +193,11 @@ class SubjectsAdapter(context: Context, subjects: List<Subject>): RecyclerView.A
 
             holder.view.setOnClickListener {
                 if (::mSubjectClickListener.isInitialized) {
-                    mSubjectClickListener.onSubjectClick(subject)
+                    if (subject.purchaseType == PurchaseType.FREE || userIsPremium) {
+                        mSubjectClickListener.onSubjectClick(subject)
+                    } else if (subject.purchaseType == PurchaseType.PREMIUM && !userIsPremium) {
+                        mSubjectClickListener.onBecomePremium()
+                    }
                 }
             }
         } else {

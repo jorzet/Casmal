@@ -10,6 +10,7 @@
 
     <string name="text_error_login">Ocurrió un error al iniciar sesión, intentalo nuevamente</string>
     <string name="text_payment_methods">Métodos de pago</string>
+    <string name="text_suggestions">Sugerencias</string>
     <string name="text_flash_cards">Mis FlashCards</string>
     <string name="text_see_more">Ver más</string>
 
@@ -26,6 +27,7 @@
 
     <!-- profile -->
     <string name="no_flashcards_text">Por el momento no tienes FlashCards</string>
+    <string name="support_email_text">casmal.contacto@gmail.com</string>
 
     <!-- level up -->
     <string name="level_up_text">Subiste de nivel</string>
@@ -37,5 +39,6 @@
     <string name="google_pay_text">Google Play</string>
     <string name="subscription_text">Se pagará una suscripción mensual</string>
     <string name="cash_text">Efectivo</string>
+
 
 </resources>

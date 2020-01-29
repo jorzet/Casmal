@@ -16,6 +16,7 @@
 
 package com.jorzet.casmal.ui
 
+import android.content.Intent
 import android.os.Handler
 import android.view.MenuItem
 import android.view.View
@@ -26,6 +27,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.ViewPagerAdapter
 import com.jorzet.casmal.base.BaseActivity
+import com.jorzet.casmal.dialogs.AlreadyPremiumDialog
 import com.jorzet.casmal.managers.BillingManager
 
 /**
@@ -55,6 +57,17 @@ class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelecte
     */
     private var doubleBackToExitPressedOnce : Boolean = false
     private val timeDelayExitBar: Int = 2000
+
+    /**
+     * Constants
+     */
+
+    companion object {
+        const val PREMIUM_RESULT_CODE = 0x01
+        const val ALREADY_PREMIUM_CODE = 0x02
+        const val IS_PREMIUM_EXTRA = "is_premium"
+
+    }
 
     override fun getLayoutId(): Int {
         return R.layout.activity_main
@@ -129,6 +142,15 @@ class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelecte
     }
 
     override fun onBillingResponseItemNotOwned() {
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (data?.extras?.getBoolean(IS_PREMIUM_EXTRA) == true) {
+            AlreadyPremiumDialog.newInstance().show(supportFragmentManager, "already_dialog")
+        }
 
     }
 }

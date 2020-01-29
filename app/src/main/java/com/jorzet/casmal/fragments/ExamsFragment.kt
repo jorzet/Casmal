@@ -16,13 +16,18 @@
 
 package com.jorzet.casmal.fragments
 
+import android.content.Intent
 import android.util.Log
 import android.widget.ListView
+import androidx.lifecycle.ViewModelProviders
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.ExamsAdapter
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Exam
+import com.jorzet.casmal.ui.MainActivity
+import com.jorzet.casmal.ui.PaywayActivity
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -30,7 +35,7 @@ import com.jorzet.casmal.models.Exam
  * @date 12/08/19.
  */
 
-class ModulesFragment: BaseFragment() {
+class ExamsFragment: BaseFragment() {
 
     /**
      * UI accessors
@@ -42,23 +47,36 @@ class ModulesFragment: BaseFragment() {
      */
     private lateinit var mExamsAdapter: ExamsAdapter
 
+    /**
+     * View Model
+     */
+    private lateinit var userViewModel: UserViewModel
+
     override fun getLayoutId(): Int {
         return R.layout.modules_fragment
     }
 
     override fun initView() {
         mModulesListView = rootView.findViewById(R.id.lv_modules)
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
     }
 
     override fun prepareComponents() {
+        val user = userViewModel.getUser().value
+
         FirebaseRequestManager.getInstance().requestExams(object: FirebaseRequestManager.OnGetExamsListener {
             override fun onGetExamsSuccess(exams: List<Exam>) {
                 Log.d("","")
 
-                mExamsAdapter = ExamsAdapter(exams)
+                mExamsAdapter = ExamsAdapter(user?.payment?.isPremium == true, exams)
                 mExamsAdapter.mExamClickListener = object: ExamsAdapter.OnExamClickListener {
                     override fun onExamClick(exam: Exam) {
                         goQuestionActivity(exam.questions, true, exam.examId)
+                    }
+
+                    override fun onBecomePremium() {
+                        val intent = Intent(activity, PaywayActivity::class.java)
+                        startActivityForResult(intent, MainActivity.PREMIUM_RESULT_CODE)
                     }
                 }
 

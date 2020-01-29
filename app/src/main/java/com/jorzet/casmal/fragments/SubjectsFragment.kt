@@ -16,7 +16,9 @@
 
 package com.jorzet.casmal.fragments
 
+import android.content.Intent
 import android.util.Log
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jorzet.casmal.R
@@ -24,6 +26,9 @@ import com.jorzet.casmal.adapters.SubjectsAdapter
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.managers.FirebaseRequestManager
 import com.jorzet.casmal.models.Subject
+import com.jorzet.casmal.ui.MainActivity
+import com.jorzet.casmal.ui.PaywayActivity
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -43,22 +48,35 @@ class SubjectsFragment: BaseFragment() {
      */
     private lateinit var mSubjectsAdapter: SubjectsAdapter
 
+    /**
+     * View Model
+     */
+    private lateinit var userViewModel: UserViewModel
+
     override fun getLayoutId(): Int {
         return R.layout.subjects_fragment
     }
 
     override fun initView() {
         mSubjectsRecyclerView = rootView.findViewById(R.id.rv_subjects)
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
     }
 
     override fun prepareComponents() {
+        val user = userViewModel.getUser().value
+
         FirebaseRequestManager.getInstance().requestSubjects(object: FirebaseRequestManager.OnGetSubjectsListener {
             override fun onGetSubjectsSuccess(subjects: List<Subject>) {
                 mSubjectsRecyclerView.layoutManager = GridLayoutManager(context, 3)
-                mSubjectsAdapter = SubjectsAdapter(context!!, subjects)
+                mSubjectsAdapter = SubjectsAdapter(context!!, user?.payment?.isPremium == true, subjects)
                 mSubjectsAdapter.mSubjectClickListener = object: SubjectsAdapter.OnSubjectClickListener {
                     override fun onSubjectClick(subject: Subject) {
                         goQuestionActivity(subject.questions, false, null)
+                    }
+
+                    override fun onBecomePremium() {
+                        val intent = Intent(activity, PaywayActivity::class.java)
+                        startActivityForResult(intent, MainActivity.PREMIUM_RESULT_CODE)
                     }
                 }
 

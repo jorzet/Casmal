@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import com.jorzet.casmal.R
 import com.jorzet.casmal.models.DifficultyType
 import com.jorzet.casmal.models.Exam
+import com.jorzet.casmal.models.PurchaseType
 
 import kotlinx.android.synthetic.main.custom_exam_item.view.*
 
@@ -33,7 +34,7 @@ import kotlinx.android.synthetic.main.custom_exam_item.view.*
  * @date 20/08/19.
  */
 
-class ExamsAdapter(exams: List<Exam>): BaseAdapter() {
+class ExamsAdapter(private val userIsPremium:Boolean, exams: List<Exam>): BaseAdapter() {
     /**
      * Model
      */
@@ -46,6 +47,7 @@ class ExamsAdapter(exams: List<Exam>): BaseAdapter() {
 
     interface OnExamClickListener {
         fun onExamClick(exam: Exam)
+        fun onBecomePremium()
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -58,11 +60,20 @@ class ExamsAdapter(exams: List<Exam>): BaseAdapter() {
             convertView
         }
 
-        val module = getItem(position)
+        val exam = getItem(position)
 
-        view.iv_exam_image.background = ContextCompat.getDrawable(parent?.context!!, R.drawable.ic_exam)
+        view.iv_exam_image.background =
+            if (exam.purchaseType == PurchaseType.FREE) {
+                ContextCompat.getDrawable(parent?.context!!, R.drawable.ic_exam)
+            } else {
+                if (userIsPremium) {
+                    ContextCompat.getDrawable(parent?.context!!, R.drawable.ic_exam)
+                } else {
+                    ContextCompat.getDrawable(parent?.context!!, R.drawable.ic_exam_premium)
+                }
+            }
 
-        when(module.difficulty) {
+        when(exam.difficulty) {
             DifficultyType.EASY ->
                 view.iv_difficulty.background = ContextCompat.getDrawable(parent.context!!, R.drawable.ic_easy)
             DifficultyType.MEDIUM ->
@@ -71,11 +82,27 @@ class ExamsAdapter(exams: List<Exam>): BaseAdapter() {
                 view.iv_difficulty.background = ContextCompat.getDrawable(parent.context!!, R.drawable.ic_hard)
         }
 
-        view.tv_exam.text = module.examName
+        view.tv_exam.text = exam.examName
+
+        view.tv_exam.setTextColor(
+        if (exam.purchaseType == PurchaseType.FREE) {
+            ContextCompat.getColor(parent.context!!, R.color.black)
+        } else {
+            if (userIsPremium) {
+                ContextCompat.getColor(parent.context!!, R.color.black)
+            } else {
+                ContextCompat.getColor(parent.context!!, R.color.gray)
+            }
+        })
+
 
         view.setOnClickListener {
             if (::mExamClickListener.isInitialized) {
-                mExamClickListener.onExamClick(module)
+                if (exam.purchaseType == PurchaseType.FREE || userIsPremium) {
+                    mExamClickListener.onExamClick(exam)
+                } else if (exam.purchaseType == PurchaseType.PREMIUM && !userIsPremium) {
+                    mExamClickListener.onBecomePremium()
+                }
             }
         }
 

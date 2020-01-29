@@ -17,6 +17,8 @@
 package com.jorzet.casmal.fragments
 
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -25,6 +27,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.jorzet.casmal.BuildConfig
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.FlashCardAdapter
 import com.jorzet.casmal.base.BaseFragment
@@ -32,6 +36,7 @@ import com.jorzet.casmal.dialogs.FullScreeImageDialog
 import com.jorzet.casmal.interfaces.ItemListener
 import com.jorzet.casmal.managers.ImageManager
 import com.jorzet.casmal.models.FlashCard
+import com.jorzet.casmal.ui.MainActivity
 import com.jorzet.casmal.ui.PaywayActivity
 import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
@@ -55,6 +60,7 @@ class ProfileFragment: BaseFragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var noFlashcards: TextView
     private lateinit var paywayButton: Button
+    private lateinit var suggestionButton: Button
 
     private lateinit var adapter: FlashCardAdapter
 
@@ -72,6 +78,7 @@ class ProfileFragment: BaseFragment() {
         recyclerView = rootView.findViewById(R.id.recyclerView)
         noFlashcards = rootView.findViewById(R.id.tv_no_flashcards)
         paywayButton = rootView.findViewById(R.id.btn_payway)
+        suggestionButton = rootView.findViewById(R.id.btn_suggest)
     }
 
     override fun prepareComponents() {
@@ -142,12 +149,52 @@ class ProfileFragment: BaseFragment() {
         recyclerView.adapter = adapter
 
         paywayButton.setOnClickListener(paywayButtonClickListener)
+        suggestionButton.setOnClickListener {
+            goSendEmailActivity()
+        }
 
         viewModel.updateFlashCards()
     }
 
     private val paywayButtonClickListener = View.OnClickListener {
         val intent = Intent(activity, PaywayActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, MainActivity.PREMIUM_RESULT_CODE)
+    }
+
+    /*
+     * This method open the native mail app to send an email to soporte@zerebrez.com
+     */
+    private fun goSendEmailActivity() {
+        //val intent = Intent(activity, SendEmailActivity::class.java)
+        //activity!!.startActivity(intent)
+        val emailIntent = Intent(Intent.ACTION_SENDTO,
+            Uri.fromParts("mailto", resources.getString(R.string.support_email_text), null))
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "")
+        val userFirebase = FirebaseAuth.getInstance().currentUser
+        var userUUID = ""
+        var userEmail = ""
+        val versionName = BuildConfig.VERSION_NAME
+        if (userFirebase != null) {
+            userUUID = userFirebase.uid
+            if (userFirebase.email != null && !userFirebase.email.equals("")) {
+                userEmail = userFirebase.email!!
+            }
+        }
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Sistema Operativo: " + getAndroidVersion() +
+                "\n\n\n Versión app: " + versionName +
+                "\n Cuenta: " + userUUID +
+                "\n Correo: " + userEmail +
+                "\n\n\n Aquí escribe tu mensaje" + "" +
+                "\n\n\n (Para un mejor soporte no borres el sistema operativo ni la cuenta)")
+        startActivity(Intent.createChooser(emailIntent, "Enviando email..."))
+    }
+
+    /*
+     * This method returns the devices current API version
+     */
+    private fun getAndroidVersion(): String {
+        val release = Build.VERSION.RELEASE
+        val sdkVersion = Build.VERSION.SDK_INT
+        return "Android SDK: $sdkVersion ($release)"
     }
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@drawable/cubes_background">
+
+
+	<TextView
+		android:id="@+id/tv_premium_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="30dp"
+		android:text="¡FELICIDADES!"
+		android:textSize="30sp"
+		android:textStyle="bold"
+		android:textColor="@color/gray"/>
+
+	<ImageView
+		android:id="@+id/iv_premium"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/tv_premium_title"
+		android:layout_marginTop="30dp"
+		android:src="@drawable/ic_premium"/>
+
+	<TextView
+		android:id="@+id/tv_premium_text1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/iv_premium"
+		android:layout_marginTop="40dp"
+		android:text="AHORA ERES"
+		android:textSize="40sp"
+		android:textStyle="bold"
+		android:textColor="@color/black"/>
+
+	<TextView
+		android:id="@+id/tv_premium_text2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/tv_premium_text1"
+		android:layout_marginTop="30dp"
+		android:text="PREMIUM"
+		android:textStyle="bold"
+		android:textSize="40sp"
+		android:textColor="@color/gold"/>
+
+
+	<RelativeLayout
+		android:id="@+id/btn_ok"
+		android:layout_width="150dp"
+		android:layout_height="30dp"
+		android:layout_centerHorizontal="true"
+		android:layout_alignParentBottom="true"
+		android:layout_marginBottom="60dp"
+		android:background="@drawable/ok_premium_background_button">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_centerVertical="true"
+			android:text="@string/ok_text"
+			android:textSize="15sp"
+			android:textColor="@color/colorWhite"/>
+
+	</RelativeLayout>
+
+</RelativeLayout>
