@@ -89,4 +89,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun updateFlashCards() {
         repository.updateFlashCards()
     }
+
+    fun setPurchase(purchase: Purchase) {
+        repository.setPurchase(purchase)
+    }
+
+    fun getPurchase(): LiveData<Purchase> = repository.getPurchase()
+
 }

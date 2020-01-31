@@ -123,9 +123,15 @@ class TrueFalseQuestionFragment(override var mQuestion: Question,
                     ContextCompat.getDrawable(mActivity, R.drawable.answer_unselected_option_background)
                 }
 
+            mOptionTrueBackgroundView.setOnClickListener(null)
+            mOptionFalseBackgroundView.setOnClickListener(null)
+
             mQuestion.wasOK = false
             mQuestion.answered = false
             mQuestion.chosenOption = "-1"
+
+            // enable next question button
+            mActivity.onNextQuestionButtonEnable(true)
         }
     }
 }

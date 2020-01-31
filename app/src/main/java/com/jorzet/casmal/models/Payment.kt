@@ -34,7 +34,7 @@ data class Payment (
     @Expose
     var confirming: Boolean = false,
 
-    @SerializedName("isPremium")
+    @SerializedName("premium")
     @Expose
     var isPremium: Boolean = false,
 

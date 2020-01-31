@@ -92,7 +92,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
         mGooglePayView.setOnClickListener(mGooglePayClickListener)
         mCashView.setOnClickListener(mCashClickListener)
 
-        mBillingManager = BillingManager(this)
+        mBillingManager = BillingManager(this, this)
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
     }
@@ -125,18 +125,6 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
                     }
                 }
             })
-
-        /*mBillingManager.queryPurchases(SKU_TYPE, object: OnBillingPurchasesListener  {
-
-            override fun onBillingResponseItemAlreadyOwned(purchase: Purchase) {
-                Log.d("","")
-            }
-
-            override fun onBillingResponseItemNotOwned() {
-                Log.d("","")
-            }
-
-        })*/
     }
 
     override fun onBillingServiceError() {
@@ -168,6 +156,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
                 payment.subscription = purchase.sku
                 user.payment = payment
                 userViewModel.setUser(user)
+                userViewModel.setPurchase(purchase)
 
                 val uid = FirebaseAuth.getInstance().currentUser?.uid
                 if (uid != null) {

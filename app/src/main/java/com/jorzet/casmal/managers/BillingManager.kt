@@ -15,6 +15,8 @@
  */
 package com.jorzet.casmal.managers
 
+import android.app.Activity
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.android.billingclient.api.*
@@ -25,12 +27,10 @@ import com.jorzet.casmal.ui.PaywayActivity
  * (via Billing library), maintain connection to it through BillingClient and cache
  * temporary states/data if needed.
  */
-class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
+class BillingManager(private val activity: Activity, private val onBillingResponseListener: OnBillingResponseListener) : PurchasesUpdatedListener {
 
     private var mBillingClient: BillingClient = BillingClient.newBuilder(activity)
         .enablePendingPurchases().setListener(this).build()
-
-    private val mActivity: PaywayActivity = activity
 
     companion object {
         private const val TAG = "BillingManager"
@@ -73,31 +73,31 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
         Log.i(TAG, "onPurchasesUpdated() response: ${billingResult.responseCode}")
         when (billingResult.responseCode) {
             BILLING_RESPONSE_RESULT_OK -> {
-                mActivity.onBillingResponseOk(purchases)
+                onBillingResponseListener.onBillingResponseOk(purchases)
             }
             BILLING_RESPONSE_RESULT_USER_CANCELED -> {
-                mActivity.onBillingResponseUserCanceled()
+                onBillingResponseListener.onBillingResponseUserCanceled()
             }
             BILLING_RESPONSE_RESULT_SERVICE_UNAVAILABLE -> {
-                mActivity.onBillingResponseServiceUnavailable()
+                onBillingResponseListener.onBillingResponseServiceUnavailable()
             }
             BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE -> {
-                mActivity.onBillingResponseBillingUnavailable()
+                onBillingResponseListener.onBillingResponseBillingUnavailable()
             }
             BILLING_RESPONSE_RESULT_ITEM_UNAVAILABLE -> {
-                mActivity.onBillingResponseItemUnavailable()
+                onBillingResponseListener.onBillingResponseItemUnavailable()
             }
             BILLING_RESPONSE_RESULT_DEVELOPER_ERROR -> {
-                mActivity.onBillingResponseDeveloperError()
+                onBillingResponseListener.onBillingResponseDeveloperError()
             }
             BILLING_RESPONSE_RESULT_ERROR -> {
-                mActivity.onBillingResponseError()
+                onBillingResponseListener.onBillingResponseError()
             }
             BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED -> {
-                mActivity.onBillingResponseItemAlreadyOwned()
+                onBillingResponseListener.onBillingResponseItemAlreadyOwned()
             }
             BILLING_RESPONSE_RESULT_ITEM_NOT_OWNED -> {
-                mActivity.onBillingResponseItemNotOwned()
+                onBillingResponseListener.onBillingResponseItemNotOwned()
             }
         }
     }
@@ -118,18 +118,18 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
                     if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                         Log.i(TAG, "onBillingSetupFinished() response: ${billingResult.responseCode}")
                         executeOnSuccess?.run()
-                        mActivity.onBillingServiceReady()
+                        onBillingResponseListener.onBillingServiceReady()
                     } else {
-                        Toast.makeText(mActivity,
+                        Toast.makeText(activity,
                             "Failed to connect GooglePlay", Toast.LENGTH_SHORT).show()
                         Log.w(TAG, "onBillingSetupFinished() error code: ${billingResult.responseCode}")
-                        mActivity.onBillingServiceError()
+                        onBillingResponseListener.onBillingServiceError()
                     }
                 }
 
                 override fun onBillingServiceDisconnected() {
                     Log.w(TAG, "onBillingServiceDisconnected()")
-                    mActivity.onBillingServiceDisconnected()
+                    onBillingResponseListener.onBillingServiceDisconnected()
                 }
             })
         }
@@ -154,10 +154,16 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
             val purchaseResult = mBillingClient.queryPurchases(itemType)
             val purchaseList = purchaseResult.purchasesList
             if (purchaseResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                for (purchase in purchaseList) {
-                    if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                        onBillingPurchasesListener.onBillingResponseItemAlreadyOwned(purchase)
+                if (purchaseList.isNotEmpty()) {
+                    for (purchase in purchaseList) {
+                        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                            onBillingPurchasesListener.onBillingResponseItemAlreadyOwned(purchase)
+                        } else {
+                            onBillingPurchasesListener.onBillingResponseItemNotOwned()
+                        }
                     }
+                } else {
+                    onBillingPurchasesListener.onBillingResponseItemNotOwned()
                 }
             }
         }
@@ -171,7 +177,7 @@ class BillingManager(activity: PaywayActivity) : PurchasesUpdatedListener {
             val billingFlowParams: BillingFlowParams = BillingFlowParams.newBuilder()
                 .setSkuDetails(skuDetails)
                 .build()
-            mBillingClient.launchBillingFlow(mActivity, billingFlowParams)
+            mBillingClient.launchBillingFlow(activity, billingFlowParams)
         }
         // If Billing client was disconnected, we retry 1 time and if success, execute the query
         startServiceConnectionIfNeeded(executeOnConnectedService)

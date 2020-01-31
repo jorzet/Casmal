@@ -12,7 +12,6 @@ class AlreadyPremiumDialog: BaseDialog() {
     private lateinit var mOkButton: View
 
     companion object {
-        private const val ARG_IS_LISTENER_ACTIVITY: String = "arg_is_listener_activity"
 
         fun newInstance(): AlreadyPremiumDialog {
             return AlreadyPremiumDialog()
@@ -33,5 +32,9 @@ class AlreadyPremiumDialog: BaseDialog() {
             dismiss()
         }
     }
+
+    /*override fun getDialogStyle(): Int {
+        return R.style.FullScreenDialog
+    }*/
 
 }

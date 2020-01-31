@@ -214,9 +214,17 @@ class MultipleQuestionFragment(override var mQuestion: Question,
                 else
                     ContextCompat.getDrawable(mActivity, R.drawable.answer_unselected_option_background)
 
+            mOptionABackgroundView.setOnClickListener(null)
+            mOptionBBackgroundView.setOnClickListener(null)
+            mOptionCBackgroundView.setOnClickListener(null)
+            mOptionDBackgroundView.setOnClickListener(null)
+
             mQuestion.wasOK = false
             mQuestion.answered = false
             mQuestion.chosenOption = "-1"
+
+            // enable next question button
+            mActivity.onNextQuestionButtonEnable(true)
         }
     }
 }

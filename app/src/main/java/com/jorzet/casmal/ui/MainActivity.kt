@@ -18,17 +18,24 @@ package com.jorzet.casmal.ui
 
 import android.content.Intent
 import android.os.Handler
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.android.billingclient.api.Purchase
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.ViewPagerAdapter
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.dialogs.AlreadyPremiumDialog
 import com.jorzet.casmal.managers.BillingManager
+import com.jorzet.casmal.managers.FirebaseRequestManager
+import com.jorzet.casmal.models.Payment
+import com.jorzet.casmal.models.User
+import com.jorzet.casmal.viewmodels.UserViewModel
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -37,7 +44,8 @@ import com.jorzet.casmal.managers.BillingManager
  */
 
 class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
-    ViewPager.OnPageChangeListener, BillingManager.OnBillingPurchasesListener {
+    ViewPager.OnPageChangeListener, BillingManager.OnBillingPurchasesListener,
+    BillingManager.OnBillingResponseListener {
 
     /**
      * UI accessors
@@ -58,11 +66,21 @@ class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelecte
     private var doubleBackToExitPressedOnce : Boolean = false
     private val timeDelayExitBar: Int = 2000
 
+    /*
+     * Payment
+     */
+    private lateinit var mBillingManager: BillingManager
+
+    /**
+     * View Model
+     */
+    private lateinit var userViewModel: UserViewModel
+
     /**
      * Constants
      */
-
     companion object {
+        const val TAG = "MainActivity"
         const val PREMIUM_RESULT_CODE = 0x01
         const val ALREADY_PREMIUM_CODE = 0x02
         const val IS_PREMIUM_EXTRA = "is_premium"
@@ -85,6 +103,20 @@ class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelecte
         mViewPager.adapter = mViewPagerAdapter
 
         mBottomNavigationView.setOnNavigationItemSelectedListener(this)
+
+
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+
+        mBillingManager = BillingManager(this, this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (data?.extras?.getBoolean(IS_PREMIUM_EXTRA) == true) {
+            AlreadyPremiumDialog.newInstance().show(supportFragmentManager, "already_dialog")
+        }
+
     }
 
     /**
@@ -142,15 +174,73 @@ class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelecte
     }
 
     override fun onBillingResponseItemNotOwned() {
+        val user: User = userViewModel.getUser().value ?: return
+        val purchase: Purchase? = userViewModel.getPurchase().value
+        val payment: Payment = user.payment
+        payment.isPremium = false
+        payment.timeStamp = 0
+        payment.subscription = purchase?.sku?: ""
+        user.payment = payment
+        userViewModel.setUser(user)
+
+
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid != null) {
+            FirebaseRequestManager.getInstance()
+                .insertUser(uid, user, object : FirebaseRequestManager.OnInsertUserListener {
+                    override fun onSuccessUserInserted() {
+                        Log.d(TAG, "user push success after subscription")
+                    }
+
+                    override fun onErrorUserInserted(throwable: Throwable) {
+                        Log.d(TAG, "user push fail after subscription")
+                    }
+
+                })
+        }
+    }
+
+    override fun onBillingServiceReady() {
+        mBillingManager.queryPurchases(PaywayActivity.SKU_TYPE, this)
+    }
+
+    override fun onBillingServiceError() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onBillingServiceDisconnected() {
 
-        if (data?.extras?.getBoolean(IS_PREMIUM_EXTRA) == true) {
-            AlreadyPremiumDialog.newInstance().show(supportFragmentManager, "already_dialog")
-        }
+    }
+
+    override fun onBillingResponseOk(purchases: List<Purchase?>?) {
+
+    }
+
+    override fun onBillingResponseUserCanceled() {
+
+    }
+
+    override fun onBillingResponseServiceUnavailable() {
+
+    }
+
+    override fun onBillingResponseBillingUnavailable() {
+
+    }
+
+    override fun onBillingResponseItemUnavailable() {
+
+    }
+
+    override fun onBillingResponseDeveloperError() {
+
+    }
+
+    override fun onBillingResponseError() {
+
+    }
+
+    override fun onBillingResponseItemAlreadyOwned() {
 
     }
 }
