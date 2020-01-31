@@ -23,7 +23,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -95,9 +95,9 @@ class SplashActivity: BaseActivity() {
     }
 
     override fun prepareComponents() {
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        flashCardsViewModel = ViewModelProviders.of(this).get(FlashCardsViewModel::class.java)
-        val levelsViewModel = ViewModelProviders.of(this).get(LevelsViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        flashCardsViewModel = ViewModelProvider(this).get(FlashCardsViewModel::class.java)
+        val levelsViewModel = ViewModelProvider(this).get(LevelsViewModel::class.java)
 
         flashCardsViewModel.load()
         levelsViewModel.load()

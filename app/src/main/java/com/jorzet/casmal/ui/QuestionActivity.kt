@@ -22,7 +22,7 @@ import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseQuestionFragment
@@ -109,9 +109,9 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     override fun prepareComponents() {
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        flashCardsViewModel = ViewModelProviders.of(this).get(FlashCardsViewModel::class.java)
-        levelsViewModel = ViewModelProviders.of(this).get(LevelsViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        flashCardsViewModel = ViewModelProvider(this).get(FlashCardsViewModel::class.java)
+        levelsViewModel = ViewModelProvider(this).get(LevelsViewModel::class.java)
 
         mShowQuestions.setOnClickListener(mShowQuestionsClickListener)
         mCloseQuestions.setOnClickListener(mCloseQuestionsClickListener)

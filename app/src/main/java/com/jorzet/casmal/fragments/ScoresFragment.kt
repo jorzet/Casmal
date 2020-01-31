@@ -1,28 +1,17 @@
-/*
- * Copyright [2020] [Jorge Zepeda Tinoco]
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.jorzet.casmal.fragments
 
-import android.graphics.Color
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.jorzet.casmal.R
+import com.jorzet.casmal.adapters.GraphAdapter
 import com.jorzet.casmal.base.BaseFragment
+import com.jorzet.casmal.utils.Utils
+import com.jorzet.casmal.viewmodels.ScoreViewModel
+
 
 /**
  * @author Bani Azarael Mejia Flores
@@ -31,58 +20,50 @@ import com.jorzet.casmal.base.BaseFragment
  */
 
 class ScoresFragment: BaseFragment() {
-    private lateinit var barChart1: BarChart
-    private lateinit var barChart2: BarChart
+    private lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var recyclerView: RecyclerView
+
+    private lateinit var adapter: GraphAdapter
+
+    private lateinit var viewModel: ScoreViewModel
 
     override fun getLayoutId(): Int {
         return R.layout.scores_fragment
     }
 
     override fun initView() {
-        barChart1 = rootView.findViewById(R.id.barChart1)
-        barChart2 = rootView.findViewById(R.id.barChart2)
+        refreshLayout = rootView.findViewById(R.id.refreshLayout)
+        recyclerView = rootView.findViewById(R.id.recyclerView)
     }
 
     override fun prepareComponents() {
-        val entries: MutableList<BarEntry> = ArrayList()
+        viewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
 
-        entries.add(BarEntry(0.0f, 2.0f)) //User
-        entries.add(BarEntry(1.0f, 4.0f)) //Average
-        entries.add(BarEntry(2.0f, 6.0f)) //Maxium
+        adapter = GraphAdapter()
 
-        val barDataSet1 = BarDataSet(entries, "Examen 1")
-        val barData1 = BarData(barDataSet1)
+        viewModel.getScores().observe(this, Observer {
+            adapter.setList(it)
+        })
 
-        val barDataSet2 = BarDataSet(entries, "Examen 2")
-        val barData2 = BarData(barDataSet2)
+        viewModel.isUpdating().observe(this, Observer {
+            refreshLayout.isRefreshing = it
+        })
 
-        barDataSet1.setColors(
-            Color.rgb(193, 37, 82),
-            Color.rgb(255, 102, 0),
-            Color.rgb(245, 199, 0)
-        )
+        viewModel.getException().observe(this, Observer {
+            if(it != null) {
+                Utils.print("Exception: $it")
+            }
+        })
 
-        barDataSet2.setColors(
-            Color.rgb(193, 37, 82),
-            Color.rgb(255, 102, 0),
-            Color.rgb(245, 199, 0)
-        )
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
 
-        barData1.barWidth = 1.0f
-        barData2.barWidth = 1.0f
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter = adapter
 
-        barChart1.data = barData1
-        barChart1.setFitBars(false)
-        barChart1.setDrawBarShadow(false)
-        barChart1.setDrawValueAboveBar(false)
-        barChart1.setScaleEnabled(false)
-        barChart1.invalidate()
-
-        barChart2.data = barData2
-        barChart2.setFitBars(false)
-        barChart2.setDrawBarShadow(false)
-        barChart2.setDrawValueAboveBar(false)
-        barChart2.setScaleEnabled(false)
-        barChart2.invalidate()
+        if(user != null) {
+            viewModel.load(user.uid)
+        }
     }
 }
