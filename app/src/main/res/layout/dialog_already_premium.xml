@@ -20,8 +20,8 @@
 
 	<ImageView
 		android:id="@+id/iv_premium"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_width="150dp"
+		android:layout_height="150dp"
 		android:layout_centerHorizontal="true"
 		android:layout_below="@+id/tv_premium_title"
 		android:layout_marginTop="30dp"
@@ -33,9 +33,9 @@
 		android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
 		android:layout_below="@+id/iv_premium"
-		android:layout_marginTop="40dp"
+		android:layout_marginTop="30dp"
 		android:text="AHORA ERES"
-		android:textSize="40sp"
+		android:textSize="30sp"
 		android:textStyle="bold"
 		android:textColor="@color/black"/>
 
@@ -48,7 +48,7 @@
 		android:layout_marginTop="30dp"
 		android:text="PREMIUM"
 		android:textStyle="bold"
-		android:textSize="40sp"
+		android:textSize="35sp"
 		android:textColor="@color/gold"/>
 
 
@@ -59,7 +59,7 @@
 		android:layout_centerHorizontal="true"
 		android:layout_below="@+id/tv_premium_text2"
 		android:layout_marginTop="60dp"
-		android:background="@drawable/ok_premium_background_button">
+		android:background="@drawable/show_questions_button_background_enable">
 
 		<TextView
 			android:layout_width="wrap_content"
