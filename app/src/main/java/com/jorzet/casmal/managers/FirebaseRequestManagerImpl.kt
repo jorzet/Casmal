@@ -143,6 +143,24 @@ class FirebaseRequestManagerImpl: FirebaseRequestManager() {
         levelsRequest.request()
     }
 
+    override fun updatePointsUser(user: User, listener: OnUpdateUserLevelListener) {
+        val pushPointsRequest = PushPointsRequest(user)
+
+        pushPointsRequest.setOnRequestSuccess(object: AbstractDatabase.OnRequestListenerSuccess<Boolean> {
+            override fun onSuccess(result: Boolean) {
+                listener.onUpdateUserLevelSuccess()
+            }
+        })
+
+        pushPointsRequest.setOnRequestFailed(object: AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                listener.onUpdateUserLevelFail(throwable)
+            }
+        })
+
+        pushPointsRequest.update()
+    }
+
     override fun updateUserLevel(user: User, listener: OnUpdateUserLevelListener) {
         val pushLevelUpRequest = PushLevelUpRequest(user)
 
