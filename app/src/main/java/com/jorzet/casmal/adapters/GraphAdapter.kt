@@ -1,5 +1,6 @@
 package com.jorzet.casmal.adapters
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -21,10 +22,12 @@ class GraphAdapter : RecyclerView.Adapter<ViewHolder>() {
     private var list: MutableList<Score> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GraphHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_graph, parent, false)
+        val view: View = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_graph, parent, false)
         return GraphHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         if(viewHolder is GraphHolder) {
             val holder : GraphHolder = viewHolder
@@ -40,6 +43,8 @@ class GraphAdapter : RecyclerView.Adapter<ViewHolder>() {
             val max = item.best.toFloat()
 
             setGraph(holder.barChart, max, entries, position)
+
+            holder.barChartTitle.text = "Examen ${item.examId.replace("e", "")}"
         }
     }
 
