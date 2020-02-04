@@ -199,6 +199,11 @@ abstract class FirebaseRequestManager {
     /**
      *
      */
+    abstract fun updatePointsUser(user: User, listener: OnUpdateUserLevelListener)
+
+    /**
+     *
+     */
     abstract fun updateUserLevel(user: User, listener: OnUpdateUserLevelListener)
 
     /**

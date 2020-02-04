@@ -288,6 +288,17 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
 
             user.points += question.points.toInt()
 
+            FirebaseRequestManager.getInstance().updatePointsUser(user, object: FirebaseRequestManager.OnUpdateUserLevelListener {
+                override fun onUpdateUserLevelSuccess() {
+                    Utils.print("Success update points")
+                }
+
+                override fun onUpdateUserLevelFail(throwable: Throwable) {
+                    Utils.print("Error updating points: $throwable")
+                }
+
+            })
+
             Utils.print("PointsAdded: ${question.points}")
 
             Utils.print("Total Levels in repository: ${levels.size}")
