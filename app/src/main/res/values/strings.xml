@@ -39,6 +39,7 @@
     <string name="google_pay_text">Google Play</string>
     <string name="subscription_text">Se pagará una suscripción mensual</string>
     <string name="cash_text">Efectivo</string>
+    <string name="buy_membership_in_time">Renovación de membresía el</string>
 
 
 </resources>

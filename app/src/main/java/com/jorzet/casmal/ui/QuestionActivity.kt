@@ -164,10 +164,17 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     private val mNextQuestionClickListener = View.OnClickListener {
-        if (mQuestions != null && mCorrectQuestionIndex < mQuestions?.size!!) {
+
+        if (mQuestions != null && mCorrectQuestionIndex == mQuestions?.size!!) {
+            onBackPressed()
+        }
+
+        if (mQuestions != null && mCorrectQuestionIndex < mQuestions?.size!! ) {
             val question = mQuestions?.get(mCorrectQuestionIndex)
             onChangeQuestion(question, mCorrectQuestionIndex)
         }
+
+
     }
 
     private val mShowAnswerClickListener = View.OnClickListener {

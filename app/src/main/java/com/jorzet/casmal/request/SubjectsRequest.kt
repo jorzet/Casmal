@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.gson.Gson
 import com.jorzet.casmal.models.Subject
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -52,6 +55,7 @@ class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
                 val subjectMap = subjectsMap[key] as HashMap<*, *>
                 try {
                     val subject = Gson().fromJson(JSONObject(subjectMap).toString(), Subject::class.java)
+                    subject.subjectId = key as String
                     // just save enabled subject
                     if (subject.enabled) {
                         mSubjects.add(subject)
@@ -60,6 +64,18 @@ class SubjectsRequest: AbstractRequestDatabase<String, List<Subject>>() {
                     ex.printStackTrace()
                 }
             }
+
+            Collections.sort(mSubjects, object : Comparator<Subject> {
+                override fun compare(o1: Subject, o2: Subject): Int {
+                    return extractInt(o1) - extractInt(o2)
+                }
+
+                fun extractInt(s: Subject): Int {
+                    val num = s.subjectId.replace("s", "").replace("S", "")
+                    // return 0 if no digits found
+                    return if (num.isEmpty()) 0 else Integer.parseInt(num)
+                }
+            })
             onRequestListenerSuccess.onSuccess(mSubjects)
         } else {
             onRequestListenerFailed.onFailed(Throwable())

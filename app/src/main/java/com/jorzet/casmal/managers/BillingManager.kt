@@ -16,11 +16,9 @@
 package com.jorzet.casmal.managers
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.android.billingclient.api.*
-import com.jorzet.casmal.ui.PaywayActivity
 
 /**
  * BillingManager that handles all the interactions with Play Store

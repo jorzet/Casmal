@@ -42,6 +42,10 @@ import com.jorzet.casmal.utils.Utils
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_FACEBOOK
 import com.jorzet.casmal.utils.Utils.Companion.PROVIDER_GOOGLE
 import com.jorzet.casmal.viewmodels.UserViewModel
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 /**
  * @author Bani Azarael Mejia Flores
@@ -149,12 +153,20 @@ class ProfileFragment: BaseFragment() {
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
 
+        checkIsPremium()
+
         paywayButton.setOnClickListener(paywayButtonClickListener)
         suggestionButton.setOnClickListener {
             goSendEmailActivity()
         }
 
         viewModel.updateFlashCards()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        checkIsPremium()
     }
 
     private val paywayButtonClickListener = View.OnClickListener {
@@ -197,5 +209,24 @@ class ProfileFragment: BaseFragment() {
         val release = Build.VERSION.RELEASE
         val sdkVersion = Build.VERSION.SDK_INT
         return "Android SDK: $sdkVersion ($release)"
+    }
+
+    /**
+     * Validate view according isPremium flag
+     */
+    private fun checkIsPremium() {
+        val isPremium = viewModel.getUser().value?.payment?.isPremium!!
+
+        paywayButton.isEnabled = !isPremium
+
+        if (isPremium) {
+            val renewSubscription = viewModel.getUser().value?.payment?.timeStamp!! + 2592000000
+
+            val simple: DateFormat = SimpleDateFormat("dd MMM yyyy")
+
+            val result = Date(renewSubscription)
+            val output = simple.format(result)
+            paywayButton.text = resources.getString(R.string.buy_membership_in_time) + " " + output
+        }
     }
 }

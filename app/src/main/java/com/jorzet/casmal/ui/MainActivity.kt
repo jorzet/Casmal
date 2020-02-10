@@ -17,6 +17,7 @@
 package com.jorzet.casmal.ui
 
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Handler
 import android.util.Log
 import android.view.MenuItem
@@ -170,6 +171,13 @@ class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelecte
     }
 
     override fun onBillingResponseItemAlreadyOwned(purchase: Purchase) {
+        Log.d("","")
+
+        val url = "http://www.googleapis.com/androidpublisher/v3/applications/" +
+                purchase.packageName +
+                "/purchases/subscriptions/" +
+                purchase.sku + "/tokens/" +
+                purchase.purchaseToken
 
     }
 
