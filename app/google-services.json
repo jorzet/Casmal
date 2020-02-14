@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "714469115491-4tbjbk6upgjlniqot0rbml713llg5sjc.apps.googleusercontent.com",
+          "client_id": "714469115491-k3vef54t1f5rkr6uircs8jp5udfubekq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.jorzet.casmal",
-            "certificate_hash": "7b93847e45e5ba54167e8403dcb0a55452e47e76"
+            "certificate_hash": "811c684d586db37640dbac2b2a858d81e15f25a9"
           }
         },
         {
