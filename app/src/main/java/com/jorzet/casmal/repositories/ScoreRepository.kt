@@ -56,7 +56,7 @@ class ScoreRepository: ViewModelRepository() {
         val list: MutableList<Score> = this.list.value ?: return
 
         if(list.isNotEmpty()) {
-            return
+            list.clear()
         }
 
         ScoreRequest.parse(userId, object : RequestListener<MutableList<Score>> {
