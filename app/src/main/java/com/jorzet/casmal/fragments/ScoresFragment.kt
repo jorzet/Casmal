@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.GraphAdapter
 import com.jorzet.casmal.base.BaseFragment
@@ -26,6 +27,8 @@ class ScoresFragment: BaseFragment() {
     private lateinit var adapter: GraphAdapter
 
     private lateinit var viewModel: ScoreViewModel
+
+    private var user: FirebaseUser? = null
 
     override fun getLayoutId(): Int {
         return R.layout.scores_fragment
@@ -56,14 +59,22 @@ class ScoresFragment: BaseFragment() {
         })
 
         val auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
+        user = auth.currentUser
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
 
+        val user = this.user
         if(user != null) {
             viewModel.load(user.uid)
+        }
+
+        refreshLayout.setOnRefreshListener {
+            val user = this.user
+            if(user != null) {
+                viewModel.load(user.uid)
+            }
         }
     }
 }
