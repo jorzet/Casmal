@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.jorzet.casmal.BuildConfig
 import com.jorzet.casmal.R
 import com.jorzet.casmal.adapters.FlashCardAdapter
+import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseFragment
 import com.jorzet.casmal.dialogs.FullScreeImageDialog
 import com.jorzet.casmal.interfaces.ItemListener
@@ -193,22 +194,13 @@ class ProfileFragment: BaseFragment() {
                 userEmail = userFirebase.email!!
             }
         }
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Sistema Operativo: " + getAndroidVersion() +
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Sistema Operativo: " + (activity as BaseActivity).getAndroidVersion() +
                 "\n\n\n Versión app: " + versionName +
                 "\n Cuenta: " + userUUID +
                 "\n Correo: " + userEmail +
                 "\n\n\n Aquí escribe tu mensaje" + "" +
                 "\n\n\n (Para un mejor soporte no borres el sistema operativo ni la cuenta)")
         startActivity(Intent.createChooser(emailIntent, "Enviando email..."))
-    }
-
-    /*
-     * This method returns the devices current API version
-     */
-    private fun getAndroidVersion(): String {
-        val release = Build.VERSION.RELEASE
-        val sdkVersion = Build.VERSION.SDK_INT
-        return "Android SDK: $sdkVersion ($release)"
     }
 
     /**

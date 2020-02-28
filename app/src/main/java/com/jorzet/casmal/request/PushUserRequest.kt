@@ -49,6 +49,7 @@ class PushUserRequest(private var uid: String): AbstractUpdateDatabase<User, Boo
         val userMap = HashMap<String, Any>()
         val userParams = HashMap<String, Any>()
 
+        userParams["specialUser"] = user!!.specialUser
         userParams["deviceOS"] = user!!.deviceOS
         userParams["level"] = user!!.level
         userParams["points"] = user!!.points

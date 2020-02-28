@@ -93,6 +93,17 @@ abstract class FirebaseRequestManager {
         fun onErrorUserInserted(throwable: Throwable)
     }
 
+    interface OnInsertPaymentListener {
+        /**
+         *
+         */
+        fun onSuccessPaymentInserted()
+        /**
+         *
+         */
+        fun onErrorPaymentInserted(throwable: Throwable)
+    }
+
     interface OnPushAverageListener {
         /**
          *
@@ -205,6 +216,11 @@ abstract class FirebaseRequestManager {
      *
      */
     abstract fun updateUserLevel(user: User, listener: OnUpdateUserLevelListener)
+
+    /**
+     *
+     */
+    abstract fun updatePayment(uid: String, user: User, onInsertPaymentListener: OnInsertPaymentListener)
 
     /**
      * Destroy [FirebaseRequestManager] INSTANCE

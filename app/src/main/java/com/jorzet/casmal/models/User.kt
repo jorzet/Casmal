@@ -30,6 +30,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class User (
+    @SerializedName("specialUser")
+    @Expose
+    var specialUser: Boolean = false,
+
     @SerializedName("deviceOS")
     @Expose
     var deviceOS: String = "Android",
@@ -51,7 +55,7 @@ data class User (
     var flashCards: ArrayList<String> = arrayListOf()
 
 ) : Parcelable {
-    constructor() : this("Android", 0, 0, Payment())
+    constructor() : this(false,"Android", 0, 0, Payment())
 
     override fun toString(): String {
         Utils.print("deviceOS: $deviceOS")

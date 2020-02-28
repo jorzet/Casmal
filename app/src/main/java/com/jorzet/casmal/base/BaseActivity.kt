@@ -16,6 +16,7 @@
 
 package com.jorzet.casmal.base
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
@@ -47,4 +48,14 @@ abstract class BaseActivity: AppCompatActivity() {
      * This method is just to set data, listeners or handle [View] components
      */
     abstract fun prepareComponents()
+
+
+    /*
+     * This method returns the devices current API version
+     */
+    fun getAndroidVersion(): String {
+        val release = Build.VERSION.RELEASE
+        val sdkVersion = Build.VERSION.SDK_INT
+        return "Android SDK: $sdkVersion ($release)"
+    }
 }

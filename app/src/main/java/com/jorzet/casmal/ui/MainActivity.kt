@@ -183,28 +183,38 @@ class MainActivity: BaseActivity(), BottomNavigationView.OnNavigationItemSelecte
 
     override fun onBillingResponseItemNotOwned() {
         val user: User = userViewModel.getUser().value ?: return
-        val purchase: Purchase? = userViewModel.getPurchase().value
-        val payment: Payment = user.payment
-        payment.isPremium = false
-        payment.timeStamp = 0
-        payment.subscription = purchase?.sku?: ""
-        user.payment = payment
-        userViewModel.setUser(user)
+        if (!user.specialUser) {
 
+            val purchase: Purchase? = userViewModel.getPurchase().value
+            val payment: Payment = user.payment
+            payment.isPremium = false
+            payment.timeStamp = 0
+            payment.subscription = purchase?.sku?: ""
+            user.payment = payment
+            userViewModel.setUser(user)
 
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
-        if (uid != null) {
-            FirebaseRequestManager.getInstance()
-                .insertUser(uid, user, object : FirebaseRequestManager.OnInsertUserListener {
-                    override fun onSuccessUserInserted() {
-                        Log.d(TAG, "user push success after subscription")
-                    }
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            if (uid != null) {
+                FirebaseRequestManager.getInstance()
+                    /*.insertUser(uid, user, object: FirebaseRequestManager.OnInsertUserListener {
+                        override fun onSuccessUserInserted() {
+                            Log.d(TAG, "user push success after subscription")
+                        }
+                        override fun onErrorUserInserted(throwable: Throwable) {
+                            Log.d(TAG, "user push fail after subscription")
+                        }
+                    })*/
+                    .updatePayment(uid, user,
+                        object : FirebaseRequestManager.OnInsertPaymentListener {
+                            override fun onSuccessPaymentInserted() {
+                                Log.d(TAG, "user push success after subscription")
+                            }
 
-                    override fun onErrorUserInserted(throwable: Throwable) {
-                        Log.d(TAG, "user push fail after subscription")
-                    }
-
-                })
+                            override fun onErrorPaymentInserted(throwable: Throwable) {
+                                Log.d(TAG, "user push fail after subscription")
+                            }
+                        })
+            }
         }
     }
 

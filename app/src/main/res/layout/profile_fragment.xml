@@ -105,13 +105,13 @@
 
 	<Button
 		android:id="@+id/btn_suggest"
+		style="@style/style_button_positive"
 		android:layout_width="200dp"
 		android:layout_height="wrap_content"
-		android:text="@string/text_suggestions"
 		android:layout_gravity="center_horizontal"
 		android:layout_margin="10dp"
 		android:background="@drawable/payway_background_button"
-		style="@style/style_button_positive"/>
+		android:text="@string/text_suggestions" />
 
 	<RelativeLayout
 		android:layout_width="match_parent"

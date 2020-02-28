@@ -150,6 +150,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
 
             if (purchase != null) {
                 val user: User = userViewModel.getUser().value ?: return
+                user.specialUser = false
                 val payment: Payment = user.payment
                 payment.isPremium = true
                 payment.timeStamp = purchase.purchaseTime

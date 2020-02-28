@@ -16,6 +16,9 @@
 
 package com.jorzet.casmal.ui
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
@@ -23,6 +26,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.jorzet.casmal.BuildConfig
 import com.jorzet.casmal.R
 import com.jorzet.casmal.base.BaseActivity
 import com.jorzet.casmal.base.BaseQuestionFragment
@@ -61,6 +66,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
      */
     private lateinit var mQuestionTitle: TextView
     private lateinit var mShowQuestions: View
+    private lateinit var mSuggestionsQuestions: View
     private lateinit var mCloseQuestions: View
     private lateinit var mProgressBarQuestions: ProgressBar
     private lateinit var mShowAnswer: View
@@ -101,6 +107,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     override fun initView() {
         mQuestionTitle = findViewById(R.id.tv_question_type_text)
         mShowQuestions = findViewById(R.id.rl_show_questions)
+        mSuggestionsQuestions = findViewById(R.id.rl_suggestions)
         mCloseQuestions = findViewById(R.id.iv_close_question)
         mProgressBarQuestions = findViewById(R.id.pb_questions_progress)
         mNextQuestion = findViewById(R.id.btn_next_question)
@@ -114,6 +121,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         levelsViewModel = ViewModelProvider(this).get(LevelsViewModel::class.java)
 
         mShowQuestions.setOnClickListener(mShowQuestionsClickListener)
+        mSuggestionsQuestions.setOnClickListener(mSuggestionsQuestionsClickListener)
         mCloseQuestions.setOnClickListener(mCloseQuestionsClickListener)
         mNextQuestion.setOnClickListener(mNextQuestionClickListener)
         mShowAnswer.setOnClickListener(mShowAnswerClickListener)
@@ -157,6 +165,10 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
             .beginTransaction()
             .add(R.id.complete_question_fragment_container, questionListFragment, TAG_FRAGMENT_QUESTIONS)
             .commitAllowingStateLoss()
+    }
+
+    private val mSuggestionsQuestionsClickListener = View.OnClickListener {
+        goSendEmailActivity()
     }
 
     private val mCloseQuestionsClickListener = View.OnClickListener {
@@ -323,17 +335,23 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                 return
             }
 
-            val userLevel: Level = if(user.level - 1 < 0) {
+            var userLevel: Level = levels[0]/* = if(user.level - 1 < 0) {
                 levels[0]
             } else {
                 if(user.level - 1 >= levels.size) return
 
                 levels[user.level - 1]
+            }*/
+
+            for (level in levels) {
+                if (user.points == level.points) {
+                    userLevel = level
+                }
             }
 
             Utils.print("CurrentLevel: ${user.level}")
             Utils.print("CurrentPoints: ${user.points}")
-            Utils.print("NextLevel: ${userLevel.id} with ${userLevel.points} points and id = $userLevel")
+            //Utils.print("NextLevel: ${userLevel.id} with ${userLevel.points} points and id = $userLevel")
 
             if(user.points >= userLevel.points) {
                 Utils.print("OldLevel: ${user.level}")
@@ -394,4 +412,35 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     override fun onOkButtonClick() {
 
     }
+
+    /*
+     * This method open the native mail app to send an email to soporte@zerebrez.com
+     */
+    private fun goSendEmailActivity() {
+
+        val userFirebase = FirebaseAuth.getInstance().currentUser
+        var userUUID = ""
+        var userEmail = ""
+        val versionName = BuildConfig.VERSION_NAME
+        if (userFirebase != null) {
+            userUUID = userFirebase.uid
+            if (userFirebase.email != null && !userFirebase.email.equals("")) {
+                userEmail = userFirebase.email!!
+            }
+        }
+
+        val emailIntent = Intent(Intent.ACTION_SENDTO,
+            Uri.fromParts("mailto", resources.getString(R.string.support_email_text), null))
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "")
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Sistema Operativo: " + getAndroidVersion() +
+                    "\n\n\n Versión app: " + versionName +
+                    "\n Cuenta: " + userUUID +
+                    "\n Correo: " + userEmail +
+                    "\n ID de Pregunta: " + mQuestions?.get(mCorrectQuestionIndex - 1) +
+                    "\n\n\n Aquí escribe tu mensaje:" + "" +
+                    "\n\n\n (Para un mejor soporte no borres ninguno de los datos anteriores )")
+
+        startActivity(Intent.createChooser(emailIntent, "Elija una app para mandar un email..."))
+    }
+
 }

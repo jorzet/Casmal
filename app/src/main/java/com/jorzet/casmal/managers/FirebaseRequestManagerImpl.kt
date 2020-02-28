@@ -179,6 +179,24 @@ class FirebaseRequestManagerImpl: FirebaseRequestManager() {
         pushLevelUpRequest.update()
     }
 
+    override fun updatePayment(uid: String, user: User, onInsertPaymentListener: OnInsertPaymentListener) {
+        val updatePaymentRequest = PushPayment(uid, user)
+
+        updatePaymentRequest.setOnRequestSuccess(object : AbstractDatabase.OnRequestListenerSuccess<Boolean> {
+            override fun onSuccess(result: Boolean) {
+                onInsertPaymentListener.onSuccessPaymentInserted()
+            }
+        })
+
+        updatePaymentRequest.setOnRequestFailed(object : AbstractDatabase.OnRequestListenerFailed {
+            override fun onFailed(throwable: Throwable) {
+                onInsertPaymentListener.onErrorPaymentInserted(throwable)
+            }
+        })
+
+        updatePaymentRequest.update()
+    }
+
     override fun requestExams(onGetExamsListener: OnGetExamsListener) {
         val examsRequest = ExamsRequest()
 
@@ -268,4 +286,6 @@ class FirebaseRequestManagerImpl: FirebaseRequestManager() {
 
         insertUserRequest.update()
     }
+
+
 }
