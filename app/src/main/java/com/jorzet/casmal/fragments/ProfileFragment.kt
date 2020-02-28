@@ -16,6 +16,7 @@
 
 package com.jorzet.casmal.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -206,8 +207,16 @@ class ProfileFragment: BaseFragment() {
     /**
      * Validate view according isPremium flag
      */
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
     private fun checkIsPremium() {
         val isPremium = viewModel.getUser().value?.payment?.isPremium!!
+
+        // in case user is special
+        if (viewModel.getUser().value?.specialUser!!) {
+            paywayButton.text = resources.getString(R.string.special_user)
+            paywayButton.isEnabled = false
+            return
+        }
 
         paywayButton.isEnabled = !isPremium
 

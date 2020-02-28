@@ -40,6 +40,7 @@
     <string name="subscription_text">Se pagará una suscripción mensual</string>
     <string name="cash_text">Efectivo</string>
     <string name="buy_membership_in_time">Renovación de membresía el</string>
+    <string name="special_user">Membresía indefinida. Usuario especial</string>
 
 
 </resources>
