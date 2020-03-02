@@ -335,16 +335,10 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                 return
             }
 
-            var userLevel: Level = levels[0]/* = if(user.level - 1 < 0) {
-                levels[0]
-            } else {
-                if(user.level - 1 >= levels.size) return
-
-                levels[user.level - 1]
-            }*/
+            var userLevel: Level = levels[0]
 
             for (level in levels) {
-                if (user.points == level.points) {
+                if (user.level == level.id) {
                     userLevel = level
                 }
             }
