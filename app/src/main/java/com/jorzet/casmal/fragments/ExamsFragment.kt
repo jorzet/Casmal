@@ -53,7 +53,7 @@ class ExamsFragment: BaseFragment() {
     private lateinit var userViewModel: UserViewModel
 
     override fun getLayoutId(): Int {
-        return R.layout.modules_fragment
+        return R.layout.exams_fragment
     }
 
     override fun initView() {

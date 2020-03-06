@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'com.google.firebase.crashlytics'
+
 android {
     compileSdkVersion 29
     buildToolsVersion = '29.0.2'
@@ -18,8 +20,8 @@ android {
         applicationId "com.jorzet.casmal"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 6
-        versionName "1.0.6"
+        versionCode 7
+        versionName "1.0.7"
         multiDexEnabled true
         signingConfig signingConfigs.config
     }
@@ -91,6 +93,12 @@ dependencies {
 
     //Request
     implementation 'com.loopj.android:android-async-http:1.4.9'
+
+    // Firebase Analytics
+    implementation 'com.google.firebase:firebase-analytics:17.2.3'
+
+    // Add the Firebase SDK for Crashlytics.
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
 
     //Unit Tests
     testImplementation 'junit:junit:4.12'

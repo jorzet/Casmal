@@ -18,7 +18,6 @@ package com.jorzet.casmal.ui
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
@@ -83,7 +82,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     /**
      * Attributes
      */
-    private var mCorrectQuestionIndex = 0
+    private var mCurrentQuestionIndex = 0
     private var mCurrentQuestionProgress = 0
     private var mIsExam: Boolean = false
     private var mExamId: String = ""
@@ -142,9 +141,9 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         mAverage.totalQuestions = mQuestionsList.size
 
         mLoadingQuestionProgressBar.visibility = View.VISIBLE
-        if (mQuestions != null && mCorrectQuestionIndex < mQuestions?.size!!) {
-            val question = mQuestions?.get(mCorrectQuestionIndex)
-            onChangeQuestion(question, mCorrectQuestionIndex)
+        if (mQuestions != null && mCurrentQuestionIndex < mQuestions?.size!!) {
+            val question = mQuestions?.get(mCurrentQuestionIndex)
+            onChangeQuestion(question, mCurrentQuestionIndex)
         }
     }
 
@@ -158,7 +157,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
     }
 
     private val mShowQuestionsClickListener = View.OnClickListener {
-        val questionListFragment = QuestionListFragment.getInstance(mQuestionsList, mCorrectQuestionIndex)
+        val questionListFragment = QuestionListFragment.getInstance(mQuestionsList, mCurrentQuestionIndex)
 
         // add to fragment manager
         supportFragmentManager
@@ -177,13 +176,13 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
 
     private val mNextQuestionClickListener = View.OnClickListener {
 
-        if (mQuestions != null && mCorrectQuestionIndex == mQuestions?.size!!) {
+        if (mQuestions != null && mCurrentQuestionIndex == mQuestions?.size!!) {
             onBackPressed()
         }
 
-        if (mQuestions != null && mCorrectQuestionIndex < mQuestions?.size!! ) {
-            val question = mQuestions?.get(mCorrectQuestionIndex)
-            onChangeQuestion(question, mCorrectQuestionIndex)
+        if (mQuestions != null && mCurrentQuestionIndex < mQuestions?.size!! ) {
+            val question = mQuestions?.get(mCurrentQuestionIndex)
+            onChangeQuestion(question, mCurrentQuestionIndex)
         }
 
 
@@ -256,11 +255,11 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                 })
 
             // increase questionIndex
-            mCorrectQuestionIndex = position + 1
+            mCurrentQuestionIndex = position + 1
 
             // update progress
             if (mQuestions != null) {
-                mCurrentQuestionProgress = (mCorrectQuestionIndex * 100) / mQuestions?.size!!
+                mCurrentQuestionProgress = (mCurrentQuestionIndex * 100) / mQuestions?.size!!
                 mProgressBarQuestions.progress = mCurrentQuestionProgress
             }
         }
@@ -292,7 +291,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
         }
 
         if (mQuestionsList.isNotEmpty()) {
-            mQuestionsList[mCorrectQuestionIndex - 1] = question
+            mQuestionsList[mCurrentQuestionIndex - 1] = question
         }
 
         if (::mAverage.isInitialized) {
@@ -430,7 +429,7 @@ class QuestionActivity: BaseActivity(), BaseQuestionFragment.OnOptionSelectedLis
                     "\n\n\n Versión app: " + versionName +
                     "\n Cuenta: " + userUUID +
                     "\n Correo: " + userEmail +
-                    "\n ID de Pregunta: " + mQuestions?.get(mCorrectQuestionIndex - 1) +
+                    "\n ID de Pregunta: " + mQuestions?.get(mCurrentQuestionIndex - 1) +
                     "\n\n\n Aquí escribe tu mensaje:" + "" +
                     "\n\n\n (Para un mejor soporte no borres ninguno de los datos anteriores )")
 

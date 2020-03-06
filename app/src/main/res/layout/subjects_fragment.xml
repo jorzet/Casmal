@@ -12,7 +12,9 @@
 		android:layout_centerHorizontal="true"
 		android:columnWidth="80dp"
 		android:clipToPadding="false"
-		android:layout_margin="30dp"
+		android:layout_marginRight="30dp"
+		android:layout_marginLeft="30dp"
+		android:layout_marginTop="30dp"
 		android:numColumns="3" />
 
 </RelativeLayout>

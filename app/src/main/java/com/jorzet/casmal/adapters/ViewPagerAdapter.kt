@@ -19,10 +19,7 @@ package com.jorzet.casmal.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.jorzet.casmal.fragments.ExamsFragment
-import com.jorzet.casmal.fragments.ProfileFragment
-import com.jorzet.casmal.fragments.ScoresFragment
-import com.jorzet.casmal.fragments.SubjectsFragment
+import com.jorzet.casmal.fragments.*
 
 /**
  * @author Jorge Zepeda Tinoco
@@ -38,6 +35,7 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
             0 -> fragment = ExamsFragment()
             1 -> fragment = SubjectsFragment()
             2 -> fragment = ScoresFragment()
+            //3 -> fragment = SpecialsFragment()
             3 -> fragment = ProfileFragment()
         }
 

@@ -58,6 +58,18 @@ class ExamsRequest: AbstractRequestDatabase<String, List<Exam>>() {
                 }
             }
 
+            Collections.sort(mExams, object : Comparator<Exam> {
+                override fun compare(o1: Exam, o2: Exam): Int {
+                    return extractInt(o1) - extractInt(o2)
+                }
+
+                fun extractInt(s: Exam): Int {
+                    val num = s.examId.replace("e", "").replace("E", "")
+                    // return 0 if no digits found
+                    return if (num.isEmpty()) 0 else Integer.parseInt(num)
+                }
+            })
+
             onRequestListenerSuccess.onSuccess(mExams)
         } else {
             onRequestListenerFailed.onFailed(Throwable())

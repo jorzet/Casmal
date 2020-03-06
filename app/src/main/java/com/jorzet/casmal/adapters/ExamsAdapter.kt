@@ -16,6 +16,8 @@
 
 package com.jorzet.casmal.adapters
 
+import android.os.Build
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,7 +84,11 @@ class ExamsAdapter(private val userIsPremium:Boolean, exams: List<Exam>): BaseAd
                 view.iv_difficulty.background = ContextCompat.getDrawable(parent.context!!, R.drawable.ic_hard)
         }
 
-        view.tv_exam.text = exam.examName
+        view.tv_exam.text =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                Html.fromHtml(exam.examName, Html.FROM_HTML_MODE_COMPACT)
+            else
+                Html.fromHtml(exam.examName)
 
         view.tv_exam.setTextColor(
         if (exam.purchaseType == PurchaseType.FREE) {
