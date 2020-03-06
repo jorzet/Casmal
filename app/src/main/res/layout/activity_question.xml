@@ -9,11 +9,20 @@
 		android:layout_width="match_parent"
 		android:layout_height="50dp">
 
+		<ImageView
+			android:id="@+id/iv_random_question"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:layout_centerVertical="true"
+			android:layout_marginLeft="5dp"
+			android:background="@drawable/random_question_button"/>
+
 		<TextView
 			android:id="@+id/tv_module_number"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
+			android:layout_toRightOf="@+id/iv_random_question"
 			android:layout_marginStart="10dp"
 			android:text=""
 			android:textColor="@color/black"
