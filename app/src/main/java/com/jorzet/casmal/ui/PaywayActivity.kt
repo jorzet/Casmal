@@ -16,11 +16,13 @@
 
 package com.jorzet.casmal.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import com.android.billingclient.api.*
 import com.google.firebase.auth.FirebaseAuth
@@ -52,6 +54,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
      */
     private lateinit var mGooglePayView: View
     private lateinit var mCashView: View
+    private lateinit var mCurrency: TextView
 
     /*
      * Payment
@@ -79,6 +82,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
 
         mGooglePayView = findViewById(R.id.rl_google_pay_container)
         mCashView = findViewById(R.id.rl_cash_container)
+        mCurrency = findViewById(R.id.tv_payment_currency_2)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -112,6 +116,7 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBillingServiceReady() {
         val skuList = listOf(PRODUCT_ID)
         mBillingManager.querySkuDetailsAsync(SKU_TYPE, skuList,
@@ -122,6 +127,9 @@ class PaywayActivity: BaseActivity(), BillingManager.OnBillingResponseListener,
                 for (skuDetail in skuDetailsList) {
                     if (skuDetail.sku == PRODUCT_ID) {
                         mSkuDetails = skuDetail
+                        if (::mCurrency.isInitialized && skuDetail != null) {
+                            mCurrency.text = skuDetail.price + " " + skuDetail.priceCurrencyCode
+                        }
                     }
                 }
             })
